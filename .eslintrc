@@ -1,0 +1,20 @@
+{
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended",
+      "react-app",
+      "javascript"
+    ],
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "plugins": []
+  }
