@@ -2,8 +2,7 @@
     "extends": [
       "eslint:recommended",
       "plugin:prettier/recommended",
-      "react-app",
-      "javascript"
+      "react-app"
     ],
     "env": {
       "browser": true,

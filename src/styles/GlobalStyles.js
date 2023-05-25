@@ -55,7 +55,6 @@ export const GlobalStyles = createGlobalStyle`
         cursor: pointer;
         border: none;
         outline: none;
-        padding: 0px;
     }
 
     input {
