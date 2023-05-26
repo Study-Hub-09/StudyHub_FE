@@ -5,16 +5,13 @@ import { Link } from 'react-router-dom';
 export const GlobalStyles = createGlobalStyle`
     :root{
         /* Color */
-        --color-black: #1a1a1d; /* 191919 */
-        --color-white: #F7F7FF;
-        --color-light-white: #f7f9fb;
-        --color-gray: #fafafa;
-        --color-light-gray: #e2ebf2;
-        --color-green: #687862;
-        --color-dark-blue: #31708e;
-        --color-blue: #5085a5;
-        --color-primary: #8fc1e3;
-        --color-red: #dc143d;
+        --color-black: #000000; 
+        --color-white: #ffffff;
+        --color-gray: #d9d9d9;
+        --color-light-gray: #e8e8e8;
+        --color-outline: #bfbfbf;
+        --color-dark-green: #00573F;
+        --color-light-green: #90B54C;
 
         /* Font size */
         --font-extra-large: 60px;
@@ -79,8 +76,7 @@ export const GlobalStyles = createGlobalStyle`
     -moz-box-shadow: none;
     box-shadow: none;
     resize: none;
-}
-    
+}  
 `;
 
 export const StLink = styled(Link)`
