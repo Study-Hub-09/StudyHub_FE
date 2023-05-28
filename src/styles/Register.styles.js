@@ -1,83 +1,106 @@
 import styled from 'styled-components';
 
-export const StRegisterContainer = styled.div`
+// ===============REGISTER SECTION================ //
+
+export const StRegisterSection = styled.div`
+  width: 936px;
+  height: 783px;
+  border: 1px solid var(--color-gray);
+  border-radius: 20px;
+  padding: 60px 80px;
   display: flex;
   flex-direction: column;
-  padding: 60px 80px;
-  height: 487px;
-  border: 1px solid #bfbfbf;
-  border-radius: 20px;
-  width: 954px;
-  height: 750px;
 `;
 
+// ===============REGISTER FORM================ //
+
 export const StRegisterBox = styled.div`
-  width: 794px;
-  height: 630px;
+  width: 776px;
+  height: 663px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const StHeader = styled.header`
+  width: 50%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+
   h1 {
-    line-height: 35.41px;
     font-size: 26px;
+    font-weight: var(--weight-bold);
   }
 `;
 
-export const StRegisterHeader = styled.header`
-  width: 366px;
-  height: 38px;
-`;
-
-export const StRegisterFormBox = styled.div`
-  border-bottom: 1px solid #bfbfbf;
-  width: 794px;
-  height: 457px;
-  padding-top: 50px;
-  padding-bottom: 47px;
-`;
-
-export const StRegisterForm = styled.form`
-  width: 794px;
-  height: 360px;
+export const StForm = styled.form`
+  width: 100%;
+  height: 487px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--color-gray);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 24px;
+  justify-content: space-between;
 `;
 
 export const StInputField = styled.div`
   display: flex;
-  gap: 60px;
+  gap: 40px;
 `;
 
 export const StPolicyField = styled.div`
+  width: 100%;
+  height: 52px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const StCheckboxInputField = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  justify-content: space-between;
 `;
 
 export const StSocialField = styled.div`
-  width: 792px;
-  height: 139px;
+  width: 100%;
+  height: 90px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    width: 366px;
+    height: 24px;
+    text-align: center;
+    font-size: var(--font-small);
+  }
+`;
+
+// ===============REGISTER FOOTER================ //
+
+export const StRegisterFooter = styled.div`
+  width: 366px;
+  height: 24px;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
+  font-size: var(--font-small);
 
-  p {
-    text-align: center;
-    width: 366px;
-    height: 24px;
+  :nth-child(1) {
+    width: 143px;
+    height: 19px;
   }
-`;
-
-export const StFormFooter = styled.div`
-  span {
+  :nth-child(2) {
+    width: 39px;
+    height: 19px;
     color: var(--color-light-green);
-    margin-left: 10.89px;
     cursor: pointer;
+    text-decoration: none;
   }
 `;
+
+// =================================== //

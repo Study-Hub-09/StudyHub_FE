@@ -1,5 +1,5 @@
 import React from 'react';
-import kakaobtn from '../../assets/Images/KakaoButton/kakao_login_large_narrow.png';
+import kakaobtn from '../../assets/Icons/kakaobtn.svg';
 import { StKakaoBtn } from '../../styles/Common.styles';
 
 function KakaoButton() {

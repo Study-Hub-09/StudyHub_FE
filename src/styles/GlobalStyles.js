@@ -5,13 +5,16 @@ import { Link } from 'react-router-dom';
 export const GlobalStyles = createGlobalStyle`
     :root{
         /* Color */
+        --color-dark-green: #00573f;
+        --color-light-green: #90b54c;
+        --color-background: #bcc2b0;
         --color-black: #000000; 
         --color-white: #ffffff;
-        --color-gray: #d9d9d9;
+        --color-white-gray: #fefefe;
+        --color-gray: #9d9d9d;
+        --color-dark-gray: #424242;
         --color-light-gray: #e8e8e8;
-        --color-outline: #bfbfbf;
-        --color-dark-green: #00573F;
-        --color-light-green: #90B54C;
+        
 
         /* Font size */
         --font-extra-large: 60px;
@@ -42,7 +45,7 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     body{
-        font-family: 'Inter', sans-serif;
+        font-family: 'Noto Sans', sans-serif;
         background-color: var(--color-light-white);
         color: var(--color-black);
     }

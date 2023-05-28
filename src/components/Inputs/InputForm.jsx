@@ -33,7 +33,7 @@ function InputForm(props) {
         )) ||
           (props.icon && props.icon)}
       </StInputDiv>
-      <StErrorMessage>{props.span}</StErrorMessage>
+      <StErrorMessage>{props.errorMessage}</StErrorMessage>
     </StInputBox>
   );
 }
