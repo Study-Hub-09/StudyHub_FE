@@ -41,7 +41,7 @@ export const StForm = styled.form`
   border-bottom: 1px solid var(--color-gray);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 24px;
 `;
 
 export const StInputField = styled.div`

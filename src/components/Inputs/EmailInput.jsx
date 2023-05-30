@@ -9,36 +9,72 @@ import {
   StMessage,
 } from '../../styles/Inputs.styles';
 import errorIcon from '../../assets/Icons/errorIcon.svg';
+import checkIcon from '../../assets/Icons/checkIcon.svg';
 
-function EmailInput(props) {
+function EmailInput({
+  label,
+  inputboxwidth,
+  divwith,
+  bordercolor,
+  onFocus,
+  onBlur,
+  onClick,
+  disabled,
+  button,
+  message,
+  value,
+  validEmail,
+  validCode,
+  emailVerification,
+  successMessage,
+  errorMessage,
+  ...inputprops
+}) {
+  const getBordercolor = () => {
+    if (value) {
+      return validCode || validEmail || emailVerification ? 'green' : 'red';
+    }
+    return bordercolor;
+  };
+
   return (
-    <StInputBox inputboxwidth={props.inputboxwidth}>
-      <label>{props.label}</label>
+    <StInputBox inputboxwidth={inputboxwidth}>
+      <label>{label}</label>
       <StInputFrame>
-        <StInputDiv divwith={props.divwith}>
-          <StInput
-            type="text"
-            name={props.name}
-            value={props.value}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            inputwidth={props.inputwidth}
-          />
+        <StInputDiv
+          divwith={divwith}
+          bordercolor={getBordercolor()}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        >
+          <StInput type="text" value={value} {...inputprops} />
           <Button
+            type="button"
             width="82px"
             height="36px"
             border="var(--color-gray)"
             padding="8px 27px"
             borderradius="47px"
+            onClick={onClick}
           >
-            {props.button}
+            {button}
           </Button>
         </StInputDiv>
-        <StIcon>
-          <img src={errorIcon} alt="Red Error Icon" />
-        </StIcon>
+        {value && (
+          <StIcon>
+            {validCode || validEmail || emailVerification ? (
+              <img src={checkIcon} alt="Green Check Icon" />
+            ) : (
+              <img src={errorIcon} alt="Red Error Icon" />
+            )}
+          </StIcon>
+        )}
       </StInputFrame>
-      <StMessage>{props.message}</StMessage>
+      {value && (
+        <StMessage>
+          {validCode || validEmail || emailVerification ? successMessage : errorMessage}
+        </StMessage>
+      )}
     </StInputBox>
   );
 }

@@ -1,34 +1,69 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  StIcon,
-  StInput,
   StInputBox,
-  StInputDiv,
   StInputFrame,
+  StInputDiv,
+  StInput,
+  StIcon,
   StMessage,
 } from '../../styles/Inputs.styles';
 import errorIcon from '../../assets/Icons/errorIcon.svg';
+import checkIcon from '../../assets/Icons/checkIcon.svg';
+import Button from '../Buttons/Button';
 
-function NicknameInput(props) {
+function NicknameInput({
+  onClick,
+  value,
+  button,
+  validNickname,
+  successMessage,
+  errorMessage,
+  onFocus,
+  onBlur,
+  bordercolor,
+  ...inputprops
+}) {
+  const nicknameRef = useRef();
+
+  useEffect(() => {
+    nicknameRef.current.focus();
+  }, []);
+
+  const getBordercolor = () => {
+    if (value) {
+      return validNickname ? 'green' : 'red';
+    }
+    return bordercolor;
+  };
+
   return (
     <StInputBox>
       <label>닉네임</label>
       <StInputFrame>
-        <StInputDiv>
-          <StInput
-            type="text"
-            name={props.name}
-            value={props.value}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            inputwidth={props.inputwidth}
-          />
+        <StInputDiv bordercolor={getBordercolor()} onFocus={onFocus} onBlur={onBlur}>
+          <StInput ref={nicknameRef} type="text" value={value} {...inputprops} />
+          <Button
+            width="82px"
+            height="36px"
+            border="var(--color-gray)"
+            padding="8px 27px"
+            borderradius="47px"
+            onClick={onClick}
+          >
+            {button}
+          </Button>
         </StInputDiv>
-        <StIcon>
-          <img src={errorIcon} alt="Red Error Icon" />
-        </StIcon>
+        {value && (
+          <StIcon>
+            {validNickname ? (
+              <img src={checkIcon} alt="Green Check Icon" />
+            ) : (
+              <img src={errorIcon} alt="Red Error Icon" />
+            )}
+          </StIcon>
+        )}
       </StInputFrame>
-      <StMessage>필수 입력칸입니다</StMessage>
+      {value && <StMessage>{validNickname ? successMessage : errorMessage}</StMessage>}
     </StInputBox>
   );
 }

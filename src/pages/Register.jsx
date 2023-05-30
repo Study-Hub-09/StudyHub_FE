@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
 import NicknameInput from '../components/Inputs/NicknameInput';
 import EmailInput from '../components/Inputs/EmailInput';
@@ -6,6 +6,7 @@ import Button from '../components/Buttons/Button';
 import PasswordInput from '../components/Inputs/PasswordInput';
 import CheckboxInput from '../components/Inputs/CheckboxInput';
 import KakaoButton from '../components/Buttons/KakaoButton';
+import alertIcon from '../assets/Icons/alertIcon.svg';
 import {
   StRegisterSection,
   StRegisterFooter,
@@ -17,9 +18,32 @@ import {
   StPolicyField,
   StCheckboxInputField,
 } from '../styles/Register.styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { register, validateEmail } from '../core/api/auth/register';
 
 function Register() {
+  const navigate = useNavigate();
+  const [verificationCode, setVerificationCode] = useState('');
+  const [emailVerification, setEmailVerification] = useState(false);
+  const [validCode, setValidCode] = useState(false);
+  const [validPwd, setValidPwd] = useState(false);
+  const [matchPwd, setMatchPwd] = useState(false);
+  const [validNickname, setValidNickname] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+
+  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState('');
+  const [nicknameErrorMessage, setNicknameErrorMessage] = useState('');
+
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+
+  const [emailCodeSuccessMessage, setEmailCodeSuccessMessage] = useState('');
+  const [emailCodeErrorMessage, setEmailCodeErrorMessage] = useState('');
+
+  const [pwdErrorMessage, setPwdErrorMessage] = useState('');
+  const [pwdMatchErrorMessage, setPwdMatchErrorMessage] = useState('');
+
   const [values, setValues] = useState({
     nickname: '',
     email: '',
@@ -33,6 +57,181 @@ function Register() {
     setValues({ ...values, [name]: value });
   };
 
+  const registerMutation = useMutation(register, {
+    async onSuccess(response) {
+      console.log(response.data.message);
+      const statusCode = response.status;
+      if (statusCode === 200) {
+        alert('회원가입 성공!');
+        setTimeout(() => {
+          navigate('/members/login');
+        }, 500);
+      }
+    },
+    async onError(error) {
+      console.log('Register.jsx ERROR=====> ', error);
+    },
+  });
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    if (
+      values.nickname === '' ||
+      values.email === '' ||
+      values.checkCode === '' ||
+      values.password === '' ||
+      values.checkPassword === ''
+    ) {
+      return alert('모든 칸을 입력해주세요.');
+    } else {
+      registerMutation.mutate({
+        nickname: values.nickname,
+        email: values.email,
+        password: values.password,
+        checkPassword: values.checkPassword,
+      });
+    }
+  };
+
+  const validateEmailMutation = useMutation(validateEmail, {
+    async onSuccess(response) {
+      console.log('Register.jsx line52 RESPONSE=====> ', response);
+      console.log('Verification Code line54 RESPONSE.DATA=====> ', response.data);
+      const statusCode = response.status;
+      if (statusCode === 200) {
+        setEmailVerification(true);
+        setEmailSuccessMessage('이메일이 발송되었습니다');
+        setVerificationCode(response.data);
+      }
+    },
+    async onError(error) {
+      const statusCode = error.response.data.statusCode;
+      console.log('statusCode', statusCode);
+
+      if (statusCode === 400) {
+        setEmailErrorMessage('중복된 이메일입니다');
+        setValidEmail(false);
+      }
+    },
+  });
+
+  const validateEmailHandler = (e) => {
+    e.preventDefault();
+    validateEmailMutation.mutate({
+      email: values.email,
+    });
+  };
+
+  const verificateCodeHandler = (e) => {
+    e.preventDefault();
+    if (values.checkCode === verificationCode) {
+      setValidCode(true);
+    } else {
+      setValidCode(false);
+    }
+  };
+
+  useEffect(() => {
+    if (values.nickname) {
+      const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
+      const result = NICKNAME_REGEX.test(values.nickname);
+      setValidNickname(result);
+
+      if (result && values.nickname.length >= 2) {
+        setNicknameSuccessMessage('사용 가능한 닉네임입니다.');
+        setNicknameErrorMessage('');
+      } else {
+        setNicknameSuccessMessage('');
+        setNicknameErrorMessage('한글 또는 영문 대소문자 2-10자 닉네임을 입력해주세요');
+      }
+    } else {
+      setNicknameSuccessMessage('');
+      setNicknameErrorMessage('');
+    }
+  }, [values.nickname]);
+
+  useEffect(() => {
+    if (values.email) {
+      const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      const result = EMAIL_REGEX.test(values.email);
+      setValidEmail(result);
+      if (result) {
+        setEmailSuccessMessage('사용가능한 이메일입니다');
+        setEmailErrorMessage('');
+      } else {
+        setEmailSuccessMessage('');
+        setEmailErrorMessage('잘못된 이메일 형식입니다');
+      }
+    } else {
+      setEmailSuccessMessage('');
+      setEmailErrorMessage('');
+    }
+  }, [values.email]);
+
+  useEffect(() => {
+    if (validCode) {
+      setEmailCodeSuccessMessage('이메일 인증이 완료 되었습니다.');
+      setEmailCodeErrorMessage('');
+    } else {
+      setEmailCodeSuccessMessage('');
+      setEmailCodeErrorMessage('올바른 인증 코드를 입력해주세요.');
+    }
+  }, [validCode]);
+
+  useEffect(() => {
+    if (values.password) {
+      const PWD_REGEX = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=\S+$).{8,15}$/;
+      const result = PWD_REGEX.test(values.password);
+      setValidPwd(result); // 상태 값 변경 : false -> true
+      if (values.password.length >= 8) {
+        setValidPwd(true);
+        setPwdErrorMessage('');
+      } else {
+        setValidPwd(false);
+        setPwdErrorMessage(
+          '알파벳 소문자, 대문자, 숫자 포함, 특수문자를 포함한 8-15자 사이의 비밀번호를 입력해주세요.'
+        );
+      }
+      const match = values.password === values.checkPassword; // 비밀번호와 비밀번호 값 비교
+      setMatchPwd(match); // 상태 값 변경 : false -> true
+      if (match) {
+        setPwdMatchErrorMessage('');
+      } else {
+        setPwdMatchErrorMessage('비밀번호가 일치하지 않습니다.');
+      }
+    }
+  }, [values.password, values.checkPassword]);
+
+  const [focusBorder, setFocusBorder] = useState({
+    nicknameBorder: false,
+    emailBorder: false,
+    checkCodeBorder: false,
+    passwordBorder: false,
+    checkPasswordBorder: false,
+  });
+
+  const {
+    nicknameBorder,
+    emailBorder,
+    checkCodeBorder,
+    passwordBorder,
+    checkPasswordBorder,
+  } = focusBorder;
+
+  const onFocusBorder = (border) => {
+    setFocusBorder({
+      ...focusBorder,
+      [border]: !focusBorder[border],
+    });
+  };
+
+  const onBlurBorder = (border) => {
+    setFocusBorder({
+      ...focusBorder,
+      [border]: false,
+    });
+  };
+
   return (
     <Container
       display="flex"
@@ -41,24 +240,30 @@ function Register() {
       alignitems="center"
       gap="12px"
     >
-      {values.nickname}
-      {values.email}
-      {values.checkCode}
-      {values.password}
-      {values.checkPassword}
       <StRegisterSection>
         <StRegisterBox>
           <StHeader>
             <h1>회원가입</h1>
           </StHeader>
-          <StForm>
+
+          {/* 회원가입 영역 */}
+          <StForm onSubmit={onSubmitHandler}>
             {/* 닉네임 영역 */}
             <NicknameInput
               name="nickname"
               value={values.nickname}
               onChange={onChangeHandler}
               placeholder="닉네임"
-              inputwidth="280px"
+              inputwidth="193px"
+              validNickname={validNickname}
+              button="확인"
+              bordercolor={
+                nicknameBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
+              }
+              onFocus={() => onFocusBorder('nicknameBorder')}
+              onBlur={() => onBlurBorder('nicknameBorder')}
+              successMessage={nicknameSuccessMessage}
+              errorMessage={nicknameErrorMessage}
             />
 
             {/* 이메일 영역 */}
@@ -70,9 +275,16 @@ function Register() {
                 onChange={onChangeHandler}
                 label="이메일 주소"
                 placeholder="이메일 주소"
-                button="발송"
                 inputwidth="193px"
-                message="잘못된 이메일 형식입니다."
+                validEmail={validEmail}
+                bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
+                onFocus={() => onFocusBorder('emailBorder')}
+                onBlur={() => onBlurBorder('emailBorder')}
+                onClick={(e) => validateEmailHandler(e)}
+                button="발송"
+                emailVerification={emailVerification}
+                successMessage={emailSuccessMessage}
+                errorMessage={emailErrorMessage}
               />
 
               {/* 2. 인증번호 */}
@@ -82,11 +294,19 @@ function Register() {
                 onChange={onChangeHandler}
                 label="인증번호"
                 placeholder="1234"
+                inputwidth="85px"
+                bordercolor={
+                  checkCodeBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
+                }
+                onFocus={() => onFocusBorder('checkCodeBorder')}
+                onBlur={() => onBlurBorder('checkCodeBorder')}
+                onClick={(e) => verificateCodeHandler(e)}
                 button="확인"
                 inputboxwidth="255px"
                 divwith="227px"
-                inputwidth="85px"
-                message="잘못된 번호입니다. 다시 시도해주세요."
+                validCode={validCode}
+                successMessage={emailCodeSuccessMessage}
+                errorMessage={emailCodeErrorMessage}
               />
             </StInputField>
 
@@ -98,11 +318,19 @@ function Register() {
                 value={values.password}
                 onChange={onChangeHandler}
                 label="비밀번호"
-                inputboxheight="138px"
+                placeholder="비밀번호"
                 inputwidth="243px"
+                bordercolor={
+                  passwordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
+                }
+                onFocus={() => onFocusBorder('passwordBorder')}
+                onBlur={() => onBlurBorder('passwordBorder')}
+                inputboxheight="105px"
                 messageheight="57px"
                 messagewidth="335px"
-                message="알파벳 소문자, 대문자, 숫자 포함, 특수문자($, @, !, %, *, ?, &, (,))를 포함한 8-15자 사이의 비밀번호를 입력해주세요."
+                icon={alertIcon}
+                validPwd={validPwd}
+                errorMessage={pwdErrorMessage}
               />
 
               {/* 2. 비밀번호 확인 */}
@@ -111,16 +339,32 @@ function Register() {
                 value={values.checkPassword}
                 onChange={onChangeHandler}
                 label="비밀번호 확인"
+                placeholder="비밀번호 확인"
                 inputwidth="243px"
-                message="비밀번호가 일치하지 않습니다."
+                bordercolor={
+                  checkPasswordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
+                }
+                onFocus={() => onFocusBorder('checkPasswordBorder')}
+                onBlur={() => onBlurBorder('checkPasswordBorder')}
+                inputboxheight="82px"
+                matchPwd={matchPwd}
+                errorMessage={pwdMatchErrorMessage}
               />
             </StInputField>
 
             {/* 약관 및 회원가입 버튼 영역 */}
             <StPolicyField>
               <StCheckboxInputField>
-                <CheckboxInput label="서비스 약관에 동의합니다." />
-                <CheckboxInput label="개인정보 수집 및 이용에 동의합니다." />
+                <CheckboxInput
+                  label="서비스 약관에 동의합니다."
+                  id="terms"
+                  htmlFor="terms"
+                />
+                <CheckboxInput
+                  label="개인정보 수집 및 이용에 동의합니다."
+                  id="personal"
+                  htmlFor="personal"
+                />
               </StCheckboxInputField>
               <Button
                 width="156px"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StInputBox,
   StInputFrame,
@@ -6,35 +6,95 @@ import {
   StInput,
   StIcon,
   StMessage,
+  StLabel,
 } from '../../styles/Inputs.styles';
 import errorIcon from '../../assets/Icons/errorIcon.svg';
+import checkIcon from '../../assets/Icons/checkIcon.svg';
 import eye from '../../assets/Icons/eye.svg';
 
-function PasswordInput(props) {
+function PasswordInput({
+  inputboxwidth,
+  inputboxheight,
+  label,
+  onChange,
+  onFocus,
+  onBlur,
+  bordercolor,
+  divwith,
+  messagewidth,
+  messageheight,
+  successmsg,
+  errorMessage,
+  value,
+  validPwd,
+  matchPwd,
+  cursor,
+  icon,
+  ...inputprops
+}) {
+  const [showPwd, setshowPwd] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const toggleShowPwd = () => {
+    setshowPwd(!showPwd);
+  };
+
+  const getBordercolor = () => {
+    if (value) {
+      return validPwd || matchPwd ? 'green' : 'red';
+    }
+    return bordercolor;
+  };
+
+  const onMouseEnter = () => {
+    setShowTooltip(!showTooltip);
+  };
+
+  const onMouseLeave = () => {
+    setShowTooltip(!showTooltip);
+  };
+
   return (
-    <StInputBox inputboxwidth={props.inputboxwidth} inputboxheight={props.inputboxheight}>
-      <label>{props.label}</label>
-      <StInputFrame>
-        <StInputDiv divwith={props.divwith}>
-          <StInput
-            type="password"
-            name={props.name}
-            value={props.value}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            inputwidth={props.inputwidth}
+    <StInputBox inputboxwidth={inputboxwidth} inputboxheight={inputboxheight}>
+      <StLabel>
+        <label>{label}</label>
+        {/* {icon && (
+          <img
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            src={icon}
+            alt="Gray Alert Icon"
           />
-          <StIcon>
+        )} */}
+      </StLabel>
+      <StInputFrame>
+        <StInputDiv
+          bordercolor={getBordercolor()}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          divwith={divwith}
+        >
+          <StInput
+            type={showPwd ? 'text' : 'password'}
+            value={value}
+            onChange={onChange}
+            {...inputprops}
+          />
+          <StIcon onClick={toggleShowPwd} cursor="pointer">
             <img src={eye} alt="Eye Open Icon" />
           </StIcon>
         </StInputDiv>
-        <StIcon>
-          <img src={errorIcon} alt="Red Error Icon" />
-        </StIcon>
+        {value && (
+          <StIcon>
+            {validPwd || matchPwd ? (
+              <img src={checkIcon} alt="Green Check Icon" />
+            ) : (
+              <img src={errorIcon} alt="Red Error Icon" />
+            )}
+          </StIcon>
+        )}
       </StInputFrame>
-      <StMessage messagewidth={props.messagewidth} messageheight={props.messageheight}>
-        {props.message}
-      </StMessage>
+      {value && <StMessage>{validPwd || matchPwd ? successmsg : errorMessage}</StMessage>}
     </StInputBox>
   );
 }

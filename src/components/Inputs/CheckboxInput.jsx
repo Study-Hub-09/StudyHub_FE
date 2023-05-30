@@ -6,11 +6,11 @@ import {
   StCheckboxSpan,
 } from '../../styles/Inputs.styles';
 
-function CheckboxInput(props) {
+function CheckboxInput({ label, id, htmlFor }) {
   return (
     <StCheckboxInputBox>
-      <StCheckboxInput type="checkbox" />
-      <StCheckboxLabel>{props.label}</StCheckboxLabel>
+      <StCheckboxInput type="checkbox" id={id} />
+      <StCheckboxLabel htmlFor={htmlFor}>{label}</StCheckboxLabel>
       <StCheckboxSpan>내용보기</StCheckboxSpan>
     </StCheckboxInputBox>
   );

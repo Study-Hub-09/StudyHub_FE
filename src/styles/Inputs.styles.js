@@ -7,7 +7,7 @@ export const StInputBox = styled.div`
   height: ${(props) => props.inputboxheight || '100px'};
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 4px;
 
   label {
     height: 19px;
@@ -25,12 +25,19 @@ export const StInputFrame = styled.div`
 export const StInputDiv = styled.div`
   width: ${(props) => props.divwith || '335px'};
   height: 54px;
-  border: 1px solid var(--color-gray);
+  border: 1px solid ${(props) => props.bordercolor};
   border-radius: 8px;
+  background-color: var(--color-white);
   padding: 13px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const StLabel = styled.div`
+  width: 80px;
+  display: flex;
+  gap: 8px;
 `;
 
 export const StInput = styled.input`
@@ -44,10 +51,11 @@ export const StIcon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: ${(props) => props.cursor};
 `;
 
 export const StMessage = styled.span`
-  width: ${(props) => props.messagewidth};
+  width: ${(props) => props.messagewidth || '335px'};
   height: ${(props) => props.messageheight || '19px'};
   font-size: var(--font-small);
   line-height: 19.07px;
