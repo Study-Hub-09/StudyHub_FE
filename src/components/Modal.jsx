@@ -28,26 +28,6 @@ const Modal = ({ onClose }) => {
         roomContent,
       },
       image: 'string',
-      userDetails: {
-        member: {
-          id: 0,
-          kakaoId: 0,
-          nickname: 'string',
-          email: 'string',
-          password: 'string',
-        },
-        enabled: true,
-        authorities: [
-          {
-            authority: 'string',
-          },
-        ],
-        username: 'string',
-        password: 'string',
-        accountNonExpired: true,
-        accountNonLocked: true,
-        credentialsNonExpired: true,
-      },
     };
     mutation.mutate(addRoom);
     onClose(false);

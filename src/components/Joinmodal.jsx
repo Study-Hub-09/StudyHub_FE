@@ -1,17 +1,23 @@
-import React, { useRef, useState } from 'react';
-import { styled } from 'styled-components';
+import React, { useRef, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import cancel from '../asset/cancel.svg';
-import Vector from '../asset/Vector.svg';
+import usericon from '../asset/Vector.svg';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getRoomDetail } from '../api/api';
 
-function Joinmodal({ onClose }) {
+function Joinmodal({ onClose, sessionId }) {
   const outside = useRef();
   const navigate = useNavigate();
   const joinbuttonHandler = () => {
-    navigate('/room');
+    navigate(`/room/${sessionId}/detail`);
     onClose(false);
   };
 
+  const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(sessionId));
+  console.log(sessionId);
+
+  const roomData = data?.data;
   return (
     <Stcontainer
       ref={outside}
@@ -31,12 +37,12 @@ function Joinmodal({ onClose }) {
               }}
             />
           </Stheaderbox>
-          <Sttitle>스터디 이름</Sttitle>
+          <Sttitle>{roomData?.roomName}</Sttitle>
           <Stcategory>카테고리</Stcategory>
-          <Stcontent>스터디 설명글</Stcontent>
+          <Stcontent>{roomData?.roomContent}</Stcontent>
           <Stroomcount>
             <span>1 / 9</span>
-            <img src={Vector} alt="" />
+            <img src={usericon} alt="" />
             <Stjoinbutton onClick={joinbuttonHandler}>입장하기</Stjoinbutton>
           </Stroomcount>
         </StLayout>

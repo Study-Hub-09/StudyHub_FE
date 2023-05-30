@@ -16,6 +16,7 @@ function Main() {
   const [checked, setChecked] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
 
   const { isLoading, isError, data } = useQuery('rooms', getRoom);
 
@@ -27,7 +28,7 @@ function Main() {
     return <p>오류가 발생하였습니다...!</p>;
   }
 
-  console.log(data);
+  // console.log(data);
 
   const checkBoxHandler = () => {
     setChecked(!checked);
@@ -37,8 +38,9 @@ function Main() {
     setModalOpen(true);
   };
 
-  const joinmodalToggleHandler = () => {
+  const joinmodalToggleHandler = (sessionId) => {
     setJoinModalOpen(true);
+    setSelectedRoomId(sessionId);
   };
   return (
     <>
@@ -52,6 +54,7 @@ function Main() {
         )}
         {joinModalOpen && (
           <Joinmodal
+            sessionId={selectedRoomId}
             onClose={() => {
               setJoinModalOpen(false);
             }}
@@ -83,21 +86,30 @@ function Main() {
             </div>
           </Stfilterbox>
           <StroomArea>
-            <Stroombox onClick={joinmodalToggleHandler}>
-              <Stroomboxlayout>
-                <Stthumbnail></Stthumbnail>
-                <Stroomtext>
-                  <Stroomtitle>방 이름</Stroomtitle>
-                  <Stroomsubtitle>방에 대한 세부 셜명</Stroomsubtitle>
-                </Stroomtext>
-                <div>
-                  <Stroomcount>
-                    <span>1 / 9</span>
-                    <img src={Vector} alt="" />
-                  </Stroomcount>
-                </div>
-              </Stroomboxlayout>
-            </Stroombox>
+            {data.data.map((item) => {
+              return (
+                <Stroombox
+                  key={item.sessionId}
+                  onClick={() => {
+                    joinmodalToggleHandler(item.sessionId);
+                  }}
+                >
+                  <Stroomboxlayout>
+                    <Stthumbnail></Stthumbnail>
+                    <Stroomtext>
+                      <Stroomtitle>{item.roomName}</Stroomtitle>
+                      <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>
+                    </Stroomtext>
+                    <div>
+                      <Stroomcount>
+                        <span>1 / 9</span>
+                        <img src={Vector} alt="" />
+                      </Stroomcount>
+                    </div>
+                  </Stroomboxlayout>
+                </Stroombox>
+              );
+            })}
           </StroomArea>
         </StContents>
         <Stallowbox>

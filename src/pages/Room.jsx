@@ -15,12 +15,19 @@ import cancel from '../asset/cancel.svg';
 import logo from '../asset/logo.svg';
 import profileimg from '../asset/user.svg';
 import viewmic from '../asset/viewmic.svg';
-
+import { FaUserCircle } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getRoomDetail } from '../api/api';
 function Room() {
   const [micon, setMicOn] = useState(false);
   const [camon, setCamOn] = useState(false);
   const [ischatOpen, setisChatOpen] = useState(false);
-
+  const params = useParams();
+  //   console.log(params.id);
+  const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(params.id));
+  //   console.log(data);
+  const roomData = data?.data;
   const micbuttonhandler = () => {
     setMicOn(!micon);
   };
@@ -38,7 +45,7 @@ function Room() {
               <div>00:00:00</div>
               <img src={play} alt="" />
             </Sttimertext>
-            <Sttitle>스터디 방 이름</Sttitle>
+            <Sttitle>{roomData?.roomName}</Sttitle>
           </Stheader>
           <Stcamarea ischatOpen={ischatOpen}>
             <Stcambox>
@@ -129,7 +136,7 @@ function Room() {
                   </StTochatinner>
                   <Stchattext>채팅내용 입력</Stchattext>
                 </StchattextArea>
-                <img src={profileimg} alt="" />
+                <FaUserCircle size={46.67} />
               </StTochat>
               {/* 받는 메시지 */}
               <StFromchat>
@@ -140,7 +147,7 @@ function Room() {
                   </StTochatinner>
                   <StFromchattext>채팅내용 입력</StFromchattext>
                 </StchattextArea>
-                <img src={profileimg} alt="" />
+                <FaUserCircle size={46.67} />
               </StFromchat>
             </Stchatbox>
             <Stsendarea>
@@ -304,7 +311,7 @@ const StFromchat = styled.div`
 
 const Stcamarea = styled.div`
   /* background-color: blue; */
-  width: ${(props) => (props.ischatOpen ? '1264px' : '1264px')};
+  width: ${({ ischatOpen }) => (ischatOpen ? '1264px' : '1264px')};
   height: 771px;
   display: grid;
   grid-template-columns: repeat(3, 1fr); // 기본적으로 3 열로 표시.
