@@ -7,6 +7,7 @@ import Main from '../pages/Main';
 import MyPage from '../pages/Mypage';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import Room from '../pages/Room';
 
 function Router() {
   return (
@@ -19,6 +20,7 @@ function Router() {
         <Route element={<MainLayout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/room" element={<Room />} />
         </Route>
 
         <Route path="/members/login" element={<Login />} />
