@@ -63,7 +63,7 @@ function SideBar({ children }) {
 
         <StNavLinkContainer>
           {menuItem.map((item, index) => (
-            <StNavLink>
+            <StNavLink to={item.nevigate} key={index}>
               <StMenuItems isOpen={isOpen}>
                 <StIcon>{item.icon}</StIcon>
                 <StName isOpen={isOpen}>{item.name}</StName>
@@ -97,7 +97,7 @@ function SideBar({ children }) {
       <StOutFrame isOpen={isOpen}>
         <StStraight src={Straight} alt="오류" isOpen={isOpen} onClick={toggle} />
       </StOutFrame>
-      <StMainContainer>{children}</StMainContainer>
+      {/* <StMainContainer>{children}</StMainContainer> */}
     </StContainer>
   );
 }
@@ -107,7 +107,6 @@ export default SideBar;
 const StContainer = styled.div`
   display: flex;
   height: 100vh;
-  width: 100%;
 `;
 const StSidebarContainer = styled.div`
   display: flex;
@@ -307,6 +306,7 @@ const StMainContainer = styled.div`
   width: 100%;
   height: 100vh;
   flex: 1;
+  background-color: #9aaeff;
 `;
 const StOutFrame = styled.div`
   width: ${({ isOpen }) => (!isOpen ? '20px' : '0px')};
