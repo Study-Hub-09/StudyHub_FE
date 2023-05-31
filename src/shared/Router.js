@@ -7,6 +7,7 @@ import Main from '../pages/Main';
 import MyPage from '../pages/Mypage';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import KakaoRedirectPage from '../pages/KakaoRedirectPage';
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
 
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/register" element={<Register />} />
+        <Route path="/api/members/kakao/callback" element={<KakaoRedirectPage />} />
       </Routes>
     </BrowserRouter>
   );

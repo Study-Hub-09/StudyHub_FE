@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-// ===============COMMON INPUT================ //
+// =============== INPUT================ //
 
 export const StInputBox = styled.div`
   width: ${(props) => props.inputboxwidth || '363px'};
