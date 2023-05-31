@@ -20,7 +20,8 @@ import {
 } from '../styles/Register.styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { register, validateEmail } from '../core/api/auth/register';
+import { register, validateEmail, validateNickname } from '../core/api/auth/register';
+import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
 
 function Register() {
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ function Register() {
     },
   });
 
+  // 회원가입 폼 버튼 핸들러
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (
@@ -93,10 +95,38 @@ function Register() {
     }
   };
 
+  // 닉네임 확인 함수
+  const validateNickNameMutation = useMutation(validateNickname, {
+    async onSuccess(response) {
+      const duplicateNickname = response.data.data;
+      console.log(duplicateNickname);
+      if (duplicateNickname === true) {
+        setNicknameSuccessMessage('닉네임 중복 확인되었습니다.');
+      } else if (duplicateNickname === false) {
+        setNicknameErrorMessage('중복된 닉네임입니다');
+        setValidNickname(false);
+      }
+    },
+    async onError(error) {
+      console.log(error);
+    },
+  });
+
+  // 중복 닉네임 확인 버튼 핸들러
+  const validateNicknameHandler = (e) => {
+    e.preventDefault();
+    if (!values.nickname) {
+      alert('닉네임을 입력해주세요.');
+    } else {
+      validateNickNameMutation.mutate({
+        nickname: values.nickname,
+      });
+    }
+  };
+
+  // 이메일 확인 함수
   const validateEmailMutation = useMutation(validateEmail, {
     async onSuccess(response) {
-      console.log('Register.jsx line52 RESPONSE=====> ', response);
-      console.log('Verification Code line54 RESPONSE.DATA=====> ', response.data);
       const statusCode = response.status;
       if (statusCode === 200) {
         setEmailVerification(true);
@@ -115,15 +145,22 @@ function Register() {
     },
   });
 
+  // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
-    validateEmailMutation.mutate({
-      email: values.email,
-    });
+    if (!values.email) {
+      alert('이메일을 입력해주세요');
+    } else {
+      validateEmailMutation.mutate({
+        email: values.email,
+      });
+    }
   };
 
+  // 인증번호 확인 버튼 핸들러
   const verificateCodeHandler = (e) => {
     e.preventDefault();
+    if (!values.checkCode) alert('인증번호를 입력해주세요');
     if (values.checkCode === verificationCode) {
       setValidCode(true);
     } else {
@@ -131,6 +168,7 @@ function Register() {
     }
   };
 
+  // 닉네임 유효성 검사
   useEffect(() => {
     if (values.nickname) {
       const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
@@ -150,6 +188,7 @@ function Register() {
     }
   }, [values.nickname]);
 
+  // 이메일 유효성 검사
   useEffect(() => {
     if (values.email) {
       const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -168,6 +207,7 @@ function Register() {
     }
   }, [values.email]);
 
+  // 발송 클릭시 이메일 인증확인
   useEffect(() => {
     if (validCode) {
       setEmailCodeSuccessMessage('이메일 인증이 완료 되었습니다.');
@@ -178,6 +218,7 @@ function Register() {
     }
   }, [validCode]);
 
+  // 비밀번호 유효성 검사
   useEffect(() => {
     if (values.password) {
       const PWD_REGEX = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=\S+$).{8,15}$/;
@@ -202,6 +243,7 @@ function Register() {
     }
   }, [values.password, values.checkPassword]);
 
+  // Border Focus
   const [focusBorder, setFocusBorder] = useState({
     nicknameBorder: false,
     emailBorder: false,
@@ -262,6 +304,7 @@ function Register() {
               }
               onFocus={() => onFocusBorder('nicknameBorder')}
               onBlur={() => onBlurBorder('nicknameBorder')}
+              onClick={(e) => validateNicknameHandler(e)}
               successMessage={nicknameSuccessMessage}
               errorMessage={nicknameErrorMessage}
             />
@@ -381,7 +424,7 @@ function Register() {
           {/* 소셜 로그인 영역 */}
           <StSocialField>
             <p>SNS 계정으로 시작하기</p>
-            <KakaoButton />
+            <KakaoButton to={KAKAO_AUTH_URL} />
           </StSocialField>
         </StRegisterBox>
       </StRegisterSection>
