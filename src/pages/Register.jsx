@@ -115,9 +115,13 @@ function Register() {
   // 중복 닉네임 확인 버튼 핸들러
   const validateNicknameHandler = (e) => {
     e.preventDefault();
-    validateNickNameMutation.mutate({
-      nickname: values.nickname,
-    });
+    if (!values.nickname) {
+      alert('닉네임을 입력해주세요.');
+    } else {
+      validateNickNameMutation.mutate({
+        nickname: values.nickname,
+      });
+    }
   };
 
   // 이메일 확인 함수
@@ -144,14 +148,19 @@ function Register() {
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
-    validateEmailMutation.mutate({
-      email: values.email,
-    });
+    if (!values.email) {
+      alert('이메일을 입력해주세요');
+    } else {
+      validateEmailMutation.mutate({
+        email: values.email,
+      });
+    }
   };
 
   // 인증번호 확인 버튼 핸들러
   const verificateCodeHandler = (e) => {
     e.preventDefault();
+    if (!values.checkCode) alert('인증번호를 입력해주세요');
     if (values.checkCode === verificationCode) {
       setValidCode(true);
     } else {
