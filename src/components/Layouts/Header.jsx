@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import SymbolG from '../../assets/images/SymbolG.svg';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <StHeaderContainer>
       <StLogoNameContainer>
@@ -14,7 +16,11 @@ function Header() {
         <StMenu>진행중인 스터디</StMenu>
         <StMenu2>내 공부 현황</StMenu2>
         <StMenu3>검색</StMenu3>
-        <StLoginBtn>
+        <StLoginBtn
+          onClick={() => {
+            navigate('/members/login');
+          }}
+        >
           <StLoginBtnText>로그인</StLoginBtnText>
         </StLoginBtn>
       </StMenuContainer>
@@ -30,12 +36,12 @@ const StHeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border: 1px solid #ff8e95;
+  /* border: 1px solid #ff8e95; */
 `;
 const StLogoNameContainer = styled.div`
   width: 98px;
   height: 40px;
-  border: 1px solid #ff8e95;
+  /* border: 1px solid #ff8e95; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +64,7 @@ const StLogoName = styled.div`
 const StMenuContainer = styled.div`
   width: 385px;
   height: 48px;
-  border: 1px solid #ff8e95;
+  /* border: 1px solid #ff8e95; */
   display: flex;
   align-items: center;
 `;
@@ -126,5 +132,6 @@ const StLoginBtnText = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
+  justify-content: center;
   color: #ffffff;
 `;

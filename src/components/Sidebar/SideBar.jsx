@@ -140,8 +140,8 @@ const StNavLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   &:hover {
-    /* height: 29.5px;
-    margin: 15px 0px 15px 0px; */
+    height: 29.5px;
+    margin: 15px 0px 15px 0px;
     border-left: 3px solid #ffffff;
   }
 `;
