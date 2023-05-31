@@ -21,6 +21,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { register, validateEmail } from '../core/api/auth/register';
+import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
 
 function Register() {
   const navigate = useNavigate();
@@ -381,7 +382,7 @@ function Register() {
           {/* 소셜 로그인 영역 */}
           <StSocialField>
             <p>SNS 계정으로 시작하기</p>
-            <KakaoButton />
+            <KakaoButton to={KAKAO_AUTH_URL} />
           </StSocialField>
         </StRegisterBox>
       </StRegisterSection>

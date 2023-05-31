@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SymbolG from '../../assets/images/SymbolG.svg';
+import SymbolG from '../../assets/Images/SymbolG.svg';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
