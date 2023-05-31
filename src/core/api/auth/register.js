@@ -1,4 +1,4 @@
-import instance from '../axios/instance';
+import { instance } from '../axios/instance';
 
 const register = async (member) => {
   try {

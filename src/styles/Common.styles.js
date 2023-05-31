@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 // ===============CONTAINER================ //
@@ -36,7 +37,7 @@ export const StButton = styled.button`
 
 // ===============KAKAO BUTTON================ //
 
-export const StKakaoBtn = styled.button`
+export const StKakaoBtn = styled(Link)`
   width: 215px;
   height: 54px;
 `;
