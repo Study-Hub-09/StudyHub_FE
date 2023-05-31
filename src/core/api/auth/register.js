@@ -24,4 +24,15 @@ const validateEmail = async ({ email }) => {
   }
 };
 
-export { register, validateEmail };
+const validateNickname = async ({ nickname }) => {
+  try {
+    const response = await instance.get(`/api/members/checkNickname/${nickname}`);
+    console.log('Register.js: line30 VALIDATE NICKNAME RESPONSE=====> ', response);
+    return response;
+  } catch (error) {
+    console.log('Register.js: line33 VALIDATE NICKNAME ERROR=====> ', error);
+    throw error;
+  }
+};
+
+export { register, validateEmail, validateNickname };
