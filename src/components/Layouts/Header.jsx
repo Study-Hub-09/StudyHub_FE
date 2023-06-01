@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import SymbolG from '../../assets/Images/SymbolG.svg';
+import SymbolG from '../../assets/images/SymbolG.svg';
 import { useNavigate } from 'react-router-dom';
+import { getCookie, removeCookie } from '../../Cookies/Cookies';
 
 function Header() {
   const navigate = useNavigate();
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    setToken(accessToken);
+  }, []);
+
+  const tokenHandler = () => {
+    if (token) {
+      removeCookie('AccessToken', { path: '/' });
+      removeCookie('RefreshToken', { path: '/' });
+      setToken('');
+      window.location.reload();
+    }
+  };
+  console.log(token);
   return (
     <StHeaderContainer>
       <StLogoNameContainer>
@@ -13,15 +30,33 @@ function Header() {
       </StLogoNameContainer>
 
       <StMenuContainer>
-        <StMenu>진행중인 스터디</StMenu>
-        <StMenu2>내 공부 현황</StMenu2>
-        <StMenu3>검색</StMenu3>
-        <StLoginBtn
+        <StMenu
           onClick={() => {
-            navigate('/members/login');
+            navigate('/main');
           }}
         >
-          <StLoginBtnText>로그인</StLoginBtnText>
+          진행중인 스터디
+        </StMenu>
+        <StMenu2
+          onClick={() => {
+            navigate('/main');
+          }}
+        >
+          내 공부 현황
+        </StMenu2>
+        <StMenu3
+          onClick={() => {
+            navigate('/main');
+          }}
+        >
+          검색
+        </StMenu3>
+        <StLoginBtn
+          onClick={() => {
+            token ? tokenHandler() : navigate('/members/login');
+          }}
+        >
+          <StLoginBtnText>{token ? '로그아웃' : '로그인'}</StLoginBtnText>
         </StLoginBtn>
       </StMenuContainer>
     </StHeaderContainer>
@@ -81,6 +116,7 @@ const StMenu = styled.div`
   text-align: center;
   justify-content: center;
   color: #000000;
+  cursor: pointer;
 `;
 const StMenu2 = styled.div`
   width: 90px;
@@ -96,6 +132,7 @@ const StMenu2 = styled.div`
   justify-content: center;
   color: #000000;
   margin: 0px 0px 0px 20px;
+  cursor: pointer;
 `;
 const StMenu3 = styled.div`
   width: 30px;
@@ -111,9 +148,10 @@ const StMenu3 = styled.div`
   justify-content: center;
   color: #000000;
   margin: 0px 20px 0px 20px;
+  cursor: pointer;
 `;
 const StLoginBtn = styled.button`
-  width: 97px;
+  width: 100px;
   height: 40px;
   background: #000000;
   border-radius: 5px;
@@ -122,7 +160,7 @@ const StLoginBtn = styled.button`
   align-items: center;
 `;
 const StLoginBtnText = styled.div`
-  width: 49px;
+  width: 60px;
   height: 16px;
   font-family: 'Noto Sans';
   font-style: normal;
