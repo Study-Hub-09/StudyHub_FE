@@ -10,7 +10,6 @@ import Register from '../pages/Register';
 import Room from '../pages/Room';
 import KakaoRedirectPage from '../pages/KakaoRedirectPage';
 
-
 function Router() {
   return (
     <BrowserRouter>
