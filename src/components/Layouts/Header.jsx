@@ -17,6 +17,7 @@ function Header() {
     if (token) {
       removeCookie('AccessToken', { path: '/' });
       removeCookie('RefreshToken', { path: '/' });
+      localStorage.removeItem('member');
       setToken('');
       window.location.reload();
     }
