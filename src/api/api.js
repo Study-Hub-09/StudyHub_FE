@@ -1,18 +1,9 @@
 import axios from 'axios';
 // import { Cookies } from 'react-cookie';
-import { getCookie } from '../cookie/Cookie';
+import { getCookie } from '../Cookies/Cookies';
 
-const getToken = getCookie('token');
-const getToken2 = getCookie('token2');
-
-localStorage.setItem(
-  'token',
-  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTU0ODY4NSwiaWF0IjoxNjg1NTQ1MDg1fQ.Ir4SJU59M6NKZdJWuySw4fiaAlQH5XC5Wb7fYMHqlI4'
-);
-localStorage.setItem(
-  'token2',
-  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTU1MzcyNSwiaWF0IjoxNjg1NTQ1MDg1fQ.NVs2t1JAKP-f3hV-Ezm3oQaMm0c1KaWaKbZNiBMrfbk'
-);
+const getToken = getCookie('AccessToken');
+const getToken2 = getCookie('RefreshToken');
 
 // 게시글 조회
 const getRoom = async (page) => {
@@ -49,8 +40,7 @@ const addRoom = async (newRoom) => {
 const getRoomDetail = async (sessionId) => {
   const token = getToken;
   const token2 = getToken2;
-  // const token = localStorage.getItem('token');
-  // const token2 = localStorage.getItem('token2');
+
   const response = await axios.get(
     `${process.env.REACT_APP_SERVER_URL}/api/room/${sessionId}`,
     {
@@ -65,10 +55,8 @@ const getRoomDetail = async (sessionId) => {
 
 // 스터디룸 입장
 const joinRoom = async (sessionId, memberData) => {
-  // const token = getToken;
-  // const token2 = getToken2;
-  const token = localStorage.getItem('token');
-  const token2 = localStorage.getItem('token2');
+  const token = getToken;
+  const token2 = getToken2;
 
   const response = await axios.post(
     `${process.env.REACT_APP_SERVER_URL}/api/room/${sessionId}/enter`,

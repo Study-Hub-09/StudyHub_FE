@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import SymbolG from '../../assets/Images/SymbolG.svg';
+import SymbolG from '../../assets/images/SymbolG.svg';
 import { useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 
