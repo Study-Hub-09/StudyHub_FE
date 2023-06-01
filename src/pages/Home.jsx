@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import GroupHome from '../assets/images/GroupHome.svg';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <StHomeContainer>
       <StHomeMainContainer>
@@ -16,11 +20,19 @@ function Home() {
             담았다. <br /> 그룹공부를 통해 집중력을 높여보자!
           </StMainLogoNameEx>
           <StMainBtn>
-            <StMainBtnName>스터디 만들기</StMainBtnName>
+            <StMainBtnName
+              onClick={() => {
+                navigate('/main');
+              }}
+            >
+              스터디 만들기
+            </StMainBtnName>
           </StMainBtn>
         </StMain>
 
-        <StMainFrame></StMainFrame>
+        <StMainFrame>
+          <StMainImg src={GroupHome} alt="오류" />
+        </StMainFrame>
       </StHomeMainContainer>
     </StHomeContainer>
   );
@@ -81,7 +93,6 @@ const StMainLogoName = styled.div`
   text-align: center;
   justify-content: center;
   color: #000000;
-  padding: 10px 0px 0px 0px;
   background: linear-gradient(
     270deg,
     rgba(144, 181, 76, 0.5) 12.76%,
@@ -108,7 +119,7 @@ const StMainLogoNameEx = styled.div`
   color: #000000;
   margin: 0px 0px 35px 0px;
 `;
-const StMainBtn = styled.div`
+const StMainBtn = styled.button`
   width: 150px;
   height: 48px;
   display: flex;
@@ -136,4 +147,10 @@ const StMainFrame = styled.div`
   /* height: calc(100vh - 90px); */
   height: 234px;
   /* border: 1px solid #9e86ff; */
+  display: flex;
+  justify-content: center;
+`;
+const StMainImg = styled.img`
+  width: 1502.58px;
+  /* height: 447px; */
 `;
