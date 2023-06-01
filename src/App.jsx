@@ -5,7 +5,13 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { CookiesProvider } from 'react-cookie';
 import { GlobalStyles } from './styles/GlobalStyles';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
