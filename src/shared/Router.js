@@ -8,6 +8,8 @@ import MyPage from '../pages/Mypage';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Room from '../pages/Room';
+import KakaoRedirectPage from '../pages/KakaoRedirectPage';
+
 
 function Router() {
   return (
@@ -16,7 +18,9 @@ function Router() {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />
         </Route>
+      </Routes>
 
+      <Routes>
         <Route element={<MainLayout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
@@ -25,6 +29,7 @@ function Router() {
 
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/register" element={<Register />} />
+        <Route path="/api/members/kakao/callback" element={<KakaoRedirectPage />} />
       </Routes>
     </BrowserRouter>
   );
