@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { login } from '../core/api/auth/login';
 import { setCookie } from '../Cookies/Cookies';
@@ -76,7 +76,6 @@ function Login() {
       if (statusCode === 404) {
         alert(message); //해당 유저 정보를 찾을 수 없습니다 -> 서버에서 응답하는 메세지
         // 유효하지 않은 로그인 정보입니다
-        navigate('/members/register');
       }
       console.log('onError Login.jsx===> ', statusCode);
     },
