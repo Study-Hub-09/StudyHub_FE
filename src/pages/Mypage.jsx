@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Mypage() {
+  const nickname = localStorage.member;
   return (
     <StMainContainer>
       <StHeaderContainer>
@@ -10,7 +11,7 @@ function Mypage() {
         <StHeaderMain>
           <StHeaderMainContainer>
             <StHeaderUserNameContainer>
-              <StHeaderUserName>Hello, 이름!</StHeaderUserName>
+              <StHeaderUserName>Hello, {nickname}!</StHeaderUserName>
               <StHeaderUserIntro>나의 모든 공부 데이터 모아보기</StHeaderUserIntro>
             </StHeaderUserNameContainer>
 
@@ -186,7 +187,7 @@ const StHeaderUserNameContainer = styled.div`
   margin-bottom: 48.39px;
 `;
 const StHeaderUserName = styled.div`
-  width: 169px;
+  width: 200px;
   height: 44px;
   font-family: 'Noto Sans';
   font-style: normal;
