@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GroupHome from '../assets/Images/GroupHome.svg';
+import GroupHome from '../assets/images/GroupHome.svg';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {

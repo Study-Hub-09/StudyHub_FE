@@ -22,16 +22,29 @@ const Modal = ({ onClose }) => {
     },
   });
 
-  const addbuttonHandler = () => {
-    const addRoom = {
-      content: {
-        roomName,
-        roomContent,
-      },
-      image: 'string',
+  const addbuttonHandler = async () => {
+    const content = {
+      roomName,
+      roomContent,
     };
-    mutation.mutate(addRoom);
-    onClose(false);
+
+    // FormData에 데이터 추가
+    const formData = new FormData();
+
+    const contentrString = JSON.stringify(content);
+    await formData.append(
+      'content',
+      new Blob([contentrString], { type: 'application/json' })
+    );
+    // 이미지 추가
+    formData.append('image', '');
+
+    try {
+      mutation.mutate(formData);
+      onClose(false);
+    } catch (error) {
+      console.error('추가 실패:', error);
+    }
   };
 
   const lockbuttonHandler = () => {
