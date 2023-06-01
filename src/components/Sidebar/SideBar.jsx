@@ -1,54 +1,75 @@
-import React, { useState } from 'react';
-import Symbol from '../../assets/images/Symbol.svg';
-import Analitycs from '../../assets/images/Analitycs.svg';
-import Dashboard from '../../assets/images/Dashboard Icon.svg';
-import Search from '../../assets/images/Search.svg';
-import materialsymbols from '../../assets/images/material-symbols_help-outline.svg';
-import setting from '../../assets/images/setting2.svg';
-import logout from '../../assets/images/logout.svg';
-import profile from '../../assets/images/Frame 20.svg';
-import Straight from '../../assets/images/Straight.svg';
-import RevStraight from '../../assets/images/RevStraight.svg';
+import React, { useEffect, useState } from 'react';
+import Symbol from '../../assets/Images/Symbol.svg';
+import Analitycs from '../../assets/Images/Analitycs.svg';
+import Dashboard from '../../assets/Images/Dashboard Icon.svg';
+import Search from '../../assets/Images/Search.svg';
+import materialsymbols from '../../assets/Images/material-symbols_help-outline.svg';
+import setting from '../../assets/Images/setting2.svg';
+import logout from '../../assets/Images/logout.svg';
+import profile from '../../assets/Images/Frame 20.svg';
+import Straight from '../../assets/Images/Straight.svg';
+import RevStraight from '../../assets/Images/RevStraight.svg';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { getCookie, removeCookie } from '../../Cookies/Cookies';
 
 function SideBar({ children }) {
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    setToken(accessToken);
+  }, []);
+
+  const tokenHandler = () => {
+    if (token) {
+      removeCookie('AccessToken', { path: '/' });
+      removeCookie('RefreshToken', { path: '/' });
+      localStorage.removeItem('member');
+      setToken('');
+      window.location.reload();
+    }
+  };
+  console.log(token);
+
   const menuItem = [
     {
-      nevigate: '/main',
+      navigate: '/main',
       name: '진행중인 스터디',
       icon: <img src={Analitycs} alt="오류" />,
     },
     {
-      nevigate: '/mypage',
+      navigate: '/mypage',
       name: '내 공부 현황',
       icon: <img src={Dashboard} alt="오류" />,
     },
     {
-      nevigate: '/main',
+      navigate: '/main',
       name: '검색',
       icon: <img src={Search} alt="오류" />,
     },
   ];
   const menuItem1 = [
     {
-      nevigate: '/main',
+      navigate: '/main',
       name: 'Help',
       icon: <img src={materialsymbols} alt="오류" />,
     },
     {
-      nevigate: '/main',
+      navigate: '/main',
       name: '설정',
       icon: <img src={setting} alt="오류" />,
     },
+  ];
+  const menuItem2 = [
     {
-      nevigate: '/members/login',
-      name: '로그인',
+      onClick: () => (token ? tokenHandler() : navigate('/members/login')),
+      name: token ? '로그아웃' : '로그인',
       icon: <img src={logout} alt="오류" />,
     },
   ];
@@ -56,14 +77,21 @@ function SideBar({ children }) {
     <StContainer>
       <StSidebarContainer isOpen={isOpen}>
         <StLogoContainer>
-          <StSymbol src={Symbol} alt="오류" isOpen={isOpen} />
+          <StSymbol
+            src={Symbol}
+            alt="오류"
+            isOpen={isOpen}
+            onClick={() => {
+              navigate('/');
+            }}
+          />
           <StSymbolName isOpen={isOpen}>스터브</StSymbolName>
           <StRevStraight src={RevStraight} alt="오류" isOpen={isOpen} onClick={toggle} />
         </StLogoContainer>
 
         <StNavLinkContainer>
           {menuItem.map((item, index) => (
-            <StNavLink to={item.nevigate} key={index}>
+            <StNavLink to={item.navigate} key={index}>
               <StMenuItems isOpen={isOpen}>
                 <StIcon>{item.icon}</StIcon>
                 <StName isOpen={isOpen}>{item.name}</StName>
@@ -72,12 +100,20 @@ function SideBar({ children }) {
           ))}
           <StLine isOpen={isOpen} />
           {menuItem1.map((item, index) => (
-            <StNavLink to={item.nevigate} key={index}>
+            <StNavLink to={item.navigate} key={index}>
               <StMenuItems isOpen={isOpen}>
                 <StIcon>{item.icon}</StIcon>
                 <StName isOpen={isOpen}>{item.name}</StName>
               </StMenuItems>
             </StNavLink>
+          ))}
+          {menuItem2.map((item, index) => (
+            <StNavLink2 key={index} onClick={item.onClick}>
+              <StMenuItems isOpen={isOpen}>
+                <StIcon>{item.icon}</StIcon>
+                <StName isOpen={isOpen}>{item.name}</StName>
+              </StMenuItems>
+            </StNavLink2>
           ))}
         </StNavLinkContainer>
 
@@ -88,8 +124,13 @@ function SideBar({ children }) {
             </StProfileFreame>
 
             <StPofileTextFreame>
-              <StPofileText isOpen={isOpen}>게스트</StPofileText>
-              <StPofileText2 isOpen={isOpen}>로그인하여 이용하기</StPofileText2>
+              <StPofileText isOpen={isOpen}>
+                {token ? localStorage.member : '게스트'}
+              </StPofileText>
+
+              <StPofileText2 isOpen={isOpen}>
+                {token ? '환영합니다.' : '로그인하여 이용하기'}
+              </StPofileText2>
             </StPofileTextFreame>
           </StProfileLaout>
         </StProfileContainer>
@@ -145,6 +186,18 @@ const StNavLink = styled(Link)`
     border-left: 3px solid #ffffff;
   }
 `;
+const StNavLink2 = styled.div`
+  height: 59px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    height: 29.5px;
+    margin: 15px 0px 15px 0px;
+    border-left: 3px solid #ffffff;
+  }
+`;
 const StMenuItems = styled.div`
   display: flex;
   align-items: flex-end;
@@ -189,6 +242,7 @@ const StSymbol = styled.img`
   height: 32px;
   width: 32px;
   margin: 0px 8px 0px 36px;
+  cursor: pointer;
   ${({ isOpen }) =>
     !isOpen &&
     `
@@ -214,6 +268,7 @@ const StRevStraight = styled.img`
   width: 24px;
   height: 24px;
   margin: 0px 36px 0px 74px;
+  cursor: pointer;
   transition: display 0.36s ease;
   ${({ isOpen }) =>
     !isOpen &&
@@ -225,6 +280,7 @@ const StStraight = styled.img`
   width: 24px;
   height: 24px;
   margin: 32px 0px 0px 0px;
+  cursor: pointer;
   transition: display 0.36s ease;
   ${({ isOpen }) =>
     isOpen &&
