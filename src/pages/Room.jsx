@@ -15,7 +15,7 @@ import cancel from '../asset/cancel.svg';
 import logo from '../asset/logo.svg';
 import profileimg from '../asset/user.svg';
 import viewmic from '../asset/viewmic.svg';
-import { FaUserCircle } from 'react-icons/fa';
+import Vector from '../asset/Vector.svg';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { getRoomDetail } from '../api/api';
@@ -26,7 +26,13 @@ function Room() {
   const params = useParams();
   //   console.log(params.id);
   const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(params.id));
-  //   console.log(data);
+  if (isLoading) {
+    return <p>로딩중입니다....!</p>;
+  }
+
+  if (isError) {
+    return <p>오류가 발생하였습니다...!</p>;
+  }
   const roomData = data?.data;
   const micbuttonhandler = () => {
     setMicOn(!micon);
@@ -45,7 +51,13 @@ function Room() {
               <div>00:00:00</div>
               <img src={play} alt="" />
             </Sttimertext>
-            <Sttitle>{roomData?.roomName}</Sttitle>
+            <Sttitlebox>
+              <Sttitle>{roomData?.roomName}</Sttitle>
+              <Stroomcount>
+                <span>1 / 9</span>
+                <img src={Vector} alt="" />
+              </Stroomcount>
+            </Sttitlebox>
           </Stheader>
           <Stcamarea ischatOpen={ischatOpen}>
             <Stcambox>
@@ -112,49 +124,51 @@ function Room() {
         </StViewArea>
         {/* 채팅창 */}
         {ischatOpen ? (
-          <StChatarea>
-            <Stchatheader>
-              <div>
-                <img src={logo} alt="" />
-                <Stchatheaderfont>대화창</Stchatheaderfont>
-              </div>
-              <Stcancelbutton
-                src={cancel}
-                alt=""
-                onClick={() => {
-                  setisChatOpen(false);
-                }}
-              />
-            </Stchatheader>
-            <Stchatbox>
-              {/* 보내는 메시지 */}
-              <StTochat>
-                <StchattextArea>
-                  <StTochatinner>
-                    <StchatTime>00/00 00:00</StchatTime>
-                    <StTochatName>이름</StTochatName>
-                  </StTochatinner>
-                  <Stchattext>채팅내용 입력</Stchattext>
-                </StchattextArea>
-                <FaUserCircle size={46.67} />
-              </StTochat>
-              {/* 받는 메시지 */}
-              <StFromchat>
-                <StchattextArea>
-                  <StTochatinner>
-                    <StFromchatName>이름</StFromchatName>
-                    <StchatTime>00/00 00:00</StchatTime>
-                  </StTochatinner>
-                  <StFromchattext>채팅내용 입력</StFromchattext>
-                </StchattextArea>
-                <FaUserCircle size={46.67} />
-              </StFromchat>
-            </Stchatbox>
-            <Stsendarea>
-              <Stchatinput />
-              <Stsendbutton src={send} alt="" />
-            </Stsendarea>
-          </StChatarea>
+          <div>
+            <StChatarea>
+              <Stchatheader>
+                <div>
+                  <img src={logo} alt="" />
+                  <Stchatheaderfont>대화창</Stchatheaderfont>
+                </div>
+                <Stcancelbutton
+                  src={cancel}
+                  alt=""
+                  onClick={() => {
+                    setisChatOpen(false);
+                  }}
+                />
+              </Stchatheader>
+              <Stchatbox>
+                {/* 보내는 메시지 */}
+                <StTochat>
+                  <StchattextArea>
+                    <StTochatinner>
+                      <StchatTime>00/00 00:00</StchatTime>
+                      <StTochatName>이름</StTochatName>
+                    </StTochatinner>
+                    <Stchattext>채팅내용 입력</Stchattext>
+                  </StchattextArea>
+                  <img src={profileimg} alt="" />
+                </StTochat>
+                {/* 받는 메시지 */}
+                <StFromchat>
+                  <StchattextArea>
+                    <StTochatinner>
+                      <StFromchatName>이름</StFromchatName>
+                      <StchatTime>00/00 00:00</StchatTime>
+                    </StTochatinner>
+                    <StFromchattext>채팅내용 입력</StFromchattext>
+                  </StchattextArea>
+                  <img src={profileimg} alt="" />
+                </StFromchat>
+              </Stchatbox>
+              <Stsendarea>
+                <Stchatinput />
+                <Stsendbutton src={send} alt="" />
+              </Stsendarea>
+            </StChatarea>
+          </div>
         ) : (
           ''
         )}
@@ -166,17 +180,17 @@ function Room() {
 export default Room;
 const size = {
   xs: (...args) => css`
-    @media (max-width: 999px) {
+    @media (max-width: 970px) {
       ${css(...args)}
     }
   `,
   md: (...args) => css`
-    @media (min-width: 1000px) and (max-width: 1299px) {
+    @media (min-width: 971px) and (max-width: 1349px) {
       ${css(...args)}
     }
   `,
   lg: (...args) => css`
-    @media (min-width: 1300px) {
+    @media (min-width: 1350px) {
       ${css(...args)}
     }
   `,
@@ -193,6 +207,8 @@ const Stcontainer = styled.div`
 
 const StLayout = styled.div`
   display: flex;
+  width: 100%;
+  justify-content: center;
 `;
 
 const StViewArea = styled.div`
@@ -201,10 +217,12 @@ const StViewArea = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  flex: 1;
 `;
 
 const StChatarea = styled.div`
   width: 329px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -310,8 +328,7 @@ const StFromchat = styled.div`
 `;
 
 const Stcamarea = styled.div`
-  /* background-color: blue; */
-  width: ${({ ischatOpen }) => (ischatOpen ? '1264px' : '1264px')};
+  width: ${({ ischatOpen }) => (ischatOpen ? '1264px' : '1464px')};
   height: 771px;
   display: grid;
   grid-template-columns: repeat(3, 1fr); // 기본적으로 3 열로 표시.
@@ -319,13 +336,12 @@ const Stcamarea = styled.div`
   transform: translateY(-20px);
 
   ${size.md`
-    grid-template-columns: repeat(3, 1fr); // 중간 화면에서는 2 열로 표시.
-    width: 1000px;
+    width: 1200px;
   `}
 
   ${size.xs`
-    grid-template-columns: repeat(1, 1fr); // 최소 화면에서는 1 열로 표시.
-    width: 500px
+    grid-template-columns: repeat(2, 1fr);
+    width: 650px
   `}
 `;
 
@@ -342,19 +358,16 @@ const Stcambox = styled.div`
   ${size.xs`
     // 최소 화면 크기 설정
     width: 100%;
-    height:300px;
   `}
 
   ${size.md`
     // 중간 화면 크기 설정
     width: 100%;
-    // height:199px;
   `}
 
   ${size.lg`
     // 최대 화면 크기 설정
     width: 100%;
-    height:250px
   `}
 `;
 
@@ -379,6 +392,7 @@ const Stheader = styled.div`
   margin-bottom: 57px;
   margin-top: 65px;
   gap: 10px;
+  width: 80%;
 `;
 const Sttimertext = styled.div`
   color: #00573f;
@@ -388,9 +402,20 @@ const Sttimertext = styled.div`
   display: flex;
 `;
 
-const Sttitle = styled.div`
+const Sttitlebox = styled.div`
   font-weight: 700;
   font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Sttitle = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Stsettingbox = styled.div`
@@ -411,4 +436,13 @@ const Stfooter = styled.div`
 
 const Sticon = styled.img`
   cursor: pointer;
+`;
+
+const Stroomcount = styled.span`
+  color: #90b54c;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;

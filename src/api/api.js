@@ -5,18 +5,20 @@ import { getCookie } from '../cookie/Cookie';
 const getToken = getCookie('token');
 const getToken2 = getCookie('token2');
 
-// localStorage.setItem(
-//   'token',
-//   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTQ3NzExNywiaWF0IjoxNjg1NDczNTE3fQ.OW3iRCPx73fcaIiv7sVRxoZuW2XHXWexwthdEJck8V0'
-// );
-// localStorage.setItem(
-//   'token2',
-//   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTQ4MjE1NywiaWF0IjoxNjg1NDczNTE3fQ.Fz_40hoyyGpJLESqrdn0gtCSFRWWMxk94dBZ-Y7TnQA'
-// );
+localStorage.setItem(
+  'token',
+  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTU0ODY4NSwiaWF0IjoxNjg1NTQ1MDg1fQ.Ir4SJU59M6NKZdJWuySw4fiaAlQH5XC5Wb7fYMHqlI4'
+);
+localStorage.setItem(
+  'token2',
+  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaW9rQGdtYWlsLmNvbSIsImV4cCI6MTY4NTU1MzcyNSwiaWF0IjoxNjg1NTQ1MDg1fQ.NVs2t1JAKP-f3hV-Ezm3oQaMm0c1KaWaKbZNiBMrfbk'
+);
 
 // 게시글 조회
-const getRoom = async () => {
-  const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/main?page=1`);
+const getRoom = async (page) => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/main?page=${page}`
+  );
   return response.data;
 };
 // 게시글 생성
@@ -62,13 +64,15 @@ const getRoomDetail = async (sessionId) => {
 };
 
 // 스터디룸 입장
-const getStudyRoom = async (sessionId) => {
-  const token = getToken;
-  const token2 = getToken2;
-  // const token = localStorage.getItem('token');
-  // const token2 = localStorage.getItem('token2');
-  const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_URL}/api/room/${sessionId}`,
+const joinRoom = async (sessionId, memberData) => {
+  // const token = getToken;
+  // const token2 = getToken2;
+  const token = localStorage.getItem('token');
+  const token2 = localStorage.getItem('token2');
+
+  const response = await axios.post(
+    `${process.env.REACT_APP_SERVER_URL}/api/room/${sessionId}/enter`,
+    memberData,
     {
       headers: {
         ACCESS_KEY: `Bearer ${token}`,
@@ -78,4 +82,5 @@ const getStudyRoom = async (sessionId) => {
   );
   return response.data;
 };
-export { getRoom, addRoom, getRoomDetail, getStudyRoom };
+
+export { getRoom, addRoom, getRoomDetail, joinRoom };

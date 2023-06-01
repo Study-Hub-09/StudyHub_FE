@@ -4,20 +4,64 @@ import cancel from '../asset/cancel.svg';
 import usericon from '../asset/Vector.svg';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { getRoomDetail } from '../api/api';
+import { joinRoom } from '../api/api';
 
-function Joinmodal({ onClose, sessionId }) {
+function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
   const navigate = useNavigate();
-  const joinbuttonHandler = () => {
-    navigate(`/room/${sessionId}/detail`);
-    onClose(false);
+
+  const joinbuttonHandler = async () => {
+    const token = localStorage.getItem('token');
+    console.log(token);
+    const memberData = {
+      member: {
+        id: 0,
+        kakaoId: 0,
+        nickname: 'string',
+        email: 'string',
+        password: 'string',
+        totalStudyTime: {
+          seconds: 0,
+          nano: 0,
+          negative: true,
+          zero: true,
+          units: [
+            {
+              dateBased: true,
+              timeBased: true,
+              duration: {
+                seconds: 0,
+                nano: 0,
+                negative: true,
+                zero: true,
+              },
+              durationEstimated: true,
+            },
+          ],
+        },
+      },
+      enabled: true,
+      username: 'string',
+      authorities: [
+        {
+          authority: `Bearer ${token}`,
+        },
+      ],
+      password: 'string',
+      accountNonExpired: true,
+      accountNonLocked: true,
+      credentialsNonExpired: true,
+    };
+
+    try {
+      await joinRoom(roomData.sessionId, memberData);
+      navigate(`/room/${roomData.sessionId}/detail`);
+      onClose(false);
+    } catch (error) {
+      console.error('방 입장 중 오류가 발생했습니다', error);
+    }
   };
 
-  const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(sessionId));
-  console.log(sessionId);
-
-  const roomData = data?.data;
   return (
     <Stcontainer
       ref={outside}

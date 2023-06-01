@@ -17,8 +17,8 @@ function Main() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-
-  const { isLoading, isError, data } = useQuery('rooms', getRoom);
+  const [page, setPage] = useState(1);
+  const { isLoading, isError, data } = useQuery(['room', page], () => getRoom(page));
 
   if (isLoading) {
     return <p>로딩중입니다....!</p>;
@@ -28,7 +28,7 @@ function Main() {
     return <p>오류가 발생하였습니다...!</p>;
   }
 
-  // console.log(data);
+  console.log(data);
 
   const checkBoxHandler = () => {
     setChecked(!checked);
@@ -38,9 +38,18 @@ function Main() {
     setModalOpen(true);
   };
 
-  const joinmodalToggleHandler = (sessionId) => {
+  const joinmodalToggleHandler = (id) => {
     setJoinModalOpen(true);
-    setSelectedRoomId(sessionId);
+    setSelectedRoomId(id);
+  };
+
+  const nextpageHandler = () => {
+    setPage(page + 1);
+  };
+  const prevpageHandler = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
   };
   return (
     <>
@@ -54,7 +63,7 @@ function Main() {
         )}
         {joinModalOpen && (
           <Joinmodal
-            sessionId={selectedRoomId}
+            roomData={data.data.find((item) => item.sessionId === selectedRoomId)}
             onClose={() => {
               setJoinModalOpen(false);
             }}
@@ -113,8 +122,8 @@ function Main() {
           </StroomArea>
         </StContents>
         <Stallowbox>
-          <img src={leftallow} alt="" />
-          <img src={rightallow} alt="" />
+          <Stallowicon src={leftallow} alt="" onClick={prevpageHandler} />
+          <Stallowicon src={rightallow} alt="" onClick={nextpageHandler} />
         </Stallowbox>
       </Stcontainer>
     </>
@@ -279,4 +288,8 @@ const Stallowbox = styled.div`
   display: flex;
   justify-content: end;
   gap: 21px;
+`;
+
+const Stallowicon = styled.img`
+  cursor: pointer;
 `;

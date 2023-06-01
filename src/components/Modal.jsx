@@ -4,6 +4,7 @@ import { styled, keyframes, css } from 'styled-components';
 import { addRoom } from '../api/api';
 import cancel from '../asset/cancel.svg';
 import lockimg from '../asset/lock.svg';
+import BasicDatePicker from './Datepicker';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
@@ -93,6 +94,10 @@ const Modal = ({ onClose }) => {
               </button>
             </Stlayoutbox>
             <div>
+              <Stdatepickerbox>
+                <Stfont>만료일</Stfont>
+                <BasicDatePicker />
+              </Stdatepickerbox>
               <Stthumnailbox>
                 <Stfont>대표이미지</Stfont>
                 <Stthumbnail />
@@ -156,7 +161,7 @@ const Stmodalbox = styled.div`
   justify-content: center;
   align-items: center;
   width: 987px;
-  height: 449px;
+  height: 503px;
   border-radius: 20px;
   border: 1px solid #bfbfbf;
   padding: 36px, 56px, 60px;
@@ -165,7 +170,7 @@ const Stmodalbox = styled.div`
 
 const StmadalLayout = styled.div`
   width: 875px;
-  height: 316px;
+  height: 332px;
   display: flex;
   justify-content: space-between;
 `;
@@ -275,6 +280,8 @@ const StpasswordInput = styled.input`
 `;
 
 const Stcreatebutton = styled.button`
+  /* position: absolute; */
+  transform: translateY(-50px);
   width: 90px;
   height: 44px;
   border: 1px solid #bfbfbf;
@@ -334,7 +341,12 @@ const StlockbuttonBall = styled.div`
       animation: ${props.lock ? moveForward : moveBackward} 0.2s linear;
     `}
 `;
-
+const Stdatepickerbox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 53.19px;
+  margin-bottom: 31px;
+`;
 const Stthumnailbox = styled.div`
   height: 100px;
   display: flex;
