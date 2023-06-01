@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setCookie, getCookie } from '../Cookies/Cookies';
-import axios from 'axios';
+import { instance } from '../core/api/axios/instance';
 
 function KakaoRedirectPage() {
   const navigate = useNavigate();
@@ -13,10 +13,8 @@ function KakaoRedirectPage() {
       alert('이미 로그인된 유저입니다');
       navigate('/main');
     } else {
-      axios
-        .get(
-          `${process.env.REACT_APP_SERVER_URL}/api/members/kakao/callback?code=${code}`
-        )
+      instance
+        .get(`/api/members/kakao/callback?code=${code}`)
         .then((response) => {
           console.log(response);
           const statusCode = response.status;
