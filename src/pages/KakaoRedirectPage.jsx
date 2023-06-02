@@ -10,7 +10,7 @@ import {
   StKakaoRedirectHeader,
 } from '../styles/Common.styles';
 
-function KakaoRedirectPage({ width }) {
+function KakaoRedirectPage() {
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get('code');
 

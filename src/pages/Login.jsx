@@ -55,11 +55,8 @@ function Login() {
   const loginMutation = useMutation(login, {
     async onSuccess(response) {
       console.log('RESPONSE LOGIN.JSX LINE19 =====> ', response);
-      const { nickname, responseMessage, accessToken, refreshToken, statusCode } =
-        response;
-      setCookie('AccessToken', accessToken, { path: '/' });
-      setCookie('RefreshToken', refreshToken, { path: '/' });
-      localStorage.setItem('member', nickname);
+      const statusCode = response.status;
+      const responseMessage = response.data.message;
 
       if (statusCode === 200) {
         alert(responseMessage);
