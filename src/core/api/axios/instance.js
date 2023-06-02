@@ -39,24 +39,26 @@ instance.interceptors.request.use(
 );
 
 // 요청후에 실행될 코드
-// instance.interceptors.response.use(
-//   // 요청을 보내기 전 수행되는 함수
-//   function (config) {
-//     console.log('인터셉터 요청 성공');
-//     const accessToken = getCookie('AccessToken');
-//     // const refreshToken = getCookie('RefreshToken');
+instance.interceptors.response.use(
+  // 요청을 보내기 전 수행되는 함수
+  (response) => {
+    console.log('INSTANCE response======> ', response);
+    console.log('인터셉터 응답 성공');
+    // const accessToken = getCookie('AccessToken');
+    // // const refreshToken = getCookie('RefreshToken');
 
-//     // 토큰이 존재하는 경우에만 헤더에 추가
-//     if (accessToken) {
-//       config.headers['Access_token'] = `Bearer ${accessToken}`;
-//       // config.headers['Refresh_token'] = `Bearer ${refreshToken}`;
-//     }
-//     return config;
-//   },
+    // // 토큰이 존재하는 경우에만 헤더에 추가
+    // if (accessToken) {
+    //   config.headers['Access_token'] = `Bearer ${accessToken}`;
+    //   // config.headers['Refresh_token'] = `Bearer ${refreshToken}`;
+    // }
+    return response;
+  },
 
-//   // 오류 요청을 보내기 전 수행되는 함수
-//   function (error) {
-//     console.log('인터셉터 요청 오류');
-//     return Promise.reject(error);
-//   }
-// );
+  // 오류 요청을 보내기 전 수행되는 함수
+  function (error) {
+    console.log('인터셉터 응답 오류');
+    console.log('INSTANCE error=======> ', error);
+    return Promise.reject(error);
+  }
+);
