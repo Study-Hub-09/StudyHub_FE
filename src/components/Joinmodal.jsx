@@ -6,13 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
 
-function Joinmodal({ onClose, roomData }) {
+function Joinmodal({ onClose, roomData, joinSession }) {
   const outside = useRef();
   const navigate = useNavigate();
 
   const joinbuttonHandler = async () => {
-    const token = localStorage.getItem('token');
-    console.log(token);
     const memberData = {
       member: {
         id: 0,
@@ -44,7 +42,7 @@ function Joinmodal({ onClose, roomData }) {
       username: 'string',
       authorities: [
         {
-          authority: `Bearer ${token}`,
+          authority: `Bearer`,
         },
       ],
       password: 'string',
@@ -55,7 +53,7 @@ function Joinmodal({ onClose, roomData }) {
 
     try {
       await joinRoom(roomData.sessionId, memberData);
-      navigate(`/room/${roomData.sessionId}/detail`);
+      // navigate(`/rooms/${roomData.sessionId}/detail`);
       onClose(false);
     } catch (error) {
       console.error('방 입장 중 오류가 발생했습니다', error);
@@ -87,7 +85,7 @@ function Joinmodal({ onClose, roomData }) {
           <Stroomcount>
             <span>1 / 9</span>
             <img src={usericon} alt="" />
-            <Stjoinbutton onClick={joinbuttonHandler}>입장하기</Stjoinbutton>
+            <Stjoinbutton onClick={joinSession}>입장하기</Stjoinbutton>
           </Stroomcount>
         </StLayout>
       </Stmodalbox>
