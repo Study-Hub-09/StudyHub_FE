@@ -18,32 +18,40 @@ const Modal = ({ onClose }) => {
 
   const mutation = useMutation(addRoom, {
     onSuccess: () => {
-      queryClient.invalidateQueries('rooms');
+      queryClient.invalidateQueries('room');
     },
   });
 
   const addbuttonHandler = async () => {
-    const content = {
-      roomName,
-      roomContent,
-    };
+    if (roomName !== '' && roomContent !== '') {
+      const content = {
+        roomName,
+        roomContent,
+      };
 
-    // FormData에 데이터 추가
-    const formData = new FormData();
+      // FormData에 데이터 추가
+      const formData = new FormData();
 
-    const contentrString = JSON.stringify(content);
-    await formData.append(
-      'content',
-      new Blob([contentrString], { type: 'application/json' })
-    );
-    // 이미지 추가
-    formData.append('image', '');
+      const contentrString = JSON.stringify(content);
+      await formData.append(
+        'content',
+        new Blob([contentrString], { type: 'application/json' })
+      );
+      // 이미지 추가
+      formData.append('image', '');
 
-    try {
-      mutation.mutate(formData);
-      onClose(false);
-    } catch (error) {
-      console.error('추가 실패:', error);
+      try {
+        mutation.mutate(formData);
+        onClose(false);
+      } catch (error) {
+        console.error('추가 실패:', error);
+      }
+    } else {
+      if (roomName === '') {
+        alert('제목을 입력해 주세요');
+      } else if (roomContent === '') {
+        alert('내용을 입력해 주세요');
+      }
     }
   };
 
