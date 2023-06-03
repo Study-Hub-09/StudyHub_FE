@@ -19,21 +19,28 @@ import Vector from '../asset/Vector.svg';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { getRoomDetail } from '../api/api';
-function Room() {
+import UserVideoComponent from '../components/UserVideoComponent';
+function Room({
+  roomData,
+  publisher,
+  handleMainVideoStream,
+  mainStreamManager,
+  leaveSession,
+}) {
   const [micon, setMicOn] = useState(false);
   const [camon, setCamOn] = useState(false);
   const [ischatOpen, setisChatOpen] = useState(false);
   const params = useParams();
   //   console.log(params.id);
-  const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(params.id));
-  if (isLoading) {
-    return <p>로딩중입니다....!</p>;
-  }
+  // const { isLoading, isError, data } = useQuery('room', () => getRoomDetail(params.id));
+  // if (isLoading) {
+  //   return <p>로딩중입니다....!</p>;
+  // }
 
-  if (isError) {
-    return <p>오류가 발생하였습니다...!</p>;
-  }
-  const roomData = data?.data;
+  // if (isError) {
+  //   return <p>오류가 발생하였습니다...!</p>;
+  // }
+  // const roomData = data?.data;
   const micbuttonhandler = () => {
     setMicOn(!micon);
   };
@@ -41,7 +48,6 @@ function Room() {
   const cambuttonhandler = () => {
     setCamOn(!camon);
   };
-
   return (
     <Stcontainer>
       <StLayout>
@@ -60,42 +66,23 @@ function Room() {
             </Sttitlebox>
           </Stheader>
           <Stcamarea ischatOpen={ischatOpen}>
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
-            <Stcambox>
-              <Stcamboxname>닉네임</Stcamboxname>
-              <img src={viewmic} alt="" width={36} height={36} />
-            </Stcambox>{' '}
+            {/* <Stcambox> */}
+            <Stcamboxname>닉네임</Stcamboxname>
+            {mainStreamManager !== undefined ? (
+              <div id="main-video" className="col-md-6">
+                <UserVideoComponent streamManager={mainStreamManager} />
+              </div>
+            ) : null}
+            <img src={viewmic} alt="" width={36} height={36} />
+            {/* </Stcambox> */}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent streamManager={publisher} />
+              </div>
+            ) : null}
           </Stcamarea>
           <Stfooter>
             <Stsettingbox>
@@ -118,7 +105,7 @@ function Room() {
               />
               <Sticon src={view} alt="" />
               <Sticon src={setting} alt="" />
-              <Sticon src={logout} alt="" />
+              <Sticon src={logout} alt="" onClick={leaveSession} />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>

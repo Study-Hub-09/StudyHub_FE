@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Room from '../pages/Room';
 import KakaoRedirectPage from '../pages/KakaoRedirectPage';
+import OpenviduComponent from '../components/Openvidu';
 
 function Router() {
   return (

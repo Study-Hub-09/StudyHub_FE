@@ -11,6 +11,7 @@ import Modal from '../components/Modal';
 import { useQuery } from 'react-query';
 import { getRoom } from '../api/api';
 import Joinmodal from '../components/Joinmodal';
+import OpenviduComponent from '../components/Openvidu';
 
 function Main() {
   const [checked, setChecked] = useState(false);
@@ -62,7 +63,7 @@ function Main() {
           />
         )}
         {joinModalOpen && (
-          <Joinmodal
+          <OpenviduComponent
             roomData={data.data.find((item) => item.sessionId === selectedRoomId)}
             onClose={() => {
               setJoinModalOpen(false);
