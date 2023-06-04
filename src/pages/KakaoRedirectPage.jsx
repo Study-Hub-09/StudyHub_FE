@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setCookie, getCookie } from '../Cookies/Cookies';
 import { instance } from '../core/api/axios/instance';
+import Typed from 'react-typed';
+import {
+  StKakaoRedirectBox,
+  StKakaoRedirectContainer,
+  StKakaoRedirectContent,
+  StKakaoRedirectHeader,
+} from '../styles/Common.styles';
 
 function KakaoRedirectPage() {
   const navigate = useNavigate();
@@ -45,7 +52,21 @@ function KakaoRedirectPage() {
     }
   }, []);
 
-  return <div>KakaoRedirectPage</div>;
+  return (
+    <StKakaoRedirectContainer>
+      <StKakaoRedirectBox>
+        <StKakaoRedirectHeader>
+          <h1>
+            <Typed strings={['loading']} typeSpeed={120} backSpeed={150} loop />
+          </h1>
+        </StKakaoRedirectHeader>
+        <StKakaoRedirectContent>
+          <p width="506px">Strive for progress, not perfection</p>
+          <p width="387px">redirecting to study hub...</p>
+        </StKakaoRedirectContent>
+      </StKakaoRedirectBox>
+    </StKakaoRedirectContainer>
+  );
 }
 
 export default KakaoRedirectPage;
