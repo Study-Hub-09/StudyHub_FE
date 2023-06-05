@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { styled, css } from 'styled-components';
-import play from '../asset/play.svg';
 import camOn from '../asset/camon.svg';
 import camoff from '../asset/camoff.svg';
 import chat from '../asset/chat.svg';
@@ -19,6 +18,7 @@ import UserVideoComponent from '../components/UserVideoComponent';
 import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
+import Timer from '../components/Timer/Timer';
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 function Room() {
@@ -276,8 +276,7 @@ function Room() {
         <StViewArea>
           <Stheader>
             <Sttimertext>
-              <div>00:00:00</div>
-              <img src={play} alt="" />
+              <Timer />
             </Sttimertext>
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>

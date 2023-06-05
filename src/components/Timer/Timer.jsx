@@ -42,11 +42,10 @@ function Timer() {
   return (
     <StTimerContainer>
       <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
-      <StTimerImg src={isPaused ? play : pause} alt="" onClick={handlePause}></StTimerImg>
+      <StTimerImg src={isPaused ? pause : play} alt="" onClick={handlePause}></StTimerImg>
     </StTimerContainer>
   );
 }
-
 export default Timer;
 
 const StTimerContainer = styled.div`
@@ -65,11 +64,11 @@ const StTimer = styled.div`
   font-size: 52px;
   line-height: 71px;
   margin-right: 30px;
-  color: #00573f;
+  color: #ea4335;
   ${({ isPaused }) =>
     !isPaused &&
     `
-    color: #ea4335;
+    color: #00573f;
   `}
 `;
 const StTimerImg = styled.img`
