@@ -63,7 +63,7 @@ function Main() {
           />
         )}
         {joinModalOpen && (
-          <OpenviduComponent
+          <Joinmodal
             roomData={data.data.find((item) => item.sessionId === selectedRoomId)}
             onClose={() => {
               setJoinModalOpen(false);

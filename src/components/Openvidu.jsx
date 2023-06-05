@@ -1,246 +1,256 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { OpenVidu } from 'openvidu-browser';
-import axios from 'axios';
-import UserVideoComponent from './UserVideoComponent';
-import Joinmodal from './Joinmodal';
-import Room from '../pages/Room';
-import { useNavigate, useParams } from 'react-router-dom';
+// import React, { useState, useEffect, useRef } from 'react';
+// import { OpenVidu } from 'openvidu-browser';
+// import axios from 'axios';
+// import UserVideoComponent from './UserVideoComponent';
+// import Joinmodal from './Joinmodal';
+// import Room from '../pages/Room';
+// import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+// const APPLICATION_SERVER_URL =
+//   process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 
-const OpenviduComponent = ({ onClose, roomData }) => {
-  const [state, setState] = useState({
-    mySessionId: 'SessionA',
-    myUserName: 'Participant' + Math.floor(Math.random() * 100),
-    session: undefined,
-    mainStreamManager: undefined,
-    publisher: undefined,
-    subscribers: [],
-  });
-  const navigate = useNavigate();
-  const param = useParams();
-  const OV = useRef(null);
+// const OpenviduComponent = ({ onClose, roomData }) => {
+//   const [state, setState] = useState({
+//     mySessionId: 'SessionA',
+//     myUserName: 'Participant' + Math.floor(Math.random() * 100),
+//     session: undefined,
+//     mainStreamManager: undefined,
+//     publisher: undefined,
+//     subscribers: [],
+//   });
+//   const navigate = useNavigate();
+//   const param = useParams();
+//   const OV = useRef(null);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onbeforeunload);
+//   useEffect(() => {
+//     window.addEventListener('beforeunload', onbeforeunload);
 
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
-  }, []);
+//     return () => {
+//       window.removeEventListener('beforeunload', onbeforeunload);
+//     };
+//   }, []);
 
-  const onbeforeunload = (event) => {
-    leaveSession();
-  };
+//   const onbeforeunload = (event) => {
+//     leaveSession();
+//   };
 
-  const handleChangeSessionId = (e) => {
-    setState((prevState) => ({ ...prevState, mySessionId: e.target.value }));
-  };
+//   const handleChangeSessionId = (e) => {
+//     setState((prevState) => ({ ...prevState, mySessionId: e.target.value }));
+//   };
 
-  const handleChangeUserName = (e) => {
-    setState((prevState) => ({ ...prevState, myUserName: e.target.value }));
-  };
+//   const handleChangeUserName = (e) => {
+//     setState((prevState) => ({ ...prevState, myUserName: e.target.value }));
+//   };
 
-  const handleMainVideoStream = (stream) => {
-    if (state.mainStreamManager !== stream) {
-      setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
-    }
-  };
+//   const handleMainVideoStream = (stream) => {
+//     if (state.mainStreamManager !== stream) {
+//       setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
+//     }
+//   };
 
-  const deleteSubscriber = (streamManager) => {
-    let subscribers = state.subscribers;
-    let index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setState((prevState) => ({ ...prevState, subscribers: subscribers }));
-    }
-  };
+//   const deleteSubscriber = (streamManager) => {
+//     let subscribers = state.subscribers;
+//     let index = subscribers.indexOf(streamManager, 0);
+//     if (index > -1) {
+//       subscribers.splice(index, 1);
+//       setState((prevState) => ({ ...prevState, subscribers: subscribers }));
+//     }
+//   };
 
-  const joinSession = () => {
-    OV.current = new OpenVidu();
-    const mySession = OV.current.initSession();
+//   //   const joinSession = () => {
+//   //     OV.current = new OpenVidu();
+//   //     const mySession = OV.current.initSession();
 
-    // navigate(`/room/${roomData.sessionId}/detail`);
-    setState((prevState) => ({ ...prevState, session: mySession }));
-  };
+//   //     // navigate(`/room/${roomData.sessionId}/detail`);
+//   //     setState((prevState) => ({ ...prevState, session: mySession }));
+//   //   };
+//   useEffect(() => {
+//     if (state.session) {
+//       const handleStream = (event) => {
+//         let subscriber = state.session.subscribe(event.stream, undefined);
+//         setState((prevState) => ({
+//           ...prevState,
+//           subscribers: [...prevState.subscribers, subscriber],
+//         }));
+//       };
 
-  useEffect(() => {
-    if (state.session) {
-      state.session.on('stream', (event) => {
-        let subscriber = state.session.subscribe(event.stream, undefined);
-        setState((prevState) => ({
-          ...prevState,
-          subscribers: [...prevState.subscribers, subscriber],
-        }));
-      });
+//       const handleStreamDestroyed = (event) => {
+//         deleteSubscriber(event.stream.streamManager);
+//       };
 
-      state.session.on('streamDestroyed', (event) => {
-        deleteSubscriber(event.stream.streamManager);
-      });
+//       const handleException = (exception) => {
+//         console.warn(exception);
+//       };
 
-      state.session.on('exception', (exception) => {
-        console.warn(exception);
-      });
+//       state.session.on('stream', handleStream);
+//       state.session.on('streamDestroyed', handleStreamDestroyed);
+//       state.session.on('exception', handleException);
 
-      getToken().then((token) => {
-        state.session
-          .connect(token, { clientData: state.myUserName })
-          .then(async () => {
-            let publisher = await OV.current.initPublisherAsync(undefined, {
-              audioSource: undefined,
-              videoSource: undefined,
-              publishAudio: true,
-              publishVideo: true,
-              resolution: '640x480',
-              frameRate: 30,
-              insertMode: 'APPEND',
-              mirror: false,
-            });
+//       (async function connectToken() {
+//         try {
+//           const token = await getToken();
+//           await state.session.connect(token, { clientData: state.myUserName });
 
-            state.session.publish(publisher);
+//           const publisher = await OV.current.initPublisherAsync(undefined, {
+//             audioSource: undefined,
+//             videoSource: undefined,
+//             publishAudio: true,
+//             publishVideo: true,
+//             resolution: '640x480',
+//             frameRate: 30,
+//             insertMode: 'APPEND',
+//             mirror: false,
+//           });
 
-            const devices = await OV.current.getDevices();
-            const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-            const currentVideoDeviceId = publisher.stream
-              .getMediaStream()
-              .getVideoTracks()[0]
-              .getSettings().deviceId;
-            const currentVideoDevice = videoDevices.find(
-              (device) => device.deviceId === currentVideoDeviceId
-            );
+//           state.session.publish(publisher);
 
-            setState((prevState) => ({
-              ...prevState,
-              currentVideoDevice: currentVideoDevice,
-              mainStreamManager: publisher,
-              publisher: publisher,
-            }));
-          })
-          .catch((error) => {
-            console.log(
-              '세션에 연결하는 중 오류가 발생했습니다:',
-              error.code,
-              error.message
-            );
-          });
-      });
-    }
-  }, [state.session, param]);
+//           const devices = await OV.current.getDevices();
+//           const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+//           const currentVideoDeviceId = publisher.stream
+//             .getMediaStream()
+//             .getVideoTracks()[0]
+//             .getSettings().deviceId;
+//           const currentVideoDevice = videoDevices.find(
+//             (device) => device.deviceId === currentVideoDeviceId
+//           );
 
-  const leaveSession = () => {
-    const mySession = state.session;
+//           setState((prevState) => ({
+//             ...prevState,
+//             currentVideoDevice: currentVideoDevice,
+//             mainStreamManager: publisher,
+//             publisher: publisher,
+//           }));
+//         } catch (error) {
+//           console.log(
+//             '세션에 연결하는 중 오류가 발생했습니다:',
+//             error.code,
+//             error.message
+//           );
+//         }
+//       })();
 
-    if (mySession) {
-      mySession.disconnect();
-    }
+//       return () => {
+//         state.session.off('stream', handleStream);
+//         state.session.off('streamDestroyed', handleStreamDestroyed);
+//         state.session.off('exception', handleException);
+//       };
+//     }
+//   }, [state.session]);
 
-    OV.current = null;
-    setState({
-      session: undefined,
-      subscribers: [],
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
-      mainStreamManager: undefined,
-      publisher: undefined,
-    });
-  };
+//   const leaveSession = () => {
+//     const mySession = state.session;
 
-  const switchCamera = async () => {
-    try {
-      const devices = await OV.current.getDevices();
-      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+//     if (mySession) {
+//       mySession.disconnect();
+//     }
 
-      if (videoDevices && videoDevices.length > 1) {
-        const newVideoDevice = videoDevices.filter(
-          (device) => device.deviceId !== state.currentVideoDevice.deviceId
-        );
+//     OV.current = null;
+//     setState({
+//       session: undefined,
+//       subscribers: [],
+//       mySessionId: 'SessionA',
+//       myUserName: 'Participant' + Math.floor(Math.random() * 100),
+//       mainStreamManager: undefined,
+//       publisher: undefined,
+//     });
+//   };
 
-        if (newVideoDevice.length > 0) {
-          const newPublisher = OV.current.initPublisher(undefined, {
-            videoSource: newVideoDevice[0].deviceId,
-            publishAudio: true,
-            publishVideo: true,
-            mirror: true,
-          });
+//   const switchCamera = async () => {
+//     try {
+//       const devices = await OV.current.getDevices();
+//       const videoDevices = devices.filter((device) => device.kind === 'videoinput');
 
-          await state.session.unpublish(state.mainStreamManager);
+//       if (videoDevices && videoDevices.length > 1) {
+//         const newVideoDevice = videoDevices.filter(
+//           (device) => device.deviceId !== state.currentVideoDevice.deviceId
+//         );
 
-          await state.session.publish(newPublisher);
-          setState((prevState) => ({
-            ...prevState,
-            currentVideoDevice: newVideoDevice[0],
-            mainStreamManager: newPublisher,
-            publisher: newPublisher,
-          }));
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+//         if (newVideoDevice.length > 0) {
+//           const newPublisher = OV.current.initPublisher(undefined, {
+//             videoSource: newVideoDevice[0].deviceId,
+//             publishAudio: true,
+//             publishVideo: true,
+//             mirror: true,
+//           });
 
-  const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
-    state;
+//           await state.session.unpublish(state.mainStreamManager);
 
-  return (
-    <div>
-      {session === undefined ? (
-        <Joinmodal roomData={roomData} onClose={onClose} joinSession={joinSession} />
-      ) : (
-        <Room
-          roomData={roomData}
-          publisher={publisher}
-          subscribe={subscribers}
-          leaveSession={leaveSession}
-          handleMainVideoStream={handleMainVideoStream}
-          mainStreamManager={mainStreamManager}
-        />
-      )}
-    </div>
-  );
+//           await state.session.publish(newPublisher);
+//           setState((prevState) => ({
+//             ...prevState,
+//             currentVideoDevice: newVideoDevice[0],
+//             mainStreamManager: newPublisher,
+//             publisher: newPublisher,
+//           }));
+//         }
+//       }
+//     } catch (e) {
+//       console.error(e);
+//     }
+//   };
 
-  async function getToken() {
-    try {
-      const sessionId = await createSession(mySessionId);
-      const response = await createToken(sessionId);
-      console.log('4' + response);
-      return response;
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: getToken');
-    }
-  }
+//   const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
+//     state;
 
-  async function createSession(sessionId) {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions',
-        { customSessionId: sessionId },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-      console.log('2' + sessionId);
-      return response.data; // The sessionId
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createSession');
-    }
-  }
+//   return (
+//     <div>
+//       {session === undefined ? (
+//         <Joinmodal roomData={roomData} onClose={onClose} />
+//       ) : (
+//         <Room
+//           roomData={roomData}
+//           publisher={publisher}
+//           subscribe={subscribers}
+//           leaveSession={leaveSession}
+//           handleMainVideoStream={handleMainVideoStream}
+//           mainStreamManager={mainStreamManager}
+//           //   joinSession={joinSession}
+//         />
+//       )}
+//     </div>
+//   );
 
-  async function createToken(sessionId) {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
-        {},
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-      console.log('3' + sessionId);
-      return response.data; // The token
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createToken');
-    }
-  }
-};
-export default OpenviduComponent;
+//   async function getToken() {
+//     try {
+//       const sessionId = await createSession(mySessionId);
+//       const response = await createToken(sessionId);
+//       console.log('4' + response);
+//       return response;
+//     } catch (error) {
+//       console.error('인터넷 요청이 실패했습니다: getToken');
+//     }
+//   }
+
+//   async function createSession(sessionId) {
+//     try {
+//       const response = await axios.post(
+//         APPLICATION_SERVER_URL + 'api/sessions',
+//         { customSessionId: sessionId },
+//         {
+//           headers: { 'Content-Type': 'application/json' },
+//         }
+//       );
+//       console.log('2' + sessionId);
+//       return response.data; // The sessionId
+//     } catch (error) {
+//       console.error('인터넷 요청이 실패했습니다: createSession');
+//     }
+//   }
+
+//   async function createToken(sessionId) {
+//     try {
+//       const response = await axios.post(
+//         APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+//         {},
+//         {
+//           headers: { 'Content-Type': 'application/json' },
+//         }
+//       );
+//       console.log('3' + sessionId);
+//       return response.data; // The token
+//     } catch (error) {
+//       console.error('인터넷 요청이 실패했습니다: createToken');
+//     }
+//   }
+// };
+// export default OpenviduComponent;
