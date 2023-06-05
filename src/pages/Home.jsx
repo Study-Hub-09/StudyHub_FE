@@ -10,14 +10,15 @@ function Home() {
     <StHomeContainer>
       <StHomeMainContainer>
         <StMain>
-          <StMainEx>화상 스터디로 자율적이고 체계적으로</StMainEx>
+          <StMainEx>혼자하는 공부가 어렵다면? 함공하자!</StMainEx>
           <StMainLogoContainer>
             <StMainLogoName>스터브</StMainLogoName>
             <StMainLogoNameBar></StMainLogoNameBar>
           </StMainLogoContainer>
           <StMainLogoNameEx>
-            ‘스터브(STURB)’는 ‘study’와 ‘hub’의 합성어로 공부의 중심지, 바퀴축 등의 의미를
-            담았다. <br /> 그룹공부를 통해 집중력을 높여보자!
+            ‘스터브(STURB)’는 ‘study’와 ‘hub’의 합성어로 공부의 중심지, 바퀴축을
+            의미합니다. <br /> 혼자서는 공부에 집중할 수 없다면 목표가 같은 동료들과 함께
+            성장해요!
           </StMainLogoNameEx>
           <StMainBtn>
             <StMainBtnName
@@ -116,6 +117,7 @@ const StMainLogoNameEx = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
+  justify-content: center;
   color: #000000;
   margin: 0px 0px 35px 0px;
 `;
