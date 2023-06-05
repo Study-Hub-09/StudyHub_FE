@@ -46,7 +46,6 @@ function Timer() {
     </StTimerContainer>
   );
 }
-
 export default Timer;
 
 const StTimerContainer = styled.div`
