@@ -226,6 +226,48 @@ function Room() {
   const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
     state;
 
+  async function getToken() {
+    try {
+      const sessionId = await createSession(mySessionId);
+      const response = await createToken(sessionId);
+      console.log('4' + response);
+      return response;
+    } catch (error) {
+      console.error('인터넷 요청이 실패했습니다: getToken');
+    }
+  }
+
+  async function createSession(sessionId) {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + 'api/sessions',
+        { customSessionId: sessionId },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      console.log('2' + sessionId);
+      return response.data; // The sessionId
+    } catch (error) {
+      console.error('인터넷 요청이 실패했습니다: createSession');
+    }
+  }
+
+  async function createToken(sessionId) {
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+        {},
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      console.log('3' + sessionId);
+      return response.data; // The token
+    } catch (error) {
+      console.error('인터넷 요청이 실패했습니다: createToken');
+    }
+  }
   return (
     <Stcontainer>
       <StLayout>
@@ -333,48 +375,6 @@ function Room() {
       </StLayout>
     </Stcontainer>
   );
-  async function getToken() {
-    try {
-      const sessionId = await createSession(mySessionId);
-      const response = await createToken(sessionId);
-      console.log('4' + response);
-      return response;
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: getToken');
-    }
-  }
-
-  async function createSession(sessionId) {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions',
-        { customSessionId: sessionId },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-      console.log('2' + sessionId);
-      return response.data; // The sessionId
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createSession');
-    }
-  }
-
-  async function createToken(sessionId) {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
-        {},
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-      console.log('3' + sessionId);
-      return response.data; // The token
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createToken');
-    }
-  }
 }
 
 export default Room;
