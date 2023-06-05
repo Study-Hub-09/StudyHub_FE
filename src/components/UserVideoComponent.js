@@ -1,10 +1,10 @@
 import React from 'react';
 import OpenViduVideoComponent from './OvVideo';
-// import './UserVideo.css';
+// import '../components/UserVideo.css';
 import styled from '@emotion/styled';
 import viewmic from '../asset/viewmic.svg';
 
-const UserVideoComponent = ({ streamManager, userName }) => {
+const UserVideoComponent = ({ streamManager, userName, audioEnabled }) => {
   //   const getNicknameTag = () => {
   // 사용자의 닉네임을 가져옵니다.
   //     return JSON.parse(streamManager.stream.connection.data).clientData;
@@ -16,7 +16,7 @@ const UserVideoComponent = ({ streamManager, userName }) => {
         <Stcambox>
           <Stcamboxname>{userName}</Stcamboxname>
           <OpenViduVideoComponent streamManager={streamManager} />
-          <img src={viewmic} alt="" width={36} height={36} />
+          {audioEnabled ? '' : <img src={viewmic} alt="" width={36} height={36} />}
         </Stcambox>
       ) : null}
     </div>
