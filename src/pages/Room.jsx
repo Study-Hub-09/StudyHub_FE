@@ -22,22 +22,12 @@ import { OpenVidu } from 'openvidu-browser';
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
 function Room() {
-  const [micon, setMicOn] = useState(false);
-  const [camon, setCamOn] = useState(false);
   const [ischatOpen, setisChatOpen] = useState(false);
   const params = useParams();
   const location = useLocation();
 
   const { roomData } = location.state;
   console.log(roomData);
-
-  const micbuttonhandler = () => {
-    setMicOn(!micon);
-  };
-
-  const cambuttonhandler = () => {
-    setCamOn(!camon);
-  };
 
   const [state, setState] = useState({
     mySessionId: 'SessionA',
@@ -47,6 +37,18 @@ function Room() {
     publisher: undefined,
     subscribers: [],
   });
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [videoEnabled, setvideoEnabled] = useState(true);
+
+  const audiocontrolhandler = () => {
+    setAudioEnabled(!audioEnabled);
+    publisher.publishAudio(!audioEnabled);
+  };
+
+  const videocontrolhandler = () => {
+    setvideoEnabled(!videoEnabled);
+    publisher.publishVideo(!videoEnabled);
+  };
   const navigate = useNavigate();
 
   const OV = useRef(null);
@@ -177,7 +179,6 @@ function Room() {
     if (mySession) {
       mySession.disconnect();
     }
-    navigate(-1);
     OV.current = null;
     setState({
       session: undefined,
@@ -187,6 +188,7 @@ function Room() {
       mainStreamManager: undefined,
       publisher: undefined,
     });
+    navigate(-1);
   };
 
   const switchCamera = async () => {
@@ -292,22 +294,26 @@ function Room() {
                 className="stream-container col-md-6 col-xs-6"
                 onClick={() => handleMainVideoStream(publisher)}
               >
-                <UserVideoComponent streamManager={publisher} userName={getUserName} />
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                />
               </div>
             ) : null}
             {/* </Stcambox> */}
           </Stcamarea>
           <Stfooter>
             <Stsettingbox>
-              {micon ? (
-                <Sticon src={micOn} alt="" onClick={micbuttonhandler} />
+              {audioEnabled ? (
+                <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
               ) : (
-                <Sticon src={micoff} alt="" onClick={micbuttonhandler} />
+                <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
               )}
-              {camon ? (
-                <Sticon src={camOn} alt="" onClick={cambuttonhandler} />
+              {videoEnabled ? (
+                <Sticon src={camOn} alt="" onClick={videocontrolhandler} />
               ) : (
-                <Sticon src={camoff} alt="" onClick={cambuttonhandler} />
+                <Sticon src={camoff} alt="" onClick={videocontrolhandler} />
               )}
               <Sticon
                 src={chat}
