@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getCookie } from '../Cookies/Cookies';
+import profileLogo from '../../src/assets/Images/Frame 20.svg';
+import sprout from '../../src/assets/Images/sprout.svg';
+import Crown from '../../src/assets/Images/👑.svg';
+import Arrow from '../../src/assets/Images/Arrow 1.svg';
 
 function Mypage() {
   const nickname = localStorage.member;
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    setToken(accessToken);
+  }, []);
+
   return (
     <StMainContainer>
       <StHeaderContainer>
@@ -11,14 +23,16 @@ function Mypage() {
         <StHeaderMain>
           <StHeaderMainContainer>
             <StHeaderUserNameContainer>
-              <StHeaderUserName>Hello, {nickname}!</StHeaderUserName>
+              <StHeaderUserName>Hello, {token ? nickname : 'Guest!'}!</StHeaderUserName>
               <StHeaderUserIntro>나의 모든 공부 데이터 모아보기</StHeaderUserIntro>
             </StHeaderUserNameContainer>
 
             <StHeaderDdayProfile>
-              <StHeaderDday>D-100</StHeaderDday>
+              <StHeaderDday>{token ? 'D-100' : 'D-00'}</StHeaderDday>
 
-              <StHeaderProfile></StHeaderProfile>
+              <StHeaderProfile>
+                <StHeaderProfileImg src={profileLogo} alt="오류" />
+              </StHeaderProfile>
             </StHeaderDdayProfile>
           </StHeaderMainContainer>
         </StHeaderMain>
@@ -105,11 +119,16 @@ function Mypage() {
                 <StContentMainTitel>
                   <StContentMainMyTitel>내 칭호</StContentMainMyTitel>
 
-                  <StContentMainTitelName>공부 초보</StContentMainTitelName>
+                  <StContentMainTitelName>
+                    <img src={sprout} alt="오류" />
+                    &nbsp; 공부 초보
+                  </StContentMainTitelName>
 
                   <StContentMainTitelEx>
                     <StContentMainTitelNextEx>다음 등급</StContentMainTitelNextEx>
-                    <StContentMainTitelNextAro>이</StContentMainTitelNextAro>
+                    <StContentMainTitelNextAro>
+                      <img src={Arrow} alt="오류" />
+                    </StContentMainTitelNextAro>
                     <StContentMainTitelNextTime>00:00:00</StContentMainTitelNextTime>
                   </StContentMainTitelEx>
                 </StContentMainTitel>
@@ -117,10 +136,15 @@ function Mypage() {
                 <StContentMainRank>
                   <StContentMainRankTitle>???</StContentMainRankTitle>
 
-                  <StContentMainRankName>랭킹 유저명</StContentMainRankName>
+                  <StContentMainRankName>
+                    <img src={Crown} alt="오류" />
+                    &nbsp; 랭킹 유저명
+                  </StContentMainRankName>
 
                   <StContentMainRankEx>
-                    <StContentMainRankNextAro>이</StContentMainRankNextAro>
+                    <StContentMainRankNextAro>
+                      <img src={Arrow} alt="오류" />
+                    </StContentMainRankNextAro>
                     <StContentMainRankTime>00:00:00</StContentMainRankTime>
                   </StContentMainRankEx>
                 </StContentMainRank>
@@ -161,12 +185,12 @@ const StHeaderContainer = styled.div`
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderLeft = styled.div`
-  width: 202px;
+  width: 332px;
   height: 254px;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderMain = styled.div`
-  width: calc(100% - 202px);
+  width: calc(100% - 332px);
   height: 254px;
   /* border: 1px solid #ff8d8d; */
 `;
@@ -187,7 +211,7 @@ const StHeaderUserNameContainer = styled.div`
   margin-bottom: 48.39px;
 `;
 const StHeaderUserName = styled.div`
-  width: 200px;
+  width: 250px;
   height: 44px;
   font-family: 'Noto Sans';
   font-style: normal;
@@ -229,8 +253,12 @@ const StHeaderDday = styled.div`
 const StHeaderProfile = styled.div`
   width: 46.67px;
   height: 46.67px;
-  background: #9d9d9d;
   margin-left: 90px;
+`;
+const StHeaderProfileImg = styled.img`
+  width: 48px;
+  height: 48px;
+  /* background: #9d9d9d; */
 `;
 const StContentContainer = styled.div`
   width: 100%;
@@ -239,12 +267,12 @@ const StContentContainer = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentLeft = styled.div`
-  width: 202px;
+  width: 332px;
   height: calc(100vh - 254px);
   /* border: 1px solid #8cacff; */
 `;
 const StContentMain = styled.div`
-  width: calc(100% - 202px);
+  width: calc(100% - 332px);
   height: calc(100vh - 254px);
   /* border: 1px solid #8cacff; */
 `;
@@ -496,7 +524,7 @@ const StContentMainMyTitel = styled.div`
   margin-left: 25px;
 `;
 const StContentMainTitelName = styled.div`
-  width: 89px;
+  width: 95px;
   height: 25px;
   font-family: 'Noto Sans';
   font-style: normal;
@@ -508,6 +536,7 @@ const StContentMainTitelName = styled.div`
 `;
 const StContentMainTitelEx = styled.div`
   display: flex;
+  align-items: baseline;
   width: 162px;
   height: 19px;
 `;
@@ -562,7 +591,7 @@ const StContentMainRankTitle = styled.div`
   margin-left: 25px;
 `;
 const StContentMainRankName = styled.div`
-  width: 106px;
+  width: 118px;
   height: 25px;
   font-family: 'Noto Sans';
   font-style: normal;
@@ -575,14 +604,9 @@ const StContentMainRankName = styled.div`
 const StContentMainRankEx = styled.div`
   width: 81px;
   height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #848484;
   margin-left: 25px;
   display: flex;
+  align-items: baseline;
 `;
 const StContentMainRankNextAro = styled.div`
   box-sizing: border-box;
