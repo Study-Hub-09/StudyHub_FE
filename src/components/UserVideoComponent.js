@@ -2,21 +2,21 @@ import React from 'react';
 import OpenViduVideoComponent from './OvVideo';
 // import './UserVideo.css';
 import styled from '@emotion/styled';
+import viewmic from '../asset/viewmic.svg';
 
-const UserVideoComponent = ({ streamManager }) => {
-  const getNicknameTag = () => {
-    // 사용자의 닉네임을 가져옵니다.
-    return JSON.parse(streamManager.stream.connection.data).clientData;
-  };
-  console.log(streamManager.stream);
+const UserVideoComponent = ({ streamManager, userName }) => {
+  //   const getNicknameTag = () => {
+  // 사용자의 닉네임을 가져옵니다.
+  //     return JSON.parse(streamManager.stream.connection.data).clientData;
+  //   };
+  //   console.log(streamManager.stream);
   return (
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
+          <Stcamboxname>{userName}</Stcamboxname>
           <OpenViduVideoComponent streamManager={streamManager} />
-          <div>
-            <Stcamboxname>{getNicknameTag()}</Stcamboxname>
-          </div>
+          <img src={viewmic} alt="" width={36} height={36} />
         </Stcambox>
       ) : null}
     </div>
