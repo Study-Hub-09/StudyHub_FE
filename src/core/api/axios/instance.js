@@ -47,14 +47,14 @@ instance.interceptors.response.use(
 
     const {
       config,
-      response: { status },
+      response: { status, data },
     } = error;
 
     const originalRequest = config;
     const refreshToken = getCookie('RefreshToken');
     console.log('RESPONSE MESSAGE', status);
 
-    if (status === 400) {
+    if (status === 403 && data === 'Access Token Expired') {
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/members/refresh-token`,
@@ -78,7 +78,7 @@ instance.interceptors.response.use(
           },
         } = error;
 
-        if (status === 403 && message === '토큰이 유효하지 않습니다') {
+        if (status === 403 && message === 'Refresh Token Expired') {
           alert('로그인 후 다시 시도해주세요!');
           removeCookie('AccessToken', { path: '/' });
           removeCookie('RefreshToken', { path: '/' });
