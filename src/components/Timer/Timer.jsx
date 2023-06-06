@@ -42,7 +42,7 @@ function Timer() {
     const seconds = (time % 60).toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   };
-
+  console.log(time);
   return (
     <StTimerContainer>
       <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
