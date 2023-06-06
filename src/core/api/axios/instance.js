@@ -37,17 +37,6 @@ instance.interceptors.response.use(
   // 응답을 보내기 전 수행되는 함수
   (config) => {
     console.log('INSTANCE RESPONSE SUCCESS======> ', config);
-    const accessToken = getCookie('AccessToken');
-    const refreshToken = getCookie('RefreshToken');
-
-    if (accessToken && refreshToken) {
-      const accessToken = config.headers.get('access_token').split(' ')[1];
-      const refreshToken = config.headers.get('refresh_token').split(' ')[1];
-      const nickname = config.data.data;
-      setCookie('AccessToken', accessToken, { path: '/' });
-      setCookie('RefreshToken', refreshToken, { path: '/' });
-      localStorage.setItem('member', nickname);
-    }
     return config;
   },
 
@@ -58,14 +47,14 @@ instance.interceptors.response.use(
 
     const {
       config,
-      response: { status },
+      response: { status, data },
     } = error;
 
     const originalRequest = config;
     const refreshToken = getCookie('RefreshToken');
     console.log('RESPONSE MESSAGE', status);
 
-    if (status === 400) {
+    if (status === 403 && data === 'Access Token Expired') {
       try {
         const { data } = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/members/refresh-token`,
@@ -83,10 +72,13 @@ instance.interceptors.response.use(
         console.log('response error:', error);
 
         const {
-          response: { status },
+          response: {
+            status,
+            data: { message },
+          },
         } = error;
 
-        if (status === 403) {
+        if (status === 403 && message === 'Refresh Token Expired') {
           alert('로그인 후 다시 시도해주세요!');
           removeCookie('AccessToken', { path: '/' });
           removeCookie('RefreshToken', { path: '/' });
