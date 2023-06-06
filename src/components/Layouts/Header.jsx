@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import SymbolG from '../../assets/Images/SymbolG.svg';
+import LogoB from '../../assets/Images/LogoB.svg';
 import { useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 
@@ -17,6 +17,7 @@ function Header() {
     if (token) {
       removeCookie('AccessToken', { path: '/' });
       removeCookie('RefreshToken', { path: '/' });
+      localStorage.removeItem('member');
       setToken('');
       window.location.reload();
     }
@@ -25,8 +26,8 @@ function Header() {
   return (
     <StHeaderContainer>
       <StLogoNameContainer>
-        <StLogo src={SymbolG} alt="오류" />
-        <StLogoName>스터브</StLogoName>
+        <StLogo src={LogoB} alt="오류" />
+        {/* <StLogoName>스터브</StLogoName> */}
       </StLogoNameContainer>
 
       <StMenuContainer>
@@ -39,7 +40,7 @@ function Header() {
         </StMenu>
         <StMenu2
           onClick={() => {
-            navigate('/main');
+            navigate('/mypage');
           }}
         >
           내 공부 현황
@@ -82,9 +83,10 @@ const StLogoNameContainer = styled.div`
   justify-content: center;
 `;
 const StLogo = styled.img`
-  width: 32px;
-  height: 32px;
-  margin-right: 12px;
+  width: 114px;
+  height: 47px;
+  padding: 4px;
+  color: #000000;
 `;
 const StLogoName = styled.div`
   width: 50px;

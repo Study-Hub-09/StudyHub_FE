@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Symbol from '../../assets/Images/Symbol.svg';
+import LogoW from '../../assets/Images/LogoW.svg';
+import Logoic from '../../assets/Images/Logoic.svg';
 import Analitycs from '../../assets/Images/Analitycs.svg';
 import Dashboard from '../../assets/Images/Dashboard Icon.svg';
 import Search from '../../assets/Images/Search.svg';
 import materialsymbols from '../../assets/Images/material-symbols_help-outline.svg';
 import setting from '../../assets/Images/setting2.svg';
 import logout from '../../assets/Images/logout.svg';
-import profile from '../../assets/Images/Frame 20.svg';
+import profile from '../../assets/Images/Frame 19.svg';
 import Straight from '../../assets/Images/Straight.svg';
 import RevStraight from '../../assets/Images/RevStraight.svg';
+import sprout from '../../assets/Images/sprout.svg';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -78,14 +80,14 @@ function SideBar({ children }) {
       <StSidebarContainer isOpen={isOpen}>
         <StLogoContainer>
           <StSymbol
-            src={Symbol}
+            src={isOpen ? LogoW : Logoic}
             alt="오류"
             isOpen={isOpen}
             onClick={() => {
               navigate('/');
             }}
           />
-          <StSymbolName isOpen={isOpen}>스터브</StSymbolName>
+          {/* <StSymbolName isOpen={isOpen}>스터브</StSymbolName> */}
           <StRevStraight src={RevStraight} alt="오류" isOpen={isOpen} onClick={toggle} />
         </StLogoContainer>
 
@@ -124,12 +126,13 @@ function SideBar({ children }) {
             </StProfileFreame>
 
             <StPofileTextFreame>
-              <StPofileText isOpen={isOpen}>
-                {token ? localStorage.member : '게스트'}
-              </StPofileText>
+              <StPofileImgText isOpen={isOpen}>
+                <StPofileImg src={sprout} />
+                <StPofileName>{token ? localStorage.member : '게스트'}</StPofileName>
+              </StPofileImgText>
 
               <StPofileText2 isOpen={isOpen}>
-                {token ? '환영합니다.' : '로그인하여 이용하기'}
+                {token ? '누적시간 00:00:00' : '로그인하여 이용하기'}
               </StPofileText2>
             </StPofileTextFreame>
           </StProfileLaout>
@@ -239,14 +242,16 @@ const StLine = styled.div`
   `}
 `;
 const StSymbol = styled.img`
-  height: 32px;
-  width: 32px;
-  margin: 0px 8px 0px 36px;
+  height: 39.44px;
+  width: 106px;
+  margin: 0px 0px 0px 36px;
   cursor: pointer;
   ${({ isOpen }) =>
     !isOpen &&
     `
-    margin: 0px 24px 0px 24px; /* isOpen이 false일 때의 너비 */
+    width: 22px;
+    height: 32px;
+    margin: 0px 0px 0px 30px; /* isOpen이 false일 때의 너비 */
   `}
 `;
 const StSymbolName = styled.div`
@@ -318,28 +323,34 @@ const StProfile = styled.img`
   height: 48px;
 `;
 const StPofileTextFreame = styled.div`
-  width: 129px;
-  height: 48px;
+  width: 124px;
+  height: 51px;
   display: flex;
   flex-direction: column;
   margin: 0px 0px 0px 12.67px;
 `;
-const StPofileText = styled.div`
-  width: 42px;
-  height: 28px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 20px;
-  color: #ffffff;
+const StPofileImgText = styled.div`
+  width: 124px;
+  height: 24px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   ${({ isOpen }) =>
     !isOpen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
+`;
+const StPofileImg = styled.img`
+  width: 16px;
+  height: 16px;
+  margin: 0px 7px 0px 0px;
+`;
+const StPofileName = styled.div`
+  width: 70px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
 `;
 const StPofileText2 = styled.div`
   width: 129px;

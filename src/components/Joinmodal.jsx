@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
 
-function Joinmodal({ onClose, roomData, joinSession }) {
+function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
   const navigate = useNavigate();
 
@@ -50,10 +50,10 @@ function Joinmodal({ onClose, roomData, joinSession }) {
       accountNonLocked: true,
       credentialsNonExpired: true,
     };
-
+    console.log(roomData);
     try {
-      await joinRoom(roomData.sessionId, memberData);
-      // navigate(`/rooms/${roomData.sessionId}/detail`);
+      // await joinRoom(roomData.sessionId, memberData);
+      navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
       onClose(false);
     } catch (error) {
       console.error('방 입장 중 오류가 발생했습니다', error);
@@ -85,7 +85,7 @@ function Joinmodal({ onClose, roomData, joinSession }) {
           <Stroomcount>
             <span>1 / 9</span>
             <img src={usericon} alt="" />
-            <Stjoinbutton onClick={joinSession}>입장하기</Stjoinbutton>
+            <Stjoinbutton onClick={joinbuttonHandler}>입장하기</Stjoinbutton>
           </Stroomcount>
         </StLayout>
       </Stmodalbox>
