@@ -5,6 +5,7 @@ import profileLogo from '../../src/assets/Images/Frame 20.svg';
 import sprout from '../../src/assets/Images/sprout.svg';
 import Crown from '../../src/assets/Images/👑.svg';
 import Arrow from '../../src/assets/Images/Arrow 1.svg';
+import Graph from '../components/Graph/Graph';
 
 function Mypage() {
   const nickname = localStorage.member;
@@ -107,10 +108,12 @@ function Mypage() {
                 </StContentMainStatisticsTitlBox>
               </StContentMainStatisticsTitleH>
 
-              <StContentMainStatisticsGraph></StContentMainStatisticsGraph>
+              <StContentMainStatisticsGraph>
+                <Graph token={token} />
+              </StContentMainStatisticsGraph>
 
               <StContentMainStatisticsSub>
-                <StContentMainStatisticsSubT></StContentMainStatisticsSubT>
+                {/* <StContentMainStatisticsSubT></StContentMainStatisticsSubT> */}
               </StContentMainStatisticsSub>
             </StContentMainStatistics>
 
@@ -471,7 +474,7 @@ const StContentMainStatisticsGraph = styled.div`
   width: 479.36px;
   height: 172.9px;
   margin: 20px 0px 14px 0px;
-  background: #eaeaea;
+  /* background: #eaeaea; */
 `;
 const StContentMainStatisticsSub = styled.div`
   display: flex;
