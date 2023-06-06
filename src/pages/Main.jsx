@@ -29,7 +29,7 @@ function Main() {
     return <p>오류가 발생하였습니다...!</p>;
   }
 
-  console.log(data);
+  const roomData = data.data.content;
 
   const checkBoxHandler = () => {
     setChecked(!checked);
@@ -64,7 +64,7 @@ function Main() {
         )}
         {joinModalOpen && (
           <Joinmodal
-            roomData={data.data.find((item) => item.sessionId === selectedRoomId)}
+            roomData={roomData.find((item) => item.sessionId === selectedRoomId)}
             onClose={() => {
               setJoinModalOpen(false);
             }}
@@ -96,7 +96,7 @@ function Main() {
             </div>
           </Stfilterbox>
           <StroomArea>
-            {data.data.map((item) => {
+            {roomData.map((item) => {
               return (
                 <Stroombox
                   key={item.sessionId}
