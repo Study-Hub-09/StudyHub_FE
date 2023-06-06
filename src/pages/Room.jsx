@@ -132,10 +132,10 @@ function Room() {
             videoSource: undefined,
             publishAudio: true,
             publishVideo: true,
-            resolution: '960x540',
-            frameRate: 30,
+            resolution: '1920x1080',
+            frameRate: 60,
             insertMode: 'APPEND',
-            mirror: false,
+            mirror: true,
           });
 
           state.session.publish(publisher);
@@ -275,19 +275,16 @@ function Room() {
       <StLayout>
         <StViewArea>
           <Stheader>
-            <Sttimertext>
-              <Timer />
-            </Sttimertext>
+            <Timer />
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
                 <span>1 / 9</span>
-                <img src={Vector} alt="" />
+                <Stusericon src={Vector} alt="" />
               </Stroomcount>
             </Sttitlebox>
           </Stheader>
           <Stcamarea ischatOpen={ischatOpen}>
-            {/* <Stcambox> */}
             {publisher !== undefined ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
@@ -297,10 +294,129 @@ function Room() {
                   streamManager={publisher}
                   userName={getUserName}
                   audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
                 />
               </div>
             ) : null}
-            {/* </Stcambox> */}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}{' '}
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent
+                  streamManager={publisher}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ) : null}
+            {subscribers.map((sub, i) => (
+              <div
+                key={sub.id}
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(sub)}
+              >
+                <span>{sub.id}</span>
+                <UserVideoComponent
+                  streamManager={sub}
+                  userName={getUserName}
+                  audioEnabled={audioEnabled}
+                  videoEnabled={videoEnabled}
+                />
+              </div>
+            ))}
           </Stcamarea>
           <Stfooter>
             <Stsettingbox>
@@ -385,17 +501,17 @@ function Room() {
 export default Room;
 const size = {
   xs: (...args) => css`
-    @media (max-width: 970px) {
+    @media (max-width: 1366px) {
       ${css(...args)}
     }
   `,
   md: (...args) => css`
-    @media (min-width: 971px) and (max-width: 1349px) {
+    @media (min-width: 1367px) and (max-width: 1500px) {
       ${css(...args)}
     }
   `,
   lg: (...args) => css`
-    @media (min-width: 1350px) {
+    @media (min-width: 1501px) {
       ${css(...args)}
     }
   `,
@@ -427,7 +543,7 @@ const StViewArea = styled.div`
 
 const StChatarea = styled.div`
   width: 329px;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -533,60 +649,11 @@ const StFromchat = styled.div`
 `;
 
 const Stcamarea = styled.div`
-  width: ${({ ischatOpen }) => (ischatOpen ? '1264px' : '1464px')};
-  height: 771px;
+  width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
   display: grid;
   grid-template-columns: repeat(3, 1fr); // 기본적으로 3 열로 표시.
   grid-gap: 8px 8px;
   transform: translateY(-20px);
-
-  ${size.md`
-    width: 1200px;
-  `}
-
-  ${size.xs`
-    grid-template-columns: repeat(2, 1fr);
-    width: 650px
-  `}
-`;
-
-const Stcambox = styled.div`
-  /* width: 547px;
-  height: 308px; */
-  background-color: black;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  padding: 14px;
-
-  ${size.xs`
-    // 최소 화면 크기 설정
-    width: 100%;
-  `}
-
-  ${size.md`
-    // 중간 화면 크기 설정
-    width: 100%;
-  `}
-
-  ${size.lg`
-    // 최대 화면 크기 설정
-    width: 100%;
-  `}
-`;
-
-const Stcamboxname = styled.div`
-  width: 68px;
-  height: 30px;
-  background-color: #424242;
-  border-radius: 7px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
 `;
 
 const Stheader = styled.div`
@@ -594,22 +661,25 @@ const Stheader = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 57px;
-  margin-top: 65px;
-  gap: 10px;
-  width: 80%;
+  margin-bottom: 1rem;
+  margin-top: 3rem;
+  /* gap: 10px; */
+  gap: 1vw;
+  width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
+  /* padding: 0px 40px; */
 `;
 const Sttimertext = styled.div`
-  color: #00573f;
-  font-size: 52px;
+  /* color: #00573f; */
+  /* font-size: 52px; */
   font-weight: 700;
-  gap: 27px;
-  display: flex;
+  /* gap: 27px; */
+  /* display: flex; */
 `;
 
 const Sttitlebox = styled.div`
   font-weight: 700;
-  font-size: 26px;
+  /* font-size: 26px; */
+  font-size: 1.35vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -621,13 +691,17 @@ const Sttitle = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: center;
+  margin-left: 4vw;
 `;
 
 const Stsettingbox = styled.div`
-  width: 424px;
-  height: 64px;
+  /* width: 424px; */
+  width: 22vw;
+  /* height: 64px; */
+  height: 6vh;
   background-color: rgba(66, 66, 66, 0.8);
-  gap: 40px;
+  /* gap: 40px; */
+  gap: 2.1vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -640,14 +714,17 @@ const Stfooter = styled.div`
 `;
 
 const Sticon = styled.img`
+  width: 1.7vw;
   cursor: pointer;
 `;
 
 const Stroomcount = styled.span`
   color: #90b54c;
-  font-size: 15px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5vw;
+`;
+const Stusericon = styled.img`
+  width: 1.2vw;
 `;
