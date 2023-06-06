@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import cancel from '../asset/cancel.svg';
 import usericon from '../asset/Vector.svg';
+import studyhub from '../asset/studyhub.svg';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
@@ -70,23 +71,29 @@ function Joinmodal({ onClose, roomData }) {
       <Stmodalbox>
         <StLayout>
           <Stheaderbox>
-            <Stthumnail />
-            <Stcancelimg
-              src={cancel}
-              alt=""
-              onClick={() => {
-                onClose(false);
-              }}
-            />
+            {/* <Stthumnail /> */}
+            <img src={studyhub} alt="" width={120} />
+            <Stheadericon>
+              <Stcancelimg
+                src={cancel}
+                alt=""
+                width={13.41}
+                onClick={() => {
+                  onClose(false);
+                }}
+              />
+              <StroomCount>
+                <span>1 / 9</span>
+                <img src={usericon} alt="" width={20} />
+              </StroomCount>
+            </Stheadericon>
           </Stheaderbox>
           <Sttitle>{roomData?.roomName}</Sttitle>
           <Stcategory>카테고리</Stcategory>
           <Stcontent>{roomData?.roomContent}</Stcontent>
-          <Stroomcount>
-            <span>1 / 9</span>
-            <img src={usericon} alt="" />
+          <Stjoinbuttonlayout>
             <Stjoinbutton onClick={joinbuttonHandler}>입장하기</Stjoinbutton>
-          </Stroomcount>
+          </Stjoinbuttonlayout>
         </StLayout>
       </Stmodalbox>
     </Stcontainer>
@@ -125,10 +132,13 @@ const StLayout = styled.div`
   height: 401px;
 `;
 
-const Stthumnail = styled.div`
-  width: 120px;
+const Stheadericon = styled.div`
+  width: 100px;
   height: 120px;
-  background-color: #dedede;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-between;
 `;
 
 const Sttitle = styled.div`
@@ -158,14 +168,16 @@ const Stheaderbox = styled.div`
   align-items: start;
   margin-bottom: 27px;
 `;
-
-const Stroomcount = styled.div`
+const StroomCount = styled.div`
+  display: flex;
+  gap: 9px;
   color: #90b54c;
-  font-size: 15px;
   font-weight: 500;
+  font-size: 15px;
+`;
+const Stjoinbuttonlayout = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
   display: flex;
   justify-content: end;
 `;
@@ -178,6 +190,8 @@ const Stjoinbutton = styled.button`
   width: 104px;
   height: 40px;
   border-radius: 30px;
+  font-weight: 700;
+  line-height: 20px;
   background-color: #fefefe;
   color: #00574f;
   border: 1px solid #bfbfbf;
