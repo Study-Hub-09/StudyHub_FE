@@ -5,8 +5,9 @@ import { styled } from 'styled-components';
 
 function Timer() {
   const [time, setTime] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
   const [timerlog, setTimerlog] = useState(null);
+  // const [savedTime, setSavedTime] = useState(0);
 
   useEffect(() => {
     if (!isPaused) {
@@ -26,6 +27,9 @@ function Timer() {
 
   const handlePause = () => {
     setIsPaused((isPaused) => !isPaused);
+    // if (!isPaused) {
+    //   setSavedTime(time); // 타이머 일시정지 시 현재 시간(time)을 저장
+    // }
   };
 
   const formatTime = (time) => {
@@ -42,7 +46,7 @@ function Timer() {
   return (
     <StTimerContainer>
       <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
-      <StTimerImg src={isPaused ? pause : play} alt="" onClick={handlePause}></StTimerImg>
+      <StTimerImg src={isPaused ? play : pause} alt="" onClick={handlePause}></StTimerImg>
     </StTimerContainer>
   );
 }
