@@ -4,6 +4,23 @@ import { styled, keyframes, css } from 'styled-components';
 import { addRoom } from '../api/api';
 import cancel from '../asset/cancel.svg';
 import lockimg from '../asset/lock.svg';
+import languageunClick from '../asset/language.svg';
+import jobunClick from '../asset/job.svg';
+import certificateunClick from '../asset/certificate.svg';
+import hobbyunClick from '../asset/hobby.svg';
+import bookunClick from '../asset/book.svg';
+import officialunClick from '../asset/official.svg';
+import teacherunClick from '../asset/teacher.svg';
+import etcunClick from '../asset/etc.svg';
+import languageClick from '../asset/languageClick.svg';
+import jobClick from '../asset/jobClick.svg';
+import certificateClick from '../asset/certificateClick.svg';
+import hobbyClick from '../asset/hobbyClick.svg';
+import bookClick from '../asset/bookClick.svg';
+import officialClick from '../asset/officialClick.svg';
+import teacherClick from '../asset/teacherClick.svg';
+import etcClick from '../asset/etcClick.svg';
+
 import BasicDatePicker from './Datepicker';
 
 const Modal = ({ onClose }) => {
@@ -11,7 +28,8 @@ const Modal = ({ onClose }) => {
   const [roomContent, setRoomContent] = useState('');
   const [lock, setLock] = useState(false);
   const [animate, setAnimate] = useState(false);
-  const [category, setCategory] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState('');
+  const [selectedCategoriesB, setSelectedCategoriesB] = useState([]);
 
   const outside = useRef();
   const queryClient = useQueryClient();
@@ -21,13 +39,14 @@ const Modal = ({ onClose }) => {
       queryClient.invalidateQueries('room');
     },
   });
-
   const addbuttonHandler = async () => {
     if (roomName !== '' && roomContent !== '') {
       const content = {
         roomName,
         roomContent,
+        category: selectedCategories,
       };
+      console.log(content);
 
       // FormData에 데이터 추가
       const formData = new FormData();
@@ -60,6 +79,74 @@ const Modal = ({ onClose }) => {
     setLock(!lock);
   };
 
+  const buttonInfo = [
+    {
+      name: '어학',
+      customName: 'language',
+      clickImage: languageClick,
+      unclickImage: languageunClick,
+    },
+    {
+      name: '취업',
+      customName: 'job',
+      clickImage: jobClick,
+      unclickImage: jobunClick,
+    },
+    {
+      name: '자격증',
+      customName: 'certificate',
+      clickImage: certificateClick,
+      unclickImage: certificateunClick,
+    },
+    {
+      name: '취미',
+      customName: 'hobby',
+      clickImage: hobbyClick,
+      unclickImage: hobbyunClick,
+    },
+    {
+      name: '독서',
+      customName: 'book',
+      clickImage: bookClick,
+      unclickImage: bookunClick,
+    },
+    {
+      name: '공무원',
+      customName: 'official',
+      clickImage: officialClick,
+      unclickImage: officialunClick,
+    },
+    {
+      name: '임용',
+      customName: 'teacher',
+      clickImage: teacherClick,
+      unclickImage: teacherunClick,
+    },
+    {
+      name: '기타',
+      customName: 'etc',
+      clickImage: etcClick,
+      unclickImage: etcunClick,
+    },
+  ];
+
+  const categoryButtonHandler = (category) => {
+    const categoryName = category.name;
+    const customCategoryName = category.customName;
+    if (selectedCategories.includes(categoryName)) {
+      setSelectedCategories(
+        selectedCategories.filter((category) => category !== categoryName)
+      );
+      setSelectedCategoriesB(
+        selectedCategories.filter((category) => category !== customCategoryName)
+      );
+    } else {
+      setSelectedCategories([...selectedCategories, categoryName]);
+      setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
+    }
+  };
+  console.log(selectedCategories);
+  console.log(selectedCategoriesB);
   if (!onClose) return null;
 
   return (
@@ -95,15 +182,22 @@ const Modal = ({ onClose }) => {
             </Stcontentbox>
             <Stcatebox>
               <Stfont>카테고리</Stfont>
+
               <Stcategory>
-                <StCircle>어학</StCircle>
-                <StCircle>취업</StCircle>
-                <StCircle>자격증</StCircle>
-                <StCircle>취미</StCircle>
-                <StCircle>독서</StCircle>
-                <StCircle>공무원</StCircle>
-                <StCircle>임용</StCircle>
-                <StCircle>기타</StCircle>
+                {buttonInfo.map((button, index) => (
+                  <StCircle
+                    key={index}
+                    isSelected={selectedCategories.includes(button.name)}
+                    onClick={() => categoryButtonHandler(button)}
+                  >
+                    {selectedCategories.includes(button.name) ? (
+                      <img src={button.clickImage} alt={button.name} />
+                    ) : (
+                      <img src={button.unclickImage} alt={button.name} />
+                    )}
+                    <div>{button.name}</div>
+                  </StCircle>
+                ))}
               </Stcategory>
             </Stcatebox>
           </StmodalLeft>
@@ -218,11 +312,14 @@ const StCircle = styled.button`
   width: 70px;
   height: 70px;
   border-radius: 50px;
-  background-color: #e8e8e8;
+  color: ${(props) => (props.isSelected ? 'white' : 'black')};
+  background-color: ${(props) => (props.isSelected ? '#00573f' : '#e8e8e8')};
+  gap: 3px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 700;
 `;
 

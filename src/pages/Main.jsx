@@ -7,6 +7,8 @@ import noncheck from '../asset/noncheck.svg';
 import allow from '../asset/Polygon 3.svg';
 import leftallow from '../asset/leftallow.svg';
 import rightallow from '../asset/rightallow.svg';
+import studyhub from '../asset/studyhub.svg';
+import emptyRoom from '../asset/emptyarea.svg';
 import Modal from '../components/Modal';
 import { useQuery } from 'react-query';
 import { getRoom } from '../api/api';
@@ -52,6 +54,7 @@ function Main() {
       setPage(page - 1);
     }
   };
+  console.log(roomData);
   return (
     <>
       <div>
@@ -84,43 +87,49 @@ function Main() {
               <StButton onClick={modalToggleHandler}>스터디 만들기</StButton>
             </StSearchbox>
           </StTopline>
-          <Stfilterbox>
-            {checked ? (
-              <Stcheckboximg onClick={checkBoxHandler} src={check} alt="" />
-            ) : (
-              <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
-            )}
-            <div>입장 가능한 방만 보기</div>
-            <div>
-              분야 필터 <img src={allow} alt="" />
-            </div>
-          </Stfilterbox>
-          <StroomArea>
-            {roomData.map((item) => {
-              return (
-                <Stroombox
-                  key={item.sessionId}
-                  onClick={() => {
-                    joinmodalToggleHandler(item.sessionId);
-                  }}
-                >
-                  <Stroomboxlayout>
-                    <Stthumbnail></Stthumbnail>
-                    <Stroomtext>
-                      <Stroomtitle>{item.roomName}</Stroomtitle>
-                      <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>
-                    </Stroomtext>
-                    <div>
-                      <Stroomcount>
-                        <span>1 / 9</span>
-                        <img src={Vector} alt="" />
-                      </Stroomcount>
-                    </div>
-                  </Stroomboxlayout>
-                </Stroombox>
-              );
-            })}
-          </StroomArea>
+          {roomData.length === 0 ? (
+            <img src={emptyRoom} alt="" width={1020} height={599} />
+          ) : (
+            <>
+              <Stfilterbox>
+                {checked ? (
+                  <Stcheckboximg onClick={checkBoxHandler} src={check} alt="" />
+                ) : (
+                  <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
+                )}
+                <div>입장 가능한 방만 보기</div>
+                <div>
+                  분야 필터 <img src={allow} alt="" />
+                </div>
+              </Stfilterbox>
+              <StroomArea>
+                {roomData.map((item) => {
+                  return (
+                    <Stroombox
+                      key={item.sessionId}
+                      onClick={() => {
+                        joinmodalToggleHandler(item.sessionId);
+                      }}
+                    >
+                      <Stroomboxlayout>
+                        <img src={studyhub} alt="" width={82} height={82} />
+                        <Stroomtext>
+                          <Stroomtitle>{item.roomName}</Stroomtitle>
+                          <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>
+                        </Stroomtext>
+                        <div>
+                          <Stroomcount>
+                            <span>1 / 9</span>
+                            <img src={Vector} alt="" />
+                          </Stroomcount>
+                        </div>
+                      </Stroomboxlayout>
+                    </Stroombox>
+                  );
+                })}
+              </StroomArea>
+            </>
+          )}
         </StContents>
         <Stallowbox>
           <Stallowicon src={leftallow} alt="" onClick={prevpageHandler} />
@@ -236,12 +245,6 @@ const StroomArea = styled.div`
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-gap: 15px 40px;
-`;
-
-const Stthumbnail = styled.div`
-  width: 82px;
-  height: 82px;
-  background-color: #e8e8e8;
 `;
 
 const Stroomboxlayout = styled.div`
