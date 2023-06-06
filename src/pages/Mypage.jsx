@@ -93,18 +93,18 @@ function Mypage() {
                   <StContentMainStatisticsTitlBoxList>
                     1D
                   </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList>
+                  <StContentMainStatisticsTitlBoxList2>
                     1W
-                  </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList>
+                  </StContentMainStatisticsTitlBoxList2>
+                  <StContentMainStatisticsTitlBoxList3>
                     1M
-                  </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList>
+                  </StContentMainStatisticsTitlBoxList3>
+                  {/* <StContentMainStatisticsTitlBoxList>
                     6M
                   </StContentMainStatisticsTitlBoxList>
                   <StContentMainStatisticsTitlBoxList>
                     1Y
-                  </StContentMainStatisticsTitlBoxList>
+                  </StContentMainStatisticsTitlBoxList> */}
                 </StContentMainStatisticsTitlBox>
               </StContentMainStatisticsTitleH>
 
@@ -437,7 +437,7 @@ const StContentMainStatistics = styled.div`
 const StContentMainStatisticsTitleH = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 479.36px;
   height: 29.36px;
 `;
@@ -450,6 +450,7 @@ const StContentMainStatisticsTitl = styled.div`
   font-size: 20px;
   line-height: 27px;
   color: #303031;
+  margin-right: 45px;
 `;
 const StContentMainStatisticsTitlBox = styled.div`
   display: flex;
@@ -459,6 +460,7 @@ const StContentMainStatisticsTitlBox = styled.div`
   height: 29.36px;
   background: #f4f4f4;
   border-radius: 3.34103px;
+  margin-right: 8px;
 `;
 const StContentMainStatisticsTitlBoxList = styled.div`
   width: 16px;
@@ -469,6 +471,50 @@ const StContentMainStatisticsTitlBoxList = styled.div`
   font-size: 12px;
   line-height: 16px;
   color: #848484;
+  cursor: pointer;
+  &:hover {
+    width: 50px;
+    height: 16px;
+    padding: 0px 0px 0px 18px;
+    margin: 0px -15px 0px -18px;
+    background: #ffffff;
+  }
+`;
+const StContentMainStatisticsTitlBoxList2 = styled.div`
+  width: 16px;
+  height: 16px;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #848484;
+  cursor: pointer;
+  &:hover {
+    width: 50px;
+    height: 16px;
+    padding: 0px 0px 0px 16px;
+    margin: 0px -20px 0px -18px;
+    background: #ffffff;
+  }
+`;
+const StContentMainStatisticsTitlBoxList3 = styled.div`
+  width: 16px;
+  height: 16px;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #848484;
+  cursor: pointer;
+  &:hover {
+    width: 50px;
+    height: 16px;
+    padding: 0px 0px 0px 16px;
+    margin: 0px -18px 0px -15px;
+    background: #ffffff;
+  }
 `;
 const StContentMainStatisticsGraph = styled.div`
   width: 479.36px;
@@ -482,13 +528,13 @@ const StContentMainStatisticsSub = styled.div`
   width: 164.55px;
   height: 16px;
 `;
-const StContentMainStatisticsSubT = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 164.55px;
-  height: 16px;
-  background: #f8f8f8;
-`;
+// const StContentMainStatisticsSubT = styled.div`
+//   display: flex;
+//   align-items: flex-start;
+//   width: 164.55px;
+//   height: 16px;
+//   background: #f8f8f8;
+// `;
 const StContentMainSubContainer = styled.div`
   width: 452px;
   height: 296px;
