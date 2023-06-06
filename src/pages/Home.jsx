@@ -20,6 +20,7 @@ function Home() {
             의미합니다. <br /> 혼자서는 공부에 집중할 수 없다면 목표가 같은 동료들과 함께
             성장해요!
           </StMainLogoNameEx>
+
           <StMainBtn>
             <StMainBtnName
               onClick={() => {

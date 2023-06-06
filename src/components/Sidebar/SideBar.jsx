@@ -75,6 +75,7 @@ function SideBar({ children }) {
       icon: <img src={logout} alt="오류" />,
     },
   ];
+
   return (
     <StContainer>
       <StSidebarContainer isOpen={isOpen}>

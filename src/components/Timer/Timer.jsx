@@ -32,6 +32,11 @@ function Timer() {
     // }
   };
 
+  // const handleReset = () => {
+  //   setTime(0);
+  //   setSavedTime(0); // 저장된 시간을 초기화
+  // };
+
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600)
       .toString()
@@ -47,6 +52,7 @@ function Timer() {
     <StTimerContainer>
       <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
       <StTimerImg src={isPaused ? play : pause} alt="" onClick={handlePause}></StTimerImg>
+      {/* <button onClick={handleReset}>Reset</button> 리셋 버튼 */}
     </StTimerContainer>
   );
 }
