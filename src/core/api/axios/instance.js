@@ -37,17 +37,6 @@ instance.interceptors.response.use(
   // 응답을 보내기 전 수행되는 함수
   (config) => {
     console.log('INSTANCE RESPONSE SUCCESS======> ', config);
-    const accessToken = getCookie('AccessToken');
-    const refreshToken = getCookie('RefreshToken');
-
-    if (accessToken && refreshToken) {
-      const accessToken = config.headers.get('access_token').split(' ')[1];
-      const refreshToken = config.headers.get('refresh_token').split(' ')[1];
-      const nickname = config.data.data;
-      setCookie('AccessToken', accessToken, { path: '/' });
-      setCookie('RefreshToken', refreshToken, { path: '/' });
-      localStorage.setItem('member', nickname);
-    }
     return config;
   },
 
@@ -83,10 +72,13 @@ instance.interceptors.response.use(
         console.log('response error:', error);
 
         const {
-          response: { status },
+          response: {
+            status,
+            data: { message },
+          },
         } = error;
 
-        if (status === 403) {
+        if (status === 403 && message === '토큰이 유효하지 않습니다') {
           alert('로그인 후 다시 시도해주세요!');
           removeCookie('AccessToken', { path: '/' });
           removeCookie('RefreshToken', { path: '/' });

@@ -57,6 +57,12 @@ function Login() {
       console.log('RESPONSE LOGIN.JSX LINE19 =====> ', response);
       const statusCode = response.status;
       const responseMessage = response.data.message;
+      const accessToken = response.headers.get('access_token').split(' ')[1];
+      const refreshToken = response.headers.get('refresh_token').split(' ')[1];
+      const nickname = response.data.data;
+      setCookie('AccessToken', accessToken, { path: '/' });
+      setCookie('RefreshToken', refreshToken, { path: '/' });
+      localStorage.setItem('member', nickname);
 
       if (statusCode === 200) {
         alert(responseMessage);
