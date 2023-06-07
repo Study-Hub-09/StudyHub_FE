@@ -3,11 +3,11 @@ import play from '../../asset/play.svg';
 import pause from '../../asset/pause.svg';
 import { styled } from 'styled-components';
 
-function Timer() {
+function Timer({ onSaveTime }) {
   const [time, setTime] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
   const [timerlog, setTimerlog] = useState(null);
-  // const [savedTime, setSavedTime] = useState(0);
+  const [savedTime, setSavedTime] = useState(0);
 
   useEffect(() => {
     if (!isPaused) {
@@ -27,15 +27,17 @@ function Timer() {
 
   const handlePause = () => {
     setIsPaused((isPaused) => !isPaused);
-    // if (!isPaused) {
-    //   setSavedTime(time); // 타이머 일시정지 시 현재 시간(time)을 저장
-    // }
+    if (!isPaused) {
+      onSaveTime(time); // 타이머 일시정지 시 현재 시간(time)을 저장
+    }
   };
 
   // const handleReset = () => {
   //   setTime(0);
   //   setSavedTime(0); // 저장된 시간을 초기화
   // };
+
+  console.log('#######SAVEDTIME=====> ', savedTime);
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600)
