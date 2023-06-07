@@ -21,7 +21,7 @@ function Main() {
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [page, setPage] = useState(1);
-  const { isLoading, isError, data } = useQuery(['room', page], () => getRoom(page));
+  const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
 
   if (isLoading) {
     return <p>로딩중입니다....!</p>;
