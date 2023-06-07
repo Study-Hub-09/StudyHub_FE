@@ -43,6 +43,11 @@ function Room() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setvideoEnabled] = useState(true);
 
+  const handleSaveTime = (savedTime) => {
+    // savedTime 값을 처리하는 로직을 작성
+    return savedTime;
+  };
+
   const audiocontrolhandler = () => {
     setAudioEnabled(!audioEnabled);
     publisher.publishAudio(!audioEnabled);
@@ -67,7 +72,7 @@ function Room() {
   }, []);
 
   const onbeforeunload = (event) => {
-    leaveSession(roomData.sessionId);
+    leaveSession();
   };
 
   const handleChangeSessionId = (e) => {
@@ -107,6 +112,7 @@ function Room() {
     if (state.session) {
       const handleStream = (event) => {
         let subscriber = state.session.subscribe(event.stream, undefined);
+        console.lot('###subscriber### ', subscriber);
         setState((prevState) => ({
           ...prevState,
           subscribers: [...prevState.subscribers, subscriber],
@@ -178,15 +184,25 @@ function Room() {
 
   const leaveSession = async (sessionId) => {
     const mySession = state.session; // init value: undefined
-
+    console.log('######sessionID====>', sessionId);
     if (mySession) {
-      // try {
-      //   const response = await instance.delete(`/api/rooms${sessionId}/out`);
-      //   console.log('RESPONSE LEAVE SESSION####### ', response);
-      //   return response;
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      try {
+        // const params = new URLSearchParams();
+        // console.log('####params', params);
+        // params.append('studytime', Number(11111));
+        // const studyTime = handleSaveTime();
+        const studyTime = 123456;
+        console.log('STUDYTIME ======> ', studyTime);
+        const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
+          params: {
+            studytime: studyTime,
+          },
+        });
+        console.log('RESPONSE LEAVE SESSION####### ', response);
+        return response;
+      } catch (error) {
+        console.log('leaveSession ERROR ====> ', error);
+      }
       mySession.disconnect();
     }
     OV.current = null;
@@ -256,8 +272,18 @@ function Room() {
           'Content-Type': 'application/json',
         },
       });
+      // const response = await axios.post(
+      //   APPLICATION_SERVER_URL + 'openvidu/api/sessions',
+      //   {},
+      //   {
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
+      //     },
+      //   }
+      // );
       console.log('2' + sessionId);
-      console.log('response========> ', response.data);
+      console.log('response========> ', response);
       return response.data;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createSession');
@@ -288,7 +314,7 @@ function Room() {
       <StLayout>
         <StViewArea>
           <Stheader>
-            <Timer />
+            <Timer onSaveTime={handleSaveTime} />
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
@@ -348,7 +374,11 @@ function Room() {
               />
               <Sticon src={view} alt="" />
               <Sticon src={setting} alt="" />
-              <Sticon src={logout} alt="" onClick={leaveSession} />
+              <Sticon
+                src={logout}
+                alt=""
+                onClick={() => leaveSession(roomData.sessionId)}
+              />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>
