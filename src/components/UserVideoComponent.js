@@ -6,16 +6,16 @@ import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
 const UserVideoComponent = ({ streamManager, userName, audioEnabled, videoEnabled }) => {
-  //   const getNicknameTag = () => {
-  // 사용자의 닉네임을 가져옵니다.
-  //     return JSON.parse(streamManager.stream.connection.data).clientData;
-  //   };
-  //   console.log(streamManager.stream);
+  const getNicknameTag = () => {
+    // 사용자의 닉네임을 가져옵니다.
+    return JSON.parse(streamManager.stream.connection.data).clientData;
+  };
+  console.log(streamManager.stream.connection.stream.videoActive);
   return (
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
-          <Stcamboxname>{userName}</Stcamboxname>
+          <Stcamboxname>{getNicknameTag()}</Stcamboxname>
           {videoEnabled ? (
             <OpenViduVideoComponent streamManager={streamManager} />
           ) : (

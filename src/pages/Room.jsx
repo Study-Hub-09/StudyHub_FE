@@ -49,12 +49,12 @@ function Room() {
   };
 
   const audiocontrolhandler = () => {
-    setAudioEnabled(!audioEnabled);
+    setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
   const videocontrolhandler = () => {
-    setvideoEnabled(!videoEnabled);
+    setvideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
   const navigate = useNavigate();
@@ -90,18 +90,38 @@ function Room() {
   };
 
   const deleteSubscriber = (streamManager) => {
-    let subscribers = state.subscribers;
-    let index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setState((prevState) => ({ ...prevState, subscribers: subscribers }));
-    }
+    setState((prevState) => {
+      const updatedSubscribers = prevState.subscribers.filter(
+        (sub) => sub !== streamManager
+      );
+      return { ...prevState, subscribers: updatedSubscribers };
+    });
   };
 
   const joinSession = () => {
     OV.current = new OpenVidu();
     const mySession = OV.current.initSession();
-    setState((prevState) => ({ ...prevState, session: mySession }));
+
+    mySession.on('streamCreated', (event) => {
+      const subscriber = mySession.subscribe(event.stream, undefined);
+      setState((prevState) => ({
+        ...prevState,
+        subscribers: [...prevState.subscribers, subscriber],
+      }));
+    });
+
+    mySession.on('streamDestroyed', (event) => {
+      deleteSubscriber(event.stream.streamManager);
+    });
+
+    mySession.on('exception', (exception) => {
+      console.warn(exception);
+    });
+
+    setState((prevState) => ({
+      ...prevState,
+      session: mySession,
+    }));
   };
 
   useEffect(() => {
@@ -110,31 +130,31 @@ function Room() {
 
   useEffect(() => {
     if (state.session) {
-      const handleStream = (event) => {
-        let subscriber = state.session.subscribe(event.stream, undefined);
-        console.lot('###subscriber### ', subscriber);
-        setState((prevState) => ({
-          ...prevState,
-          subscribers: [...prevState.subscribers, subscriber],
-        }));
-      };
+      // const handleStream = (event) => {
+      //   let subscriber = state.session.subscribe(event.stream, undefined);
+      //   console.lot('###subscriber### ', subscriber);
+      //   setState((prevState) => ({
+      //     ...prevState,
+      //     subscribers: [...prevState.subscribers, subscriber],
+      //   }));
+      // };
 
-      const handleStreamDestroyed = (event) => {
-        deleteSubscriber(event.stream.streamManager);
-      };
+      // const handleStreamDestroyed = (event) => {
+      //   deleteSubscriber(event.stream.streamManager);
+      // };
 
-      const handleException = (exception) => {
-        console.warn(exception);
-      };
+      // const handleException = (exception) => {
+      //   console.warn(exception);
+      // };
 
-      state.session.on('stream', handleStream);
-      state.session.on('streamDestroyed', handleStreamDestroyed);
-      state.session.on('exception', handleException);
+      // state.session.on('stream', handleStream);
+      // state.session.on('streamDestroyed', handleStreamDestroyed);
+      // state.session.on('exception', handleException);
 
       (async function connectToken() {
         try {
           const token = await getToken();
-          await state.session.connect(token, { clientData: state.myUserName });
+          await state.session.connect(token, { clientData: getUserName });
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
@@ -175,9 +195,9 @@ function Room() {
       })();
 
       return () => {
-        state.session.off('stream', handleStream);
-        state.session.off('streamDestroyed', handleStreamDestroyed);
-        state.session.off('exception', handleException);
+        // state.session.off('stream', handleStream);
+        // state.session.off('streamDestroyed', handleStreamDestroyed);
+        // state.session.off('exception', handleException);
       };
     }
   }, [state.session]);
@@ -185,6 +205,7 @@ function Room() {
   const leaveSession = async (sessionId) => {
     const mySession = state.session; // init value: undefined
     console.log('######sessionID====>', sessionId);
+
     if (mySession) {
       try {
         // const params = new URLSearchParams();
@@ -198,6 +219,8 @@ function Room() {
             studytime: studyTime,
           },
         });
+        navigate(-1);
+        await state.session.unpublish(state.mainStreamManager);
         console.log('RESPONSE LEAVE SESSION####### ', response);
         return response;
       } catch (error) {
@@ -214,7 +237,6 @@ function Room() {
       mainStreamManager: undefined,
       publisher: undefined,
     });
-    navigate(-1);
   };
 
   const switchCamera = async () => {
@@ -318,7 +340,7 @@ function Room() {
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
-                <span>1 / 9</span>
+                <span>{roomData.userCount} / 9</span>
                 <Stusericon src={Vector} alt="" />
               </Stroomcount>
             </Sttitlebox>
