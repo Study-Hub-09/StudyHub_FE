@@ -19,18 +19,21 @@ import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
+import { instance } from '../core/api/axios/instance';
+import { getCookie } from '../Cookies/Cookies';
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
 function Room() {
   const [ischatOpen, setisChatOpen] = useState(false);
   const params = useParams();
   const location = useLocation();
+  const accessToken = getCookie('AccessToken');
 
   const { roomData } = location.state;
   console.log(roomData);
 
   const [state, setState] = useState({
-    mySessionId: 'SessionA',
+    mySessionId: roomData.sessionId,
     myUserName: 'Participant' + Math.floor(Math.random() * 100),
     session: undefined,
     mainStreamManager: undefined,
@@ -64,7 +67,7 @@ function Room() {
   }, []);
 
   const onbeforeunload = (event) => {
-    leaveSession();
+    leaveSession(roomData.sessionId);
   };
 
   const handleChangeSessionId = (e) => {
@@ -173,10 +176,17 @@ function Room() {
     }
   }, [state.session]);
 
-  const leaveSession = () => {
-    const mySession = state.session;
+  const leaveSession = async (sessionId) => {
+    const mySession = state.session; // init value: undefined
 
     if (mySession) {
+      // try {
+      //   const response = await instance.delete(`/api/rooms${sessionId}/out`);
+      //   console.log('RESPONSE LEAVE SESSION####### ', response);
+      //   return response;
+      // } catch (error) {
+      //   console.log(error);
+      // }
       mySession.disconnect();
     }
     OV.current = null;
@@ -231,7 +241,7 @@ function Room() {
   async function getToken() {
     try {
       const sessionId = await createSession(mySessionId);
-      const response = await createToken(sessionId);
+      const response = await createToken(roomData.sessionId); // 토큰
       console.log('4' + response);
       return response;
     } catch (error) {
@@ -241,15 +251,14 @@ function Room() {
 
   async function createSession(sessionId) {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions',
-        { customSessionId: sessionId },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const response = await instance.post(`api/rooms/${sessionId}/enter`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       console.log('2' + sessionId);
-      return response.data; // The sessionId
+      console.log('response========> ', response.data);
+      return response.data;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
@@ -258,18 +267,22 @@ function Room() {
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+        APPLICATION_SERVER_URL + 'openvidu/api/sessions/' + sessionId + '/connection',
         {},
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
+          },
         }
       );
-      console.log('3' + sessionId);
-      return response.data; // The token
+      console.log('3333333RESPONSEEEEEE=====> ', response);
+      return response.data.token; // token
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
+
   return (
     <Stcontainer>
       <StLayout>
