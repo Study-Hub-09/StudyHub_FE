@@ -41,22 +41,23 @@ function Room() {
     subscribers: [],
   });
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setvideoEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
     return savedTime;
   };
 
-  const audiocontrolhandler = () => {
+  const toggleAudioState = () => {
     setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
-  const videocontrolhandler = () => {
-    setvideoEnabled((prevValue) => !prevValue);
+  const toggleVideoState = () => {
+    setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
+
   const navigate = useNavigate();
 
   const OV = useRef(null);
@@ -123,6 +124,20 @@ function Room() {
       session: mySession,
     }));
   };
+
+  // const videoRef = useRef(null);
+
+  // useEffect(() => {
+  //   const videoElement = videoRef.current;
+  //   if (publisher && videoElement) {
+  //     publisher.addVideoElement(videoElement);
+  //   }
+  //   return () => {
+  //     if (publisher && videoElement) {
+  //       publisher.removeVideoElement(videoElement);
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     joinSession();
@@ -194,11 +209,11 @@ function Room() {
         }
       })();
 
-      return () => {
-        // state.session.off('stream', handleStream);
-        // state.session.off('streamDestroyed', handleStreamDestroyed);
-        // state.session.off('exception', handleException);
-      };
+      // return () => {
+      //   state.session.off('stream', handleStream);
+      //   state.session.off('streamDestroyed', handleStreamDestroyed);
+      //   state.session.off('exception', handleException);
+      // };
     }
   }, [state.session]);
 
@@ -220,7 +235,7 @@ function Room() {
           },
         });
         navigate(-1);
-        await state.session.unpublish(state.mainStreamManager);
+        await state.session.unpublish(state.mainStreamManager); ////////////////
         console.log('RESPONSE LEAVE SESSION####### ', response);
         return response;
       } catch (error) {
@@ -311,7 +326,8 @@ function Room() {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
   }
-
+  console.log('###############subscribers', subscribers);
+  console.log('###############publisher', publisher);
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
@@ -349,7 +365,9 @@ function Room() {
             {publisher !== undefined ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(publisher)}
+                onClick={() => {
+                  handleMainVideoStream(publisher);
+                }}
               >
                 <UserVideoComponent
                   streamManager={publisher}
@@ -363,7 +381,9 @@ function Room() {
               <div
                 key={sub.id}
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(sub)}
+                onClick={() => {
+                  handleMainVideoStream(sub);
+                }}
               >
                 <span>{sub.id}</span>
                 <UserVideoComponent
@@ -378,14 +398,14 @@ function Room() {
           <Stfooter>
             <Stsettingbox>
               {audioEnabled ? (
-                <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micOn} alt="" onClick={toggleAudioState} />
               ) : (
-                <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micoff} alt="" onClick={toggleAudioState} />
               )}
               {videoEnabled ? (
-                <Sticon src={camOn} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camOn} alt="" onClick={toggleVideoState} />
               ) : (
-                <Sticon src={camoff} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camoff} alt="" onClick={toggleVideoState} />
               )}
               <Sticon
                 src={chat}
