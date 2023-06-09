@@ -21,16 +21,18 @@ import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
+
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
+
 function Room() {
-  const [ischatOpen, setisChatOpen] = useState(false);
-  const params = useParams();
   const location = useLocation();
-  const accessToken = getCookie('AccessToken');
+  const token = getCookie('AccessToken');
+  const navigate = useNavigate();
+  const OV = useRef(null);
+  const getUserName = localStorage.getItem('member');
 
   const { roomData } = location.state;
-  console.log(roomData);
 
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
@@ -40,8 +42,10 @@ function Room() {
     publisher: undefined,
     subscribers: [],
   });
+
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setVideoEnabled] = useState(true);
+  const [videoEnabled, setvideoEnabled] = useState(true);
+  const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
@@ -63,6 +67,7 @@ function Room() {
   const OV = useRef(null);
 
   const getUserName = localStorage.getItem('member');
+
 
   useEffect(() => {
     window.addEventListener('beforeunload', onbeforeunload);
@@ -89,6 +94,25 @@ function Room() {
       setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
     }
   };
+
+  // const deleteSubscriber = (streamManager) => {
+  //   // let subscribers = state.subscribers;
+  //   // let index = subscribers.indexOf(streamManager, 0);
+  //   // if (index > -1) {
+  //   //   const newSubscribers = subscribers.splice(index, 1);
+  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
+  //   // }
+  //   // setState((prevSubscribers) => {
+  //   //   const index = prevSubscribers.indexOf(streamManager);
+  //   //   if (index > -1) {
+  //   //     const newSubscribers = [...prevSubscribers];
+  //   //     newSubscribers.splice(index, 1);
+  //   //     return newSubscribers;
+  //   //   } else {
+  //   //     return prevSubscribers;
+  //   //   }
+  //   // });
+  // };
 
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
@@ -140,7 +164,11 @@ function Room() {
   // }, []);
 
   useEffect(() => {
-    joinSession();
+    if (token) {
+      joinSession();
+    } else {
+      navigate('/members/login');
+    }
   }, []);
 
   useEffect(() => {
@@ -174,13 +202,14 @@ function Room() {
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
+            publishAudio: audioEnabled, // true
+            publishVideo: videoEnabled, // true
             resolution: '1920x1080',
             frameRate: 60,
             insertMode: 'APPEND',
             mirror: true,
           });
+          console.log('publiser=====> ', publisher);
 
           state.session.publish(publisher);
 
@@ -209,11 +238,12 @@ function Room() {
         }
       })();
 
-      // return () => {
-      //   state.session.off('stream', handleStream);
-      //   state.session.off('streamDestroyed', handleStreamDestroyed);
-      //   state.session.off('exception', handleException);
-      // };
+      return () => {
+        // state.session.off('stream', handleStream);
+        // state.session.off('streamDestroyed', handleStreamDestroyed);
+        // state.session.off('exception', handleException);
+      };
+
     }
   }, [state.session]);
 
@@ -294,7 +324,7 @@ function Room() {
   async function getToken() {
     try {
       const sessionId = await createSession(mySessionId);
-      const response = await createToken(roomData.sessionId); // 토큰
+      const response = await createToken(mySessionId); // 토큰
       console.log('4' + response);
       return response;
     } catch (error) {
@@ -346,6 +376,8 @@ function Room() {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
+
+  console.log('SUBSCRIBERS===>', subscribers);
 
   return (
     <Stcontainer>
@@ -480,6 +512,7 @@ function Room() {
 }
 
 export default Room;
+
 const size = {
   xs: (...args) => css`
     @media (max-width: 1366px) {
