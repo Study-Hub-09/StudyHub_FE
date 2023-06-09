@@ -97,10 +97,10 @@ function Main() {
                 ) : (
                   <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
                 )}
-                <div>입장 가능한 방만 보기</div>
-                <div>
+                <Stfont>입장 가능한 방만 보기</Stfont>
+                <Stfont>
                   분야 필터 <img src={allow} alt="" />
-                </div>
+                </Stfont>
               </Stfilterbox>
               <StroomArea>
                 {roomData.map((item) => {
@@ -119,7 +119,7 @@ function Main() {
                         </Stroomtext>
                         <div>
                           <Stroomcount>
-                            <span>1 / 9</span>
+                            <span>{item.userCount} / 9</span>
                             <img src={Vector} alt="" />
                           </Stroomcount>
                         </div>
@@ -172,12 +172,14 @@ const StTitlebox = styled.div`
 const StTitle = styled.div`
   font-size: 32px;
   font-weight: 700;
+  font-family: 'Noto Sans';
 `;
 
 const Stsubtitle = styled.div`
   font-size: 18px;
   font-weight: 400;
   color: #84848484;
+  font-family: 'Noto Sans';
 `;
 
 const StSearchbox = styled.div`
@@ -195,6 +197,7 @@ const StSearchinput = styled.input`
   border-radius: 12px;
   padding-left: 43px;
   font-size: 15px;
+  font-family: 'Noto Sans';
 `;
 
 const StSearchicon = styled.img`
@@ -211,6 +214,7 @@ const StButton = styled.button`
   border-radius: 30px;
   font-size: 15px;
   font-weight: 700;
+  font-family: 'Noto Sans';
   color: #00573f;
   border: 1px solid #bfbfbf;
   &:hover {
@@ -228,7 +232,7 @@ const Stroombox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 24px;
+  padding: 19px 24px;
   cursor: pointer;
 `;
 
@@ -238,6 +242,7 @@ const Stfilterbox = styled.div`
   gap: 21px;
   margin-top: 90px;
   margin-bottom: 10px;
+  font-family: 'Noto Sans';
 `;
 
 const StroomArea = styled.div`
@@ -248,18 +253,21 @@ const StroomArea = styled.div`
 `;
 
 const Stroomboxlayout = styled.div`
-  width: 437px;
-  height: 98px;
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
 `;
 
 const Stroomtext = styled.div`
   display: flex;
   flex-direction: column;
+  width: 67%;
   gap: 13px;
-  transform: translate3d(-70px, -15px, 0px);
+  padding-left: 26px;
+  height: 100%;
+  /* transform: translate3d(-70px, -15px, 0px); */
 `;
 
 const Stroomtitle = styled.div`
@@ -280,6 +288,7 @@ const Stroomcount = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
 `;
 
 const Stcheckboximg = styled.img`
@@ -296,4 +305,8 @@ const Stallowbox = styled.div`
 
 const Stallowicon = styled.img`
   cursor: pointer;
+`;
+
+const Stfont = styled.div`
+  font-family: 'Noto Sans';
 `;
