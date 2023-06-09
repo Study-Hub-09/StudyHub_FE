@@ -23,7 +23,7 @@ import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
+  process.env.NODE_ENV === 'production' ? 'https://studyhub-openvidu.shop/' : '';
 
 function Room() {
   const location = useLocation();
