@@ -121,8 +121,7 @@ function Room() {
     const mySession = OV.current.initSession();
 
     mySession.on('streamCreated', (event) => {
-      const subscriber = mySession.subscribe(event.stream, 'subscriber');
-      console.log('USER DATA: ' + event.stream.connection.data);
+      const subscriber = mySession.subscribe(event.stream, undefined);
       setState((prevState) => ({
         ...prevState,
         subscribers: [...prevState.subscribers, subscriber],
@@ -154,7 +153,6 @@ function Room() {
   useEffect(() => {
     if (state.session) {
       // const handleStream = (event) => {
-      //   console.log('eeeeeeevent====> ', event);
       //   let subscriber = state.session.subscribe(event.stream, undefined);
       //   console.lot('###subscriber### ', subscriber);
       //   setState((prevState) => ({
@@ -229,6 +227,7 @@ function Room() {
   const leaveSession = async (sessionId) => {
     const mySession = state.session; // init value: undefined
     console.log('######sessionID====>', sessionId);
+
     if (mySession) {
       try {
         // const params = new URLSearchParams();
@@ -365,7 +364,7 @@ function Room() {
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
-                <span>1 / 9</span>
+                <span>{roomData.userCount} / 9</span>
                 <Stusericon src={Vector} alt="" />
               </Stroomcount>
             </Sttitlebox>

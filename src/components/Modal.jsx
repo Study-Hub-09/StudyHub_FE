@@ -36,7 +36,7 @@ const Modal = ({ onClose }) => {
 
   const mutation = useMutation(addRoom, {
     onSuccess: () => {
-      queryClient.invalidateQueries('room');
+      queryClient.invalidateQueries('rooms');
     },
   });
   const addbuttonHandler = async () => {

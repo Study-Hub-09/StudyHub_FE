@@ -83,7 +83,7 @@ function Joinmodal({ onClose, roomData }) {
                 }}
               />
               <StroomCount>
-                <span>1 / 9</span>
+                <span>{roomData.userCount} / 9</span>
                 <img src={usericon} alt="" width={20} />
               </StroomCount>
             </Stheadericon>
