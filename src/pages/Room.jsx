@@ -23,7 +23,7 @@ import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
+  process.env.NODE_ENV === 'production' ? 'https://studyhub-openvidu.shop/' : '';
 
 function Room() {
   const location = useLocation();
@@ -44,7 +44,7 @@ function Room() {
   });
 
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setvideoEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
   const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
@@ -61,13 +61,6 @@ function Room() {
     setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
-
-  const navigate = useNavigate();
-
-  const OV = useRef(null);
-
-  const getUserName = localStorage.getItem('member');
-
 
   useEffect(() => {
     window.addEventListener('beforeunload', onbeforeunload);
@@ -243,7 +236,6 @@ function Room() {
         // state.session.off('streamDestroyed', handleStreamDestroyed);
         // state.session.off('exception', handleException);
       };
-
     }
   }, [state.session]);
 
