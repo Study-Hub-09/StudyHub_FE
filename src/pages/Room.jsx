@@ -44,7 +44,7 @@ function Room() {
   });
 
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setvideoEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
   const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
@@ -61,13 +61,6 @@ function Room() {
     setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
-
-  const navigate = useNavigate();
-
-  const OV = useRef(null);
-
-  const getUserName = localStorage.getItem('member');
-
 
   useEffect(() => {
     window.addEventListener('beforeunload', onbeforeunload);
