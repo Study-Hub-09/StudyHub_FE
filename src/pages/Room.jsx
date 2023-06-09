@@ -21,16 +21,18 @@ import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
+
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
+
 function Room() {
-  const [ischatOpen, setisChatOpen] = useState(false);
-  const params = useParams();
   const location = useLocation();
-  const accessToken = getCookie('AccessToken');
+  const token = getCookie('AccessToken');
+  const navigate = useNavigate();
+  const OV = useRef(null);
+  const getUserName = localStorage.getItem('member');
 
   const { roomData } = location.state;
-  console.log(roomData);
 
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
@@ -40,8 +42,10 @@ function Room() {
     publisher: undefined,
     subscribers: [],
   });
+
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setvideoEnabled] = useState(true);
+  const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
@@ -49,19 +53,14 @@ function Room() {
   };
 
   const audiocontrolhandler = () => {
-    setAudioEnabled(!audioEnabled);
+    setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
   const videocontrolhandler = () => {
-    setvideoEnabled(!videoEnabled);
+    setvideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
-  const navigate = useNavigate();
-
-  const OV = useRef(null);
-
-  const getUserName = localStorage.getItem('member');
 
   useEffect(() => {
     window.addEventListener('beforeunload', onbeforeunload);
@@ -89,63 +88,109 @@ function Room() {
     }
   };
 
+  // const deleteSubscriber = (streamManager) => {
+  //   // let subscribers = state.subscribers;
+  //   // let index = subscribers.indexOf(streamManager, 0);
+  //   // if (index > -1) {
+  //   //   const newSubscribers = subscribers.splice(index, 1);
+  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
+  //   // }
+  //   // setState((prevSubscribers) => {
+  //   //   const index = prevSubscribers.indexOf(streamManager);
+  //   //   if (index > -1) {
+  //   //     const newSubscribers = [...prevSubscribers];
+  //   //     newSubscribers.splice(index, 1);
+  //   //     return newSubscribers;
+  //   //   } else {
+  //   //     return prevSubscribers;
+  //   //   }
+  //   // });
+  // };
+
   const deleteSubscriber = (streamManager) => {
-    let subscribers = state.subscribers;
-    let index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setState((prevState) => ({ ...prevState, subscribers: subscribers }));
-    }
+    setState((prevState) => {
+      const updatedSubscribers = prevState.subscribers.filter(
+        (sub) => sub !== streamManager
+      );
+      return { ...prevState, subscribers: updatedSubscribers };
+    });
   };
 
   const joinSession = () => {
     OV.current = new OpenVidu();
     const mySession = OV.current.initSession();
-    setState((prevState) => ({ ...prevState, session: mySession }));
+
+    mySession.on('streamCreated', (event) => {
+      const subscriber = mySession.subscribe(event.stream, 'subscriber');
+      console.log('USER DATA: ' + event.stream.connection.data);
+      setState((prevState) => ({
+        ...prevState,
+        subscribers: [...prevState.subscribers, subscriber],
+      }));
+    });
+
+    mySession.on('streamDestroyed', (event) => {
+      deleteSubscriber(event.stream.streamManager);
+    });
+
+    mySession.on('exception', (exception) => {
+      console.warn(exception);
+    });
+
+    setState((prevState) => ({
+      ...prevState,
+      session: mySession,
+    }));
   };
 
   useEffect(() => {
-    joinSession();
+    if (token) {
+      joinSession();
+    } else {
+      navigate('/members/login');
+    }
   }, []);
 
   useEffect(() => {
     if (state.session) {
-      const handleStream = (event) => {
-        let subscriber = state.session.subscribe(event.stream, undefined);
-        console.lot('###subscriber### ', subscriber);
-        setState((prevState) => ({
-          ...prevState,
-          subscribers: [...prevState.subscribers, subscriber],
-        }));
-      };
+      // const handleStream = (event) => {
+      //   console.log('eeeeeeevent====> ', event);
+      //   let subscriber = state.session.subscribe(event.stream, undefined);
+      //   console.lot('###subscriber### ', subscriber);
+      //   setState((prevState) => ({
+      //     ...prevState,
+      //     subscribers: [...prevState.subscribers, subscriber],
+      //   }));
+      // };
 
-      const handleStreamDestroyed = (event) => {
-        deleteSubscriber(event.stream.streamManager);
-      };
+      // const handleStreamDestroyed = (event) => {
+      //   deleteSubscriber(event.stream.streamManager);
+      // };
 
-      const handleException = (exception) => {
-        console.warn(exception);
-      };
+      // const handleException = (exception) => {
+      //   console.warn(exception);
+      // };
 
-      state.session.on('stream', handleStream);
-      state.session.on('streamDestroyed', handleStreamDestroyed);
-      state.session.on('exception', handleException);
+      // state.session.on('stream', handleStream);
+      // state.session.on('streamDestroyed', handleStreamDestroyed);
+      // state.session.on('exception', handleException);
 
       (async function connectToken() {
         try {
           const token = await getToken();
-          await state.session.connect(token, { clientData: state.myUserName });
+          await state.session.connect(token, { clientData: getUserName });
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
+            publishAudio: audioEnabled, // true
+            publishVideo: videoEnabled, // true
             resolution: '1920x1080',
             frameRate: 60,
             insertMode: 'APPEND',
             mirror: true,
           });
+          console.log('publiser=====> ', publisher);
 
           state.session.publish(publisher);
 
@@ -173,11 +218,10 @@ function Room() {
           );
         }
       })();
-
       return () => {
-        state.session.off('stream', handleStream);
-        state.session.off('streamDestroyed', handleStreamDestroyed);
-        state.session.off('exception', handleException);
+        // state.session.off('stream', handleStream);
+        // state.session.off('streamDestroyed', handleStreamDestroyed);
+        // state.session.off('exception', handleException);
       };
     }
   }, [state.session]);
@@ -198,6 +242,8 @@ function Room() {
             studytime: studyTime,
           },
         });
+        navigate(-1);
+        await state.session.unpublish(state.mainStreamManager);
         console.log('RESPONSE LEAVE SESSION####### ', response);
         return response;
       } catch (error) {
@@ -214,7 +260,6 @@ function Room() {
       mainStreamManager: undefined,
       publisher: undefined,
     });
-    navigate(-1);
   };
 
   const switchCamera = async () => {
@@ -257,7 +302,7 @@ function Room() {
   async function getToken() {
     try {
       const sessionId = await createSession(mySessionId);
-      const response = await createToken(roomData.sessionId); // 토큰
+      const response = await createToken(mySessionId); // 토큰
       console.log('4' + response);
       return response;
     } catch (error) {
@@ -308,6 +353,8 @@ function Room() {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
+
+  console.log('SUBSCRIBERS===>', subscribers);
 
   return (
     <Stcontainer>
@@ -438,6 +485,7 @@ function Room() {
 }
 
 export default Room;
+
 const size = {
   xs: (...args) => css`
     @media (max-width: 1366px) {
