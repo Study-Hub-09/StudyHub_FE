@@ -50,20 +50,13 @@ function SideBar({ children }) {
       name: '내 공부 현황',
       icon: <img src={Dashboard} alt="오류" />,
     },
-    {
-      navigate: '/main',
-      name: '검색',
-      icon: <img src={Search} alt="오류" />,
-    },
   ];
   const menuItem1 = [
     {
-      navigate: '/main',
       name: 'Help',
       icon: <img src={materialsymbols} alt="오류" />,
     },
     {
-      navigate: '/main',
       name: '설정',
       icon: <img src={setting} alt="오류" />,
     },
