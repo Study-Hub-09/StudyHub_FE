@@ -236,7 +236,6 @@ function Room() {
         // state.session.off('streamDestroyed', handleStreamDestroyed);
         // state.session.off('exception', handleException);
       };
-
     }
   }, [state.session]);
 
