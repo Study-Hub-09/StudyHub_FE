@@ -19,41 +19,55 @@ import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
+import { instance } from '../core/api/axios/instance';
+import { getCookie } from '../Cookies/Cookies';
+
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
+
 function Room() {
-  const [ischatOpen, setisChatOpen] = useState(false);
-  const params = useParams();
   const location = useLocation();
+  const token = getCookie('AccessToken');
+  const navigate = useNavigate();
+  const OV = useRef(null);
+  const getUserName = localStorage.getItem('member');
 
   const { roomData } = location.state;
-  console.log(roomData);
 
   const [state, setState] = useState({
-    mySessionId: 'SessionA',
+    mySessionId: roomData.sessionId,
     myUserName: 'Participant' + Math.floor(Math.random() * 100),
     session: undefined,
     mainStreamManager: undefined,
     publisher: undefined,
     subscribers: [],
   });
+
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setvideoEnabled] = useState(true);
+  const [ischatOpen, setisChatOpen] = useState(false);
 
-  const audiocontrolhandler = () => {
-    setAudioEnabled(!audioEnabled);
+  const handleSaveTime = (savedTime) => {
+    // savedTime 값을 처리하는 로직을 작성
+    return savedTime;
+  };
+
+  const toggleAudioState = () => {
+    setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
-  const videocontrolhandler = () => {
-    setvideoEnabled(!videoEnabled);
+  const toggleVideoState = () => {
+    setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
+
   const navigate = useNavigate();
 
   const OV = useRef(null);
 
   const getUserName = localStorage.getItem('member');
+
 
   useEffect(() => {
     window.addEventListener('beforeunload', onbeforeunload);
@@ -81,62 +95,121 @@ function Room() {
     }
   };
 
+  // const deleteSubscriber = (streamManager) => {
+  //   // let subscribers = state.subscribers;
+  //   // let index = subscribers.indexOf(streamManager, 0);
+  //   // if (index > -1) {
+  //   //   const newSubscribers = subscribers.splice(index, 1);
+  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
+  //   // }
+  //   // setState((prevSubscribers) => {
+  //   //   const index = prevSubscribers.indexOf(streamManager);
+  //   //   if (index > -1) {
+  //   //     const newSubscribers = [...prevSubscribers];
+  //   //     newSubscribers.splice(index, 1);
+  //   //     return newSubscribers;
+  //   //   } else {
+  //   //     return prevSubscribers;
+  //   //   }
+  //   // });
+  // };
+
   const deleteSubscriber = (streamManager) => {
-    let subscribers = state.subscribers;
-    let index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setState((prevState) => ({ ...prevState, subscribers: subscribers }));
-    }
+    setState((prevState) => {
+      const updatedSubscribers = prevState.subscribers.filter(
+        (sub) => sub !== streamManager
+      );
+      return { ...prevState, subscribers: updatedSubscribers };
+    });
   };
 
   const joinSession = () => {
     OV.current = new OpenVidu();
     const mySession = OV.current.initSession();
-    setState((prevState) => ({ ...prevState, session: mySession }));
+
+    mySession.on('streamCreated', (event) => {
+      const subscriber = mySession.subscribe(event.stream, undefined);
+      setState((prevState) => ({
+        ...prevState,
+        subscribers: [...prevState.subscribers, subscriber],
+      }));
+    });
+
+    mySession.on('streamDestroyed', (event) => {
+      deleteSubscriber(event.stream.streamManager);
+    });
+
+    mySession.on('exception', (exception) => {
+      console.warn(exception);
+    });
+
+    setState((prevState) => ({
+      ...prevState,
+      session: mySession,
+    }));
   };
 
+  // const videoRef = useRef(null);
+
+  // useEffect(() => {
+  //   const videoElement = videoRef.current;
+  //   if (publisher && videoElement) {
+  //     publisher.addVideoElement(videoElement);
+  //   }
+  //   return () => {
+  //     if (publisher && videoElement) {
+  //       publisher.removeVideoElement(videoElement);
+  //     }
+  //   };
+  // }, []);
+
   useEffect(() => {
-    joinSession();
+    if (token) {
+      joinSession();
+    } else {
+      navigate('/members/login');
+    }
   }, []);
 
   useEffect(() => {
     if (state.session) {
-      const handleStream = (event) => {
-        let subscriber = state.session.subscribe(event.stream, undefined);
-        setState((prevState) => ({
-          ...prevState,
-          subscribers: [...prevState.subscribers, subscriber],
-        }));
-      };
+      // const handleStream = (event) => {
+      //   let subscriber = state.session.subscribe(event.stream, undefined);
+      //   console.lot('###subscriber### ', subscriber);
+      //   setState((prevState) => ({
+      //     ...prevState,
+      //     subscribers: [...prevState.subscribers, subscriber],
+      //   }));
+      // };
 
-      const handleStreamDestroyed = (event) => {
-        deleteSubscriber(event.stream.streamManager);
-      };
+      // const handleStreamDestroyed = (event) => {
+      //   deleteSubscriber(event.stream.streamManager);
+      // };
 
-      const handleException = (exception) => {
-        console.warn(exception);
-      };
+      // const handleException = (exception) => {
+      //   console.warn(exception);
+      // };
 
-      state.session.on('stream', handleStream);
-      state.session.on('streamDestroyed', handleStreamDestroyed);
-      state.session.on('exception', handleException);
+      // state.session.on('stream', handleStream);
+      // state.session.on('streamDestroyed', handleStreamDestroyed);
+      // state.session.on('exception', handleException);
 
       (async function connectToken() {
         try {
           const token = await getToken();
-          await state.session.connect(token, { clientData: state.myUserName });
+          await state.session.connect(token, { clientData: getUserName });
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
+            publishAudio: audioEnabled, // true
+            publishVideo: videoEnabled, // true
             resolution: '1920x1080',
             frameRate: 60,
             insertMode: 'APPEND',
             mirror: true,
           });
+          console.log('publiser=====> ', publisher);
 
           state.session.publish(publisher);
 
@@ -166,17 +239,38 @@ function Room() {
       })();
 
       return () => {
-        state.session.off('stream', handleStream);
-        state.session.off('streamDestroyed', handleStreamDestroyed);
-        state.session.off('exception', handleException);
+        // state.session.off('stream', handleStream);
+        // state.session.off('streamDestroyed', handleStreamDestroyed);
+        // state.session.off('exception', handleException);
       };
+
     }
   }, [state.session]);
 
-  const leaveSession = () => {
-    const mySession = state.session;
+  const leaveSession = async (sessionId) => {
+    const mySession = state.session; // init value: undefined
+    console.log('######sessionID====>', sessionId);
 
     if (mySession) {
+      try {
+        // const params = new URLSearchParams();
+        // console.log('####params', params);
+        // params.append('studytime', Number(11111));
+        // const studyTime = handleSaveTime();
+        const studyTime = 123456;
+        console.log('STUDYTIME ======> ', studyTime);
+        const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
+          params: {
+            studytime: studyTime,
+          },
+        });
+        navigate(-1);
+        await state.session.unpublish(state.mainStreamManager); ////////////////
+        console.log('RESPONSE LEAVE SESSION####### ', response);
+        return response;
+      } catch (error) {
+        console.log('leaveSession ERROR ====> ', error);
+      }
       mySession.disconnect();
     }
     OV.current = null;
@@ -188,7 +282,6 @@ function Room() {
       mainStreamManager: undefined,
       publisher: undefined,
     });
-    navigate(-1);
   };
 
   const switchCamera = async () => {
@@ -231,7 +324,7 @@ function Room() {
   async function getToken() {
     try {
       const sessionId = await createSession(mySessionId);
-      const response = await createToken(sessionId);
+      const response = await createToken(mySessionId); // 토큰
       console.log('4' + response);
       return response;
     } catch (error) {
@@ -241,45 +334,61 @@ function Room() {
 
   async function createSession(sessionId) {
     try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions',
-        { customSessionId: sessionId },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+      const response = await instance.post(`api/rooms/${sessionId}/enter`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      // const response = await axios.post(
+      //   APPLICATION_SERVER_URL + 'openvidu/api/sessions',
+      //   {},
+      //   {
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
+      //     },
+      //   }
+      // );
       console.log('2' + sessionId);
-      return response.data; // The sessionId
+      console.log('response========> ', response);
+      return response.data;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
   }
-
+  console.log('###############subscribers', subscribers);
+  console.log('###############publisher', publisher);
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections',
+        APPLICATION_SERVER_URL + 'openvidu/api/sessions/' + sessionId + '/connection',
         {},
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
+          },
         }
       );
-      console.log('3' + sessionId);
-      return response.data; // The token
+      console.log('3333333RESPONSEEEEEE=====> ', response);
+      return response.data.token; // token
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
+
+  console.log('SUBSCRIBERS===>', subscribers);
+
   return (
     <Stcontainer>
       <StLayout>
         <StViewArea>
           <Stheader>
-            <Timer />
+            <Timer onSaveTime={handleSaveTime} />
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
-                <span>1 / 9</span>
+                <span>{roomData.userCount} / 9</span>
                 <Stusericon src={Vector} alt="" />
               </Stroomcount>
             </Sttitlebox>
@@ -288,7 +397,9 @@ function Room() {
             {publisher !== undefined ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(publisher)}
+                onClick={() => {
+                  handleMainVideoStream(publisher);
+                }}
               >
                 <UserVideoComponent
                   streamManager={publisher}
@@ -302,7 +413,9 @@ function Room() {
               <div
                 key={sub.id}
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(sub)}
+                onClick={() => {
+                  handleMainVideoStream(sub);
+                }}
               >
                 <span>{sub.id}</span>
                 <UserVideoComponent
@@ -317,14 +430,14 @@ function Room() {
           <Stfooter>
             <Stsettingbox>
               {audioEnabled ? (
-                <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micOn} alt="" onClick={toggleAudioState} />
               ) : (
-                <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micoff} alt="" onClick={toggleAudioState} />
               )}
               {videoEnabled ? (
-                <Sticon src={camOn} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camOn} alt="" onClick={toggleVideoState} />
               ) : (
-                <Sticon src={camoff} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camoff} alt="" onClick={toggleVideoState} />
               )}
               <Sticon
                 src={chat}
@@ -335,7 +448,11 @@ function Room() {
               />
               <Sticon src={view} alt="" />
               <Sticon src={setting} alt="" />
-              <Sticon src={logout} alt="" onClick={leaveSession} />
+              <Sticon
+                src={logout}
+                alt=""
+                onClick={() => leaveSession(roomData.sessionId)}
+              />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>
@@ -395,6 +512,7 @@ function Room() {
 }
 
 export default Room;
+
 const size = {
   xs: (...args) => css`
     @media (max-width: 1366px) {
