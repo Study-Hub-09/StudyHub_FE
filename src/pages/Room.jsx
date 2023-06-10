@@ -48,7 +48,6 @@ function Room() {
 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
-  const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
