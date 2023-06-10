@@ -26,6 +26,9 @@ const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://studyhub-openvidu.shop/' : '';
 
 function Room() {
+  const [ischatOpen, setisChatOpen] = useState(false);
+  const [sessionActive, setSessionActive] = useState(true);
+  const params = useParams();
   const location = useLocation();
   const token = getCookie('AccessToken');
   const navigate = useNavigate();
@@ -62,17 +65,39 @@ function Room() {
     publisher.publishVideo(!videoEnabled);
   };
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onbeforeunload);
+  const handlePopState = async () => {
+    console.log('뒤로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
+    await leaveSession(roomData.sessionId);
+    // 원래 이벤트 처리를 원하는 경우 뒤로 가기 처리
+    // window.history.back();
+  };
 
+  const onbeforeunload = () => {
+    console.log('beforeunload event triggered');
+    console.log('새로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
+    leaveSession(roomData.sessionId);
+  };
+
+  useEffect(() => {
+    // 페이지를 빠져나갈 때 세션을 떠난다.
+    window.addEventListener('beforeunload', onbeforeunload);
+    console.log('beforeunload event listener added');
+
+    // 뒤로 가기 이벤트 처리
+    // window.addEventListener('popstate', () => handlePopState(roomData.sessionId));
+    window.addEventListener('popstate', async () => {
+      await handlePopState(roomData.sessionId);
+    });
+    console.log('popstate event listener added');
+
+    // Cleanup 함수 처리
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
+      console.log('beforeunload event listener removed');
+      window.removeEventListener('popstate', () => handlePopState(roomData.sessionId));
+      console.log('popstate event listener removed');
     };
   }, []);
-
-  const onbeforeunload = (event) => {
-    leaveSession();
-  };
 
   const handleChangeSessionId = (e) => {
     setState((prevState) => ({ ...prevState, mySessionId: e.target.value }));
