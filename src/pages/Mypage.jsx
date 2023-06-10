@@ -6,6 +6,8 @@ import sprout from '../../src/assets/Images/sprout.svg';
 import Crown from '../../src/assets/Images/👑.svg';
 import Arrow from '../../src/assets/Images/Arrow 1.svg';
 import Graph from '../components/Graph/Graph';
+import axios from 'axios';
+import { instance } from '../core/api/axios/instance';
 
 function Mypage() {
   const nickname = localStorage.member;
@@ -14,7 +16,18 @@ function Mypage() {
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     setToken(accessToken);
+    userData();
   }, []);
+
+  const userData = async () => {
+    try {
+      const response = await instance.get(`/api/members/mypage`);
+      console.log('#######response', response);
+      console.log('#######response', response.data.data.dailyStudyChart);
+    } catch (error) {
+      console.error('????error:', error);
+    }
+  };
 
   return (
     <StMainContainer>
