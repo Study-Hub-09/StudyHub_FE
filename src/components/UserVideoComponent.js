@@ -1,32 +1,104 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
 // import '../components/UserVideo.css';
-import { styled, css } from 'styled-components';
+import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
-const UserVideoComponent = ({ streamManager, userName, audioEnabled, videoEnabled }) => {
+// const UserVideoComponent = ({ streamManager, userName, audioEnabled, videoEnabled }) => {
+const UserVideoComponent = ({
+  streamManager,
+  userName,
+  toggleAudioState,
+  toggleVideoState,
+  // audioEnabled,
+  // videoEnabled,
+}) => {
   const getNicknameTag = () => {
     // 사용자의 닉네임을 가져옵니다.
     return JSON.parse(streamManager.stream.connection.data).clientData;
   };
-  console.log(streamManager.stream.connection.stream.videoActive);
+
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
+
+  // 추가(사용필요)
+  // const aControlHandler = () => {
+  //   setA((prevValue) => !prevValue);
+  //   streamManager.publishAudio(!a);
+  //   toggleAudioState();
+  // };
+
+  // const vControlHandler = () => {
+  //   setV((prevValue) => !prevValue);
+  //   streamManager.publishVideo(!v);
+  //   toggleVideoState();
+  // };
+
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (streamManager && videoElement) {
+      streamManager.addVideoElement(videoElement);
+    }
+    return () => {
+      if (streamManager && videoElement) {
+        streamManager?.removeVideoElement(videoElement);
+      }
+    };
+  }, [streamManager]);
+
   return (
+    // <div>
+    //   {streamManager !== undefined ? (
+    //     <Stcambox>
+    //       <Stcamboxname>{getNicknameTag()}</Stcamboxname>
+    //       {videoEnabled ? (
+    //         <OpenViduVideoComponent streamManager={streamManager} />
+    //       ) : (
+    //         <StCamboximage>
+    //           <img src={camuser} alt="" />
+    //         </StCamboximage>
+    //       )}
+    //       {audioEnabled ? (
+    //         ''
+    //       ) : (
+    //         <StmicMuteIcon src={viewmic} alt="" width={36} height={36} />
+    //       )}
+    //     </Stcambox>
+    //   ) : null}
+    // </div>
+    // {audioEnabled ? (
+    //   <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
+    // ) : (
+    //   <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
+    // )}
+
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
           <Stcamboxname>{getNicknameTag()}</Stcamboxname>
           {videoEnabled ? (
-            <OpenViduVideoComponent streamManager={streamManager} />
+            <OpenViduVideoComponent
+              streamManager={streamManager}
+              // onClick={vControlHandler}
+            />
           ) : (
             <StCamboximage>
-              <img src={camuser} alt="" />
+              <img src={camuser} alt="ㅇ" />
             </StCamboximage>
           )}
           {audioEnabled ? (
             ''
           ) : (
-            <StmicMuteIcon src={viewmic} alt="" width={36} height={36} />
+            <StmicMuteIcon
+              src={viewmic}
+              alt=""
+              width={36}
+              height={36}
+              // onClick={aControlHandler}
+            />
           )}
         </Stcambox>
       ) : null}

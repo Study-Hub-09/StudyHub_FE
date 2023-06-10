@@ -30,10 +30,12 @@ function Room() {
   const [sessionActive, setSessionActive] = useState(true);
   const params = useParams();
   const location = useLocation();
-  const accessToken = getCookie('AccessToken');
+  const token = getCookie('AccessToken');
+  const navigate = useNavigate();
+  const OV = useRef(null);
+  const getUserName = localStorage.getItem('member');
 
   const { roomData } = location.state;
-  console.log(roomData);
 
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
@@ -43,28 +45,25 @@ function Room() {
     publisher: undefined,
     subscribers: [],
   });
+
   const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setvideoEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(true);
+  const [ischatOpen, setisChatOpen] = useState(false);
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
     return savedTime;
   };
 
-  const audiocontrolhandler = () => {
+  const toggleAudioState = () => {
     setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
-  const videocontrolhandler = () => {
-    setvideoEnabled((prevValue) => !prevValue);
+  const toggleVideoState = () => {
+    setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
-  const navigate = useNavigate();
-
-  const OV = useRef(null);
-
-  const getUserName = localStorage.getItem('member');
 
   const handlePopState = async () => {
     console.log('뒤로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
@@ -114,6 +113,25 @@ function Room() {
     }
   };
 
+  // const deleteSubscriber = (streamManager) => {
+  //   // let subscribers = state.subscribers;
+  //   // let index = subscribers.indexOf(streamManager, 0);
+  //   // if (index > -1) {
+  //   //   const newSubscribers = subscribers.splice(index, 1);
+  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
+  //   // }
+  //   // setState((prevSubscribers) => {
+  //   //   const index = prevSubscribers.indexOf(streamManager);
+  //   //   if (index > -1) {
+  //   //     const newSubscribers = [...prevSubscribers];
+  //   //     newSubscribers.splice(index, 1);
+  //   //     return newSubscribers;
+  //   //   } else {
+  //   //     return prevSubscribers;
+  //   //   }
+  //   // });
+  // };
+
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
       const updatedSubscribers = prevState.subscribers.filter(
@@ -149,8 +167,26 @@ function Room() {
     }));
   };
 
+  // const videoRef = useRef(null);
+
+  // useEffect(() => {
+  //   const videoElement = videoRef.current;
+  //   if (publisher && videoElement) {
+  //     publisher.addVideoElement(videoElement);
+  //   }
+  //   return () => {
+  //     if (publisher && videoElement) {
+  //       publisher.removeVideoElement(videoElement);
+  //     }
+  //   };
+  // }, []);
+
   useEffect(() => {
-    joinSession();
+    if (token) {
+      joinSession();
+    } else {
+      navigate('/members/login');
+    }
   }, []);
 
   useEffect(() => {
@@ -184,13 +220,14 @@ function Room() {
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
+            publishAudio: audioEnabled, // true
+            publishVideo: videoEnabled, // true
             resolution: '1920x1080',
             frameRate: 60,
             insertMode: 'APPEND',
             mirror: true,
           });
+          console.log('publiser=====> ', publisher);
 
           state.session.publish(publisher);
 
@@ -245,7 +282,7 @@ function Room() {
           },
         });
         navigate(-1);
-        await state.session.unpublish(state.mainStreamManager);
+        await state.session.unpublish(state.mainStreamManager); ////////////////
         console.log('RESPONSE LEAVE SESSION####### ', response);
         return response;
       } catch (error) {
@@ -304,7 +341,7 @@ function Room() {
   async function getToken() {
     try {
       const sessionId = await createSession(mySessionId);
-      const response = await createToken(roomData.sessionId); // 토큰
+      const response = await createToken(mySessionId); // 토큰
       console.log('4' + response);
       return response;
     } catch (error) {
@@ -336,7 +373,8 @@ function Room() {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
   }
-
+  console.log('###############subscribers', subscribers);
+  console.log('###############publisher', publisher);
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
@@ -356,6 +394,8 @@ function Room() {
     }
   }
 
+  console.log('SUBSCRIBERS===>', subscribers);
+
   return (
     <Stcontainer>
       <StLayout>
@@ -374,7 +414,9 @@ function Room() {
             {publisher !== undefined ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(publisher)}
+                onClick={() => {
+                  handleMainVideoStream(publisher);
+                }}
               >
                 <UserVideoComponent
                   streamManager={publisher}
@@ -388,7 +430,9 @@ function Room() {
               <div
                 key={sub.id}
                 className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(sub)}
+                onClick={() => {
+                  handleMainVideoStream(sub);
+                }}
               >
                 <span>{sub.id}</span>
                 <UserVideoComponent
@@ -403,14 +447,14 @@ function Room() {
           <Stfooter>
             <Stsettingbox>
               {audioEnabled ? (
-                <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micOn} alt="" onClick={toggleAudioState} />
               ) : (
-                <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
+                <Sticon src={micoff} alt="" onClick={toggleAudioState} />
               )}
               {videoEnabled ? (
-                <Sticon src={camOn} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camOn} alt="" onClick={toggleVideoState} />
               ) : (
-                <Sticon src={camoff} alt="" onClick={videocontrolhandler} />
+                <Sticon src={camoff} alt="" onClick={toggleVideoState} />
               )}
               <Sticon
                 src={chat}
@@ -485,6 +529,7 @@ function Room() {
 }
 
 export default Room;
+
 const size = {
   xs: (...args) => css`
     @media (max-width: 1366px) {
