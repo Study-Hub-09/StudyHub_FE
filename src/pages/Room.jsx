@@ -21,9 +21,10 @@ import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
+import { connectClient } from '../core/sockJs/sockJs';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://studyhub-openvidu.shop/' : '';
+  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
 
 function Room() {
   const [ischatOpen, setisChatOpen] = useState(false);
@@ -215,6 +216,7 @@ function Room() {
         try {
           const token = await getToken();
           await state.session.connect(token, { clientData: getUserName });
+          await connectClient();
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
