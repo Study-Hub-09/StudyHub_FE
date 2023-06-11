@@ -6,10 +6,12 @@ import studyhub from '../asset/studyhub.svg';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
+import { getCookie } from '../Cookies/Cookies';
 
 function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
   const navigate = useNavigate();
+  const token = getCookie('AccessToken');
 
   const joinbuttonHandler = async () => {
     const memberData = {
@@ -54,7 +56,12 @@ function Joinmodal({ onClose, roomData }) {
     console.log(roomData);
     try {
       // await joinRoom(roomData.sessionId, memberData);
-      navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      if (token) {
+        navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      } else {
+        alert('로그인이 필요한 페이지입니다.');
+        navigate('/members/login');
+      }
       onClose(false);
     } catch (error) {
       console.error('방 입장 중 오류가 발생했습니다', error);
