@@ -37,7 +37,6 @@ function SideBar({ children }) {
       window.location.reload();
     }
   };
-  console.log(token);
 
   const menuItem = [
     {
