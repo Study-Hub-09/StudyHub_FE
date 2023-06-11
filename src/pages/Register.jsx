@@ -221,24 +221,30 @@ function Register() {
   // 비밀번호 유효성 검사
   useEffect(() => {
     if (values.password) {
-      const PWD_REGEX = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=\S+$).{8,15}$/;
+      const PWD_REGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?=\S+$).{8,15}$/;
       const result = PWD_REGEX.test(values.password);
-      setValidPwd(result); // 상태 값 변경 : false -> true
-      if (values.password.length >= 8) {
-        setValidPwd(true);
-        setPwdErrorMessage('');
-      } else {
-        setValidPwd(false);
-        setPwdErrorMessage(
-          '알파벳 소문자, 대문자, 숫자 포함, 특수문자를 포함한 8-15자 사이의 비밀번호를 입력해주세요.'
-        );
-      }
       const match = values.password === values.checkPassword; // 비밀번호와 비밀번호 값 비교
+
+      setValidPwd(result); // 상태 값 변경 : false -> true
       setMatchPwd(match); // 상태 값 변경 : false -> true
-      if (match) {
+
+      if (result && match) {
+        setPwdErrorMessage('');
         setPwdMatchErrorMessage('');
       } else {
-        setPwdMatchErrorMessage('비밀번호가 일치하지 않습니다.');
+        if (!result) {
+          setPwdErrorMessage(
+            '알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 8-15자 사이의 비밀번호를 입력해주세요.'
+          );
+        } else {
+          setPwdErrorMessage('');
+        }
+
+        if (!match) {
+          setPwdMatchErrorMessage('비밀번호가 일치하지 않습니다.');
+        } else {
+          setPwdMatchErrorMessage('');
+        }
       }
     }
   }, [values.password, values.checkPassword]);
