@@ -22,6 +22,8 @@ import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
 import { connectClient, sendMessage } from '../core/sockJs/sockJs';
+import { width } from '@mui/system';
+import Chatting from '../components/Chatting/Chatting';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
@@ -50,7 +52,7 @@ function Room() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
 
-  const [messages, setMessages] = useState([]);
+  const [chatDatas, setChatDatas] = useState([]);
   const [message, setMessage] = useState('');
 
   const onChangeMessageHandler = (e) => {
@@ -159,10 +161,9 @@ function Room() {
     e.preventDefault();
     sendMessage({
       sessionId: mySessionId,
-      time: 'time',
       profile: 'profileimg',
       nickname: getUserName,
-      message: message,
+      message,
     });
     setMessage('');
   };
@@ -170,17 +171,17 @@ function Room() {
   const getChattingData = (data) => {
     const newData = JSON.parse(data.body);
     console.log('newDATA>>>> ', newData);
-    setMessages((prevMessages) => {
-      const receivedMessages = {
+
+    setChatDatas((prevChatDatas) => {
+      const receivedDatas = {
         sessionId: newData.sessionId,
-        time: newData.time,
+        createdAt: newData.createdAt,
         profile: newData.profile,
         nickname: newData.nickname,
         message: newData.message,
       };
-      return [...prevMessages, receivedMessages];
+      return [...prevChatDatas, receivedDatas];
     });
-    console.log('RECEIVED MESSAGES>>>', messages);
   };
 
   useEffect(() => {
@@ -431,74 +432,16 @@ function Room() {
         </StViewArea>
         {/* 채팅창 */}
         {ischatOpen ? (
-          <div>
-            <StChatarea>
-              <Stchatheader>
-                <div>
-                  <img src={logo} alt="" />
-                  <Stchatheaderfont>대화창</Stchatheaderfont>
-                </div>
-                <Stcancelbutton
-                  src={cancel}
-                  alt=""
-                  onClick={() => {
-                    setisChatOpen(false);
-                  }}
-                />
-              </Stchatheader>
-              <Stchatbox>
-                {/* 보내는 메시지 */}
-                {/* {messages.map((message, id) => {
-                  return (
-                    <div key={id}>
-                      <StTochat>
-                        <StchattextArea>
-                          <StTochatinner>
-                            <StchatTime>00/00 00:00</StchatTime>
-                            <StTochatName>이름</StTochatName>
-                          </StTochatinner>
-                          <Stchattext>{message.message}</Stchattext>
-                        </StchattextArea>
-                        <img src={profileimg} alt="" />
-                      </StTochat>
-                      <StFromchat>
-                        <StchattextArea>
-                          <StTochatinner>
-                            <StFromchatName>이름</StFromchatName>
-                            <StchatTime>00/00 00:00</StchatTime>
-                          </StTochatinner>
-                          <StFromchattext>받는 메세지</StFromchattext>
-                        </StchattextArea>
-                        <img src={profileimg} alt="" />
-                      </StFromchat>
-                    </div>
-                  );
-                })} */}
-                {messages.map((message, index) => (
-                  <p
-                    style={{
-                      marginBottom: '10px',
-                      color: message.nickname === getUserName ? 'red' : 'black',
-                      fontSize: '20px',
-                    }}
-                    key={index}
-                  >
-                    {`${message.nickname}: ${message.message}`}
-                  </p>
-                ))}
-              </Stchatbox>
-              <Stsendarea onSubmit={sendMessageHandler}>
-                <Stchatinput
-                  type="text"
-                  value={message}
-                  onChange={onChangeMessageHandler}
-                />
-                <button>
-                  <Stsendbutton src={send} alt="" />
-                </button>
-              </Stsendarea>
-            </StChatarea>
-          </div>
+          <Chatting
+            message={message}
+            chatDatas={chatDatas}
+            onChange={(e) => onChangeMessageHandler(e)}
+            onSubmit={(e) => sendMessageHandler(e)}
+            onClick={() => {
+              setisChatOpen(false);
+            }}
+            getUserName={getUserName}
+          />
         ) : (
           ''
         )}
@@ -549,113 +492,6 @@ const StViewArea = styled.div`
   align-items: center;
   height: 100vh;
   flex: 1;
-`;
-
-const StChatarea = styled.div`
-  width: 329px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  border-left: 1px solid #bfbfbf;
-`;
-
-const Stchatbox = styled.div`
-  width: 280px;
-  height: 906px;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-`;
-
-const Stchatinput = styled.input`
-  width: 231px;
-  height: 36px;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  padding-left: 10px;
-`;
-
-const Stsendarea = styled.form`
-  display: flex;
-  align-items: center;
-  gap: 13px;
-`;
-
-const Stsendbutton = styled.img`
-  cursor: pointer;
-`;
-
-const Stcancelbutton = styled.img`
-  cursor: pointer;
-`;
-const Stchatheader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 280px;
-`;
-
-const Stchatheaderfont = styled.span`
-  font-size: 18px;
-  font-weight: 700;
-  margin-left: 11px;
-`;
-
-const StTochat = styled.div`
-  height: 74px;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-`;
-
-const StTochatinner = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 79.19px;
-`;
-const StchattextArea = styled.div`
-  gap: 4px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StchatTime = styled.div`
-  color: #9d9d9d;
-  font-size: 14px;
-  font-weight: 500;
-`;
-const StTochatName = styled.div`
-  color: #00573f;
-  font-size: 15px;
-  font-weight: 700;
-`;
-const StFromchatName = styled.div`
-  color: black;
-  font-size: 15px;
-  font-weight: 700;
-`;
-const Stchattext = styled.div`
-  display: flex;
-  justify-content: end;
-  font-size: 15px;
-  font-weight: 500;
-`;
-const StFromchattext = styled.div`
-  display: flex;
-  justify-content: start;
-  font-size: 15px;
-  font-weight: 500;
-`;
-const StFromchat = styled.div`
-  height: 74px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  padding: 15px;
 `;
 
 const Stcamarea = styled.div`

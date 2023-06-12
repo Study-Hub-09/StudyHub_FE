@@ -25,7 +25,6 @@ const connectClient = (sessionId, getChattingData) => {
 const sendMessage = async (payload) => {
   const message = {
     sessionId: payload.sessionId,
-    time: payload.time,
     profile: payload.profile,
     nickname: payload.nickname,
     message: payload.message,
