@@ -160,17 +160,29 @@ function Room() {
   const sendMessageHandler = (e) => {
     e.preventDefault();
     sendMessage({
-      sessionId: 'sessionId',
+      sessionId: mySessionId,
       time: 'time',
       profile: 'profileimg',
-      nickname: 'user_1',
+      nickname: getUserName,
       message: message,
     });
     setMessage('');
   };
 
   const getChattingData = (data) => {
-    console.log(data);
+    const newData = JSON.parse(data.body);
+    console.log('newDATA>>>> ', newData);
+    setMessages((prevMessages) => {
+      const receivedMessages = {
+        sessionId: newData.sessionId,
+        time: newData.time,
+        profile: newData.profile,
+        nickname: newData.nickname,
+        message: newData.message,
+      };
+      return [...prevMessages, receivedMessages];
+    });
+    console.log('RECEIVED MESSAGES>>>', messages);
   };
 
   // useEffect(() => {
@@ -457,27 +469,44 @@ function Room() {
               </Stchatheader>
               <Stchatbox>
                 {/* 보내는 메시지 */}
-                <StTochat>
-                  <StchattextArea>
-                    <StTochatinner>
-                      <StchatTime>00/00 00:00</StchatTime>
-                      <StTochatName>이름</StTochatName>
-                    </StTochatinner>
-                    <Stchattext>보내는 메세지</Stchattext>
-                  </StchattextArea>
-                  <img src={profileimg} alt="" />
-                </StTochat>
-                {/* 받는 메시지 */}
-                <StFromchat>
-                  <StchattextArea>
-                    <StTochatinner>
-                      <StFromchatName>이름</StFromchatName>
-                      <StchatTime>00/00 00:00</StchatTime>
-                    </StTochatinner>
-                    <StFromchattext>받는 메세지</StFromchattext>
-                  </StchattextArea>
-                  <img src={profileimg} alt="" />
-                </StFromchat>
+                {/* {messages.map((message, id) => {
+                  return (
+                    <div key={id}>
+                      <StTochat>
+                        <StchattextArea>
+                          <StTochatinner>
+                            <StchatTime>00/00 00:00</StchatTime>
+                            <StTochatName>이름</StTochatName>
+                          </StTochatinner>
+                          <Stchattext>{message.message}</Stchattext>
+                        </StchattextArea>
+                        <img src={profileimg} alt="" />
+                      </StTochat>
+                      <StFromchat>
+                        <StchattextArea>
+                          <StTochatinner>
+                            <StFromchatName>이름</StFromchatName>
+                            <StchatTime>00/00 00:00</StchatTime>
+                          </StTochatinner>
+                          <StFromchattext>받는 메세지</StFromchattext>
+                        </StchattextArea>
+                        <img src={profileimg} alt="" />
+                      </StFromchat>
+                    </div>
+                  );
+                })} */}
+                {messages.map((message, index) => (
+                  <p
+                    style={{
+                      marginBottom: '10px',
+                      color: message.nickname === getUserName ? 'red' : 'black',
+                      fontSize: '20px',
+                    }}
+                    key={index}
+                  >
+                    {`${message.nickname}: ${message.message}`}
+                  </p>
+                ))}
               </Stchatbox>
               <Stsendarea onSubmit={sendMessageHandler}>
                 <Stchatinput

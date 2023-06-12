@@ -18,7 +18,6 @@ const connectClient = (sessionId, getChattingData) => {
     (frame) => {
       console.log('frame====> 연결 성공!', frame);
       stompClient.subscribe(`/sub/chat/room/${sessionId}`, getChattingData);
-      // stompClient.send(`/pub/chat/message`);
     }
   );
 };
@@ -28,10 +27,10 @@ const sendMessage = async (payload) => {
     sessionId: payload.sessionId,
     time: payload.time,
     profile: payload.profile,
-    nickname: payload.nicnakme,
+    nickname: payload.nickname,
     message: payload.message,
   };
-  await stompClient.send(`/pub/chat/message`, message);
+  await stompClient.send(`/pub/chat/message`, {}, JSON.stringify(message));
 };
 
 export { connectClient, sendMessage };
