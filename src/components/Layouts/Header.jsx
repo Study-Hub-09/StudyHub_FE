@@ -22,7 +22,7 @@ function Header() {
       window.location.reload();
     }
   };
-  console.log(token);
+
   return (
     <StHeaderContainer>
       <StLogoNameContainer>

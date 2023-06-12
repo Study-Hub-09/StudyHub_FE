@@ -23,7 +23,7 @@ import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
 
 const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://studyhub-openvidu.shop/' : '';
+  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
 
 function Room() {
   const location = useLocation();
@@ -47,9 +47,11 @@ function Room() {
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [ischatOpen, setisChatOpen] = useState(false);
 
-  const handleSaveTime = (savedTime) => {
-    // savedTime 값을 처리하는 로직을 작성
-    return savedTime;
+  const [studyTime, setStudyTime] = useState(null);
+
+  const handleSaveTime = (time) => {
+    setStudyTime(time || 0);
+    console.log('@@@@Savetime', time);
   };
 
   const toggleAudioState = () => {
@@ -156,13 +158,13 @@ function Room() {
   //   };
   // }, []);
 
-  useEffect(() => {
-    if (token) {
-      joinSession();
-    } else {
-      navigate('/members/login');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (token) {
+  //     joinSession();
+  //   } else {
+  //     navigate('/members/login');
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (state.session) {
@@ -249,11 +251,11 @@ function Room() {
         // console.log('####params', params);
         // params.append('studytime', Number(11111));
         // const studyTime = handleSaveTime();
-        const studyTime = 123456;
-        console.log('STUDYTIME ======> ', studyTime);
+        const studytime = studyTime;
+        console.log('STUDYTIME ======> ', studytime);
         const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
           params: {
-            studytime: studyTime,
+            studytime: studytime,
           },
         });
         navigate(-1);
@@ -309,6 +311,19 @@ function Room() {
       console.error(e);
     }
   };
+
+  // 다른화면으로 이동시 leaveSession
+  useEffect(() => {
+    if (token) {
+      joinSession();
+    } else {
+      navigate('/members/login');
+    }
+
+    return () => {
+      leaveSession(roomData?.sessionId);
+    };
+  }, []);
 
   const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
     state;
