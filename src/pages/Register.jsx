@@ -27,7 +27,12 @@ function Register() {
   const navigate = useNavigate();
 
   const [verificationCode, setVerificationCode] = useState('');
-  const [emailVerification, setEmailVerification] = useState(false);
+
+  const [verificationStatus, setVerificationStatus] = useState({
+    isNicknameVerified: false,
+    isEmailVerified: false,
+    isEmailCodeVerified: false,
+  });
 
   const [values, setValues] = useState({
     nickname: '',
@@ -56,7 +61,7 @@ function Register() {
     pwdMatchErrorMessage: '',
   });
 
-  const [focusBorder, setFocusBorder] = useState({
+  const [inputFocusBorder, setInputFocusBorder] = useState({
     nicknameBorder: false,
     emailBorder: false,
     checkCodeBorder: false,
@@ -66,13 +71,7 @@ function Register() {
 
   const { nickname, email, checkCode, password, checkPassword } = values;
   const { validEmailCode, validPwd, matchPwd, validNickname, validEmail } = validations;
-  const {
-    nicknameBorder,
-    emailBorder,
-    checkCodeBorder,
-    passwordBorder,
-    checkPasswordBorder,
-  } = focusBorder;
+  const { isNicknameVerified, isEmailVerified, isEmailCodeVerified } = verificationStatus;
 
   const {
     nicknameSuccessMessage,
@@ -84,6 +83,14 @@ function Register() {
     pwdErrorMessage,
     pwdMatchErrorMessage,
   } = messages;
+
+  const {
+    nicknameBorder,
+    emailBorder,
+    checkCodeBorder,
+    passwordBorder,
+    checkPasswordBorder,
+  } = inputFocusBorder;
 
   // Input onChange 핸들러
   const onChangeInputHandler = (e) => {
@@ -100,9 +107,13 @@ function Register() {
       checkCode === '' ||
       password === '' ||
       checkPassword === ''
-    ) {
+    )
       return alert('모든 칸을 입력해주세요.');
-    } else {
+
+    if (!isNicknameVerified) return alert('닉네임 중복 확인해주세요.');
+    if (!isEmailVerified) return alert('이메일 발송 확인해주세요.');
+    if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해주세요.');
+    else {
       registerMutation.mutate({
         nickname,
         email,
@@ -153,21 +164,23 @@ function Register() {
     }
   };
 
+  // 입력 필드의 포커스 상태를 업데이트하는 함수
   const onFocusInputBorder = (border) => {
-    setFocusBorder({
-      ...focusBorder,
-      [border]: !focusBorder[border],
+    setInputFocusBorder({
+      ...inputFocusBorder,
+      [border]: !inputFocusBorder[border],
     });
   };
 
+  // 입력 필드의 포커스가 해제될 때 경계를 초기화하는 함수
   const onBlurInputBorder = (border) => {
-    setFocusBorder({
-      ...focusBorder,
+    setInputFocusBorder({
+      ...inputFocusBorder,
       [border]: false,
     });
   };
 
-  // 회원가입 뮤테이션
+  // 회원가입 뮤테이션 훅
   const registerMutation = useMutation(register, {
     async onSuccess(response) {
       console.log(response.data.message);
@@ -182,16 +195,20 @@ function Register() {
     },
   });
 
-  // 중복 닉네임 확인 뮤테이션
+  // 중복 닉네임 확인 뮤테이션 훅
   const validateNickNameMutation = useMutation(validateNickname, {
     async onSuccess(response) {
       const duplicateNickname = response.data.data;
-      if (duplicateNickname === true) {
+      if (duplicateNickname) {
+        setVerificationStatus((prevVerifications) => ({
+          ...prevVerifications,
+          isNicknameVerified: true,
+        }));
         setMessages((prevMessages) => ({
           ...prevMessages,
           nicknameSuccessMessage: '닉네임 중복 확인되었습니다.',
         }));
-      } else if (duplicateNickname === false) {
+      } else if (!duplicateNickname) {
         setMessages((prevMessages) => ({
           ...prevMessages,
           nicknameErrorMessage: '중복된 닉네임입니다.',
@@ -207,27 +224,27 @@ function Register() {
     },
   });
 
-  // 이메일 확인 뮤테이션
+  // 이메일 중복 확인 뮤테이션 훅
   const validateEmailMutation = useMutation(validateEmail, {
     async onSuccess(response) {
-      const statusCode = response.status;
-      if (statusCode === 200) {
-        setEmailVerification(true);
-        setMessages((prevMessages) => ({
-          ...prevMessages,
-          emailSuccessMessage: '이메일이 발송되었습니다.',
-        }));
-        setVerificationCode(response.data);
-      }
+      const { data: verificationCode } = response;
+      setVerificationStatus((prevVerifications) => ({
+        ...prevVerifications,
+        isEmailVerified: true,
+      }));
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        emailSuccessMessage: '이메일이 발송되었습니다.',
+      }));
+      setVerificationCode(verificationCode);
     },
     async onError(error) {
       const statusCode = error.response.data.statusCode;
-      console.log('statusCode', statusCode);
 
       if (statusCode === 400) {
         setMessages((prevMessages) => ({
           ...prevMessages,
-          emailErrorMessage: '중복된 이메일입니다.',
+          emailErrorMessage: '이미 회원가입된 이메일입니다.',
         }));
         setValidations((prevValidations) => ({
           ...prevValidations,
@@ -242,6 +259,7 @@ function Register() {
     if (nickname) {
       const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
       const isValidNickname = NICKNAME_REGEX.test(nickname);
+
       setValidations((prevValidations) => ({
         ...prevValidations,
         validNickname: isValidNickname,
@@ -307,6 +325,10 @@ function Register() {
         ...prevMessages,
         emailCodeSuccessMessage: '이메일 인증이 완료 되었습니다.',
         emailCodeErrorMessage: '',
+      }));
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        isEmailCodeVerified: true,
       }));
     } else {
       setMessages((prevMessages) => ({
@@ -406,7 +428,7 @@ function Register() {
                 onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
                 button="발송"
-                emailVerification={emailVerification}
+                isEmailVerified={isEmailVerified}
                 successMessage={emailSuccessMessage}
                 errorMessage={emailErrorMessage}
               />
