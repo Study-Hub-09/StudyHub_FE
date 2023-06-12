@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation } from 'react-query';
 import Container from '../components/Container/Container';
+import Button from '../components/Buttons/Button';
 import NicknameInput from '../components/Inputs/NicknameInput';
 import EmailInput from '../components/Inputs/EmailInput';
-import Button from '../components/Buttons/Button';
 import PasswordInput from '../components/Inputs/PasswordInput';
 import CheckboxInput from '../components/Inputs/CheckboxInput';
 import KakaoButton from '../components/Buttons/KakaoButton';
@@ -18,32 +20,19 @@ import {
   StPolicyField,
   StCheckboxInputField,
 } from '../styles/Register.styles';
-import { Link, useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
 import { register, validateEmail, validateNickname } from '../core/api/auth/register';
 import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
 
 function Register() {
   const navigate = useNavigate();
+
   const [verificationCode, setVerificationCode] = useState('');
-  const [emailVerification, setEmailVerification] = useState(false);
-  const [validCode, setValidCode] = useState(false);
-  const [validPwd, setValidPwd] = useState(false);
-  const [matchPwd, setMatchPwd] = useState(false);
-  const [validNickname, setValidNickname] = useState(false);
-  const [validEmail, setValidEmail] = useState(false);
 
-  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState('');
-  const [nicknameErrorMessage, setNicknameErrorMessage] = useState('');
-
-  const [emailSuccessMessage, setEmailSuccessMessage] = useState('');
-  const [emailErrorMessage, setEmailErrorMessage] = useState('');
-
-  const [emailCodeSuccessMessage, setEmailCodeSuccessMessage] = useState('');
-  const [emailCodeErrorMessage, setEmailCodeErrorMessage] = useState('');
-
-  const [pwdErrorMessage, setPwdErrorMessage] = useState('');
-  const [pwdMatchErrorMessage, setPwdMatchErrorMessage] = useState('');
+  const [verificationStatus, setVerificationStatus] = useState({
+    isNicknameVerified: false,
+    isEmailVerified: false,
+    isEmailCodeVerified: false,
+  });
 
   const [values, setValues] = useState({
     nickname: '',
@@ -53,198 +42,26 @@ function Register() {
     checkPassword: '',
   });
 
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  };
-
-  const registerMutation = useMutation(register, {
-    async onSuccess(response) {
-      console.log(response.data.message);
-      const statusCode = response.status;
-      if (statusCode === 200) {
-        alert('회원가입 성공!');
-        setTimeout(() => {
-          navigate('/members/login');
-        }, 500);
-      }
-    },
-    async onError(error) {
-      console.log('Register.jsx ERROR=====> ', error);
-    },
+  const [validations, setValidations] = useState({
+    validEmailCode: false,
+    validPwd: false,
+    matchPwd: false,
+    validNickname: false,
+    validEmail: false,
   });
 
-  // 회원가입 폼 버튼 핸들러
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    if (
-      values.nickname === '' ||
-      values.email === '' ||
-      values.checkCode === '' ||
-      values.password === '' ||
-      values.checkPassword === ''
-    ) {
-      return alert('모든 칸을 입력해주세요.');
-    } else {
-      registerMutation.mutate({
-        nickname: values.nickname,
-        email: values.email,
-        password: values.password,
-        checkPassword: values.checkPassword,
-      });
-    }
-  };
-
-  // 닉네임 확인 함수
-  const validateNickNameMutation = useMutation(validateNickname, {
-    async onSuccess(response) {
-      const duplicateNickname = response.data.data;
-      console.log(duplicateNickname);
-      if (duplicateNickname === true) {
-        setNicknameSuccessMessage('닉네임 중복 확인되었습니다.');
-      } else if (duplicateNickname === false) {
-        setNicknameErrorMessage('중복된 닉네임입니다');
-        setValidNickname(false);
-      }
-    },
-    async onError(error) {
-      console.log(error);
-    },
+  const [messages, setMessages] = useState({
+    nicknameSuccessMessage: '',
+    nicknameErrorMessage: '',
+    emailSuccessMessage: '',
+    emailErrorMessage: '',
+    emailCodeSuccessMessage: '',
+    emailCodeErrorMessage: '',
+    pwdErrorMessage: '',
+    pwdMatchErrorMessage: '',
   });
 
-  // 중복 닉네임 확인 버튼 핸들러
-  const validateNicknameHandler = (e) => {
-    e.preventDefault();
-    if (!values.nickname) {
-      alert('닉네임을 입력해주세요.');
-    } else {
-      validateNickNameMutation.mutate({
-        nickname: values.nickname,
-      });
-    }
-  };
-
-  // 이메일 확인 함수
-  const validateEmailMutation = useMutation(validateEmail, {
-    async onSuccess(response) {
-      const statusCode = response.status;
-      if (statusCode === 200) {
-        setEmailVerification(true);
-        setEmailSuccessMessage('이메일이 발송되었습니다');
-        setVerificationCode(response.data);
-      }
-    },
-    async onError(error) {
-      const statusCode = error.response.data.statusCode;
-      console.log('statusCode', statusCode);
-
-      if (statusCode === 400) {
-        setEmailErrorMessage('중복된 이메일입니다');
-        setValidEmail(false);
-      }
-    },
-  });
-
-  // 이메일 확인 버튼 핸들러
-  const validateEmailHandler = (e) => {
-    e.preventDefault();
-    if (!values.email) {
-      alert('이메일을 입력해주세요');
-    } else {
-      validateEmailMutation.mutate({
-        email: values.email,
-      });
-    }
-  };
-
-  // 인증번호 확인 버튼 핸들러
-  const verificateCodeHandler = (e) => {
-    e.preventDefault();
-    if (!values.checkCode) alert('인증번호를 입력해주세요');
-    if (values.checkCode === verificationCode) {
-      setValidCode(true);
-    } else {
-      setValidCode(false);
-    }
-  };
-
-  // 닉네임 유효성 검사
-  useEffect(() => {
-    if (values.nickname) {
-      const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
-      const result = NICKNAME_REGEX.test(values.nickname);
-      setValidNickname(result);
-
-      if (result && values.nickname.length >= 2) {
-        setNicknameSuccessMessage('사용 가능한 닉네임입니다.');
-        setNicknameErrorMessage('');
-      } else {
-        setNicknameSuccessMessage('');
-        setNicknameErrorMessage('한글 또는 영문 대소문자 2-10자 닉네임을 입력해주세요');
-      }
-    } else {
-      setNicknameSuccessMessage('');
-      setNicknameErrorMessage('');
-    }
-  }, [values.nickname]);
-
-  // 이메일 유효성 검사
-  useEffect(() => {
-    if (values.email) {
-      const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-      const result = EMAIL_REGEX.test(values.email);
-      setValidEmail(result);
-      if (result) {
-        setEmailSuccessMessage('사용가능한 이메일입니다');
-        setEmailErrorMessage('');
-      } else {
-        setEmailSuccessMessage('');
-        setEmailErrorMessage('잘못된 이메일 형식입니다');
-      }
-    } else {
-      setEmailSuccessMessage('');
-      setEmailErrorMessage('');
-    }
-  }, [values.email]);
-
-  // 발송 클릭시 이메일 인증확인
-  useEffect(() => {
-    if (validCode) {
-      setEmailCodeSuccessMessage('이메일 인증이 완료 되었습니다.');
-      setEmailCodeErrorMessage('');
-    } else {
-      setEmailCodeSuccessMessage('');
-      setEmailCodeErrorMessage('올바른 인증 코드를 입력해주세요.');
-    }
-  }, [validCode]);
-
-  // 비밀번호 유효성 검사
-  useEffect(() => {
-    if (values.password) {
-      const PWD_REGEX = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?=\S+$).{8,15}$/;
-      const result = PWD_REGEX.test(values.password);
-      setValidPwd(result); // 상태 값 변경 : false -> true
-      if (values.password.length >= 8) {
-        setValidPwd(true);
-        setPwdErrorMessage('');
-      } else {
-        setValidPwd(false);
-        setPwdErrorMessage(
-          '알파벳 소문자, 대문자, 숫자 포함, 특수문자를 포함한 8-15자 사이의 비밀번호를 입력해주세요.'
-        );
-      }
-      const match = values.password === values.checkPassword; // 비밀번호와 비밀번호 값 비교
-      setMatchPwd(match); // 상태 값 변경 : false -> true
-      if (match) {
-        setPwdMatchErrorMessage('');
-      } else {
-        setPwdMatchErrorMessage('비밀번호가 일치하지 않습니다.');
-      }
-    }
-  }, [values.password, values.checkPassword]);
-
-  // Border Focus
-  const [focusBorder, setFocusBorder] = useState({
+  const [inputFocusBorder, setInputFocusBorder] = useState({
     nicknameBorder: false,
     emailBorder: false,
     checkCodeBorder: false,
@@ -252,27 +69,313 @@ function Register() {
     checkPasswordBorder: false,
   });
 
+  const { nickname, email, checkCode, password, checkPassword } = values;
+  const { validEmailCode, validPwd, matchPwd, validNickname, validEmail } = validations;
+  const { isNicknameVerified, isEmailVerified, isEmailCodeVerified } = verificationStatus;
+
+  const {
+    nicknameSuccessMessage,
+    nicknameErrorMessage,
+    emailSuccessMessage,
+    emailErrorMessage,
+    emailCodeSuccessMessage,
+    emailCodeErrorMessage,
+    pwdErrorMessage,
+    pwdMatchErrorMessage,
+  } = messages;
+
   const {
     nicknameBorder,
     emailBorder,
     checkCodeBorder,
     passwordBorder,
     checkPasswordBorder,
-  } = focusBorder;
+  } = inputFocusBorder;
 
-  const onFocusBorder = (border) => {
-    setFocusBorder({
-      ...focusBorder,
-      [border]: !focusBorder[border],
+  // Input onChange 핸들러
+  const onChangeInputHandler = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  // 회원가입 폼 버튼 핸들러
+  const onSubmitFormHandler = (e) => {
+    e.preventDefault();
+    if (
+      nickname === '' ||
+      email === '' ||
+      checkCode === '' ||
+      password === '' ||
+      checkPassword === ''
+    )
+      return alert('모든 칸을 입력해주세요.');
+
+    if (!isNicknameVerified) return alert('닉네임 중복 확인해주세요.');
+    if (!isEmailVerified) return alert('이메일 발송 확인해주세요.');
+    if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해주세요.');
+    else {
+      registerMutation.mutate({
+        nickname,
+        email,
+        password,
+        checkPassword,
+      });
+    }
+  };
+
+  // 이메일 확인 버튼 핸들러
+  const validateEmailHandler = (e) => {
+    e.preventDefault();
+    if (!email) {
+      alert('이메일을 입력해주세요');
+    } else {
+      validateEmailMutation.mutate({
+        email,
+      });
+    }
+  };
+
+  // 중복 닉네임 확인 버튼 핸들러
+  const validateNicknameHandler = (e) => {
+    e.preventDefault();
+    if (!nickname) {
+      alert('닉네임을 입력해주세요.');
+    } else {
+      validateNickNameMutation.mutate({
+        nickname,
+      });
+    }
+  };
+
+  // 이메일 인증번호 확인 버튼 핸들러
+  const verificateEmailCodeHandler = (e) => {
+    e.preventDefault();
+    if (!checkCode) alert('인증번호를 입력해주세요');
+    if (checkCode === verificationCode) {
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        validEmailCode: true,
+      }));
+    } else {
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        validEmailCode: false,
+      }));
+    }
+  };
+
+  // 입력 필드의 포커스 상태를 업데이트하는 함수
+  const onFocusInputBorder = (border) => {
+    setInputFocusBorder({
+      ...inputFocusBorder,
+      [border]: !inputFocusBorder[border],
     });
   };
 
-  const onBlurBorder = (border) => {
-    setFocusBorder({
-      ...focusBorder,
+  // 입력 필드의 포커스가 해제될 때 경계를 초기화하는 함수
+  const onBlurInputBorder = (border) => {
+    setInputFocusBorder({
+      ...inputFocusBorder,
       [border]: false,
     });
   };
+
+  // 회원가입 뮤테이션 훅
+  const registerMutation = useMutation(register, {
+    async onSuccess(response) {
+      console.log(response.data.message);
+      const statusCode = response.status;
+      if (statusCode === 200) {
+        alert('회원가입 성공!');
+        navigate('/members/login');
+      }
+    },
+    async onError(error) {
+      console.log('Register.jsx ERROR=====> ', error);
+    },
+  });
+
+  // 중복 닉네임 확인 뮤테이션 훅
+  const validateNickNameMutation = useMutation(validateNickname, {
+    async onSuccess(response) {
+      const duplicateNickname = response.data.data;
+      if (duplicateNickname) {
+        setVerificationStatus((prevVerifications) => ({
+          ...prevVerifications,
+          isNicknameVerified: true,
+        }));
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameSuccessMessage: '닉네임 중복 확인되었습니다.',
+        }));
+      } else if (!duplicateNickname) {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameErrorMessage: '중복된 닉네임입니다.',
+        }));
+        setValidations((prevValidations) => ({
+          ...prevValidations,
+          validNickname: false,
+        }));
+      }
+    },
+    async onError(error) {
+      console.log(error);
+    },
+  });
+
+  // 이메일 중복 확인 뮤테이션 훅
+  const validateEmailMutation = useMutation(validateEmail, {
+    async onSuccess(response) {
+      const { data: verificationCode } = response;
+      setVerificationStatus((prevVerifications) => ({
+        ...prevVerifications,
+        isEmailVerified: true,
+      }));
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        emailSuccessMessage: '이메일이 발송되었습니다.',
+      }));
+      setVerificationCode(verificationCode);
+    },
+    async onError(error) {
+      const statusCode = error.response.data.statusCode;
+
+      if (statusCode === 400) {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          emailErrorMessage: '이미 회원가입된 이메일입니다.',
+        }));
+        setValidations((prevValidations) => ({
+          ...prevValidations,
+          validEmail: false,
+        }));
+      }
+    },
+  });
+
+  // 닉네임 유효성 검사
+  useEffect(() => {
+    if (nickname) {
+      const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
+      const isValidNickname = NICKNAME_REGEX.test(nickname);
+
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        validNickname: isValidNickname,
+      }));
+
+      if (isValidNickname && nickname.length >= 2) {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameSuccessMessage: '사용 가능한 닉네임입니다.',
+          nicknameErrorMessage: '',
+        }));
+      } else {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameSuccessMessage: '',
+          nicknameErrorMessage: '한글 또는 영문 대소문자 2-10자 닉네임을 입력해주세요.',
+        }));
+      }
+    } else {
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        nicknameSuccessMessage: '',
+        nicknameErrorMessage: '',
+      }));
+    }
+  }, [nickname]);
+
+  // 이메일 유효성 검사
+  useEffect(() => {
+    if (email) {
+      const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      const isValidEmail = EMAIL_REGEX.test(email);
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        validEmail: isValidEmail,
+      }));
+      if (isValidEmail) {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          emailSuccessMessage: '사용가능한 이메일입니다.',
+          emailErrorMessage: '',
+        }));
+      } else {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          emailSuccessMessage: '',
+          emailErrorMessage: '잘못된 이메일 형식입니다.',
+        }));
+      }
+    } else {
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        emailSuccessMessage: '',
+        emailErrorMessage: '',
+      }));
+    }
+  }, [email]);
+
+  // 이메일 인증 발송 버튼 클릭시 이메일 인증확인
+  useEffect(() => {
+    if (validEmailCode) {
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        emailCodeSuccessMessage: '이메일 인증이 완료 되었습니다.',
+        emailCodeErrorMessage: '',
+      }));
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        isEmailCodeVerified: true,
+      }));
+    } else {
+      setMessages((prevMessages) => ({
+        ...prevMessages,
+        emailCodeSuccessMessage: '',
+        emailCodeErrorMessage: '올바른 인증 코드를 입력해주세요.',
+      }));
+    }
+  }, [validEmailCode]);
+
+  // 비밀번호 유효성 검사 및 동일한 비밀번호 입력 확인
+  useEffect(() => {
+    if (password) {
+      const PWD_REGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?=\S+$).{8,15}$/;
+      const isValidPassword = PWD_REGEX.test(password);
+      const matchPassword = password === checkPassword;
+
+      setValidations((prevValidations) => ({
+        ...prevValidations,
+        validPwd: isValidPassword,
+        matchPwd: matchPassword,
+      }));
+
+      if (isValidPassword && matchPassword) {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          pwdErrorMessage: '',
+          pwdMatchErrorMessage: '',
+        }));
+      } else {
+        if (!isValidPassword || !matchPassword) {
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            pwdErrorMessage:
+              '알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 8-15자 사이의 비밀번호를 입력해주세요.',
+            pwdMatchErrorMessage: '비밀번호가 일치하지 않습니다.',
+          }));
+        } else {
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            pwdErrorMessage: '',
+            pwdMatchErrorMessage: '',
+          }));
+        }
+      }
+    }
+  }, [password, checkPassword]);
 
   return (
     <Container
@@ -289,12 +392,12 @@ function Register() {
           </StHeader>
 
           {/* 회원가입 영역 */}
-          <StForm onSubmit={onSubmitHandler}>
+          <StForm onSubmit={onSubmitFormHandler}>
             {/* 닉네임 영역 */}
             <NicknameInput
               name="nickname"
-              value={values.nickname}
-              onChange={onChangeHandler}
+              value={nickname}
+              onChange={onChangeInputHandler}
               placeholder="닉네임"
               inputwidth="193px"
               validNickname={validNickname}
@@ -302,8 +405,8 @@ function Register() {
               bordercolor={
                 nicknameBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
               }
-              onFocus={() => onFocusBorder('nicknameBorder')}
-              onBlur={() => onBlurBorder('nicknameBorder')}
+              onFocus={() => onFocusInputBorder('nicknameBorder')}
+              onBlur={() => onBlurInputBorder('nicknameBorder')}
               onClick={(e) => validateNicknameHandler(e)}
               successMessage={nicknameSuccessMessage}
               errorMessage={nicknameErrorMessage}
@@ -314,18 +417,18 @@ function Register() {
               {/* 1. 이메일 주소 */}
               <EmailInput
                 name="email"
-                value={values.email}
-                onChange={onChangeHandler}
+                value={email}
+                onChange={onChangeInputHandler}
                 label="이메일 주소"
                 placeholder="이메일 주소"
                 inputwidth="193px"
                 validEmail={validEmail}
                 bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
-                onFocus={() => onFocusBorder('emailBorder')}
-                onBlur={() => onBlurBorder('emailBorder')}
+                onFocus={() => onFocusInputBorder('emailBorder')}
+                onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
                 button="발송"
-                emailVerification={emailVerification}
+                isEmailVerified={isEmailVerified}
                 successMessage={emailSuccessMessage}
                 errorMessage={emailErrorMessage}
               />
@@ -333,21 +436,21 @@ function Register() {
               {/* 2. 인증번호 */}
               <EmailInput
                 name="checkCode"
-                value={values.checkCode}
-                onChange={onChangeHandler}
+                value={checkCode}
+                onChange={onChangeInputHandler}
                 label="인증번호"
                 placeholder="1234"
                 inputwidth="85px"
                 bordercolor={
                   checkCodeBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
                 }
-                onFocus={() => onFocusBorder('checkCodeBorder')}
-                onBlur={() => onBlurBorder('checkCodeBorder')}
-                onClick={(e) => verificateCodeHandler(e)}
+                onFocus={() => onFocusInputBorder('checkCodeBorder')}
+                onBlur={() => onBlurInputBorder('checkCodeBorder')}
+                onClick={(e) => verificateEmailCodeHandler(e)}
                 button="확인"
                 inputboxwidth="255px"
                 divwith="227px"
-                validCode={validCode}
+                validCode={validEmailCode}
                 successMessage={emailCodeSuccessMessage}
                 errorMessage={emailCodeErrorMessage}
               />
@@ -358,16 +461,16 @@ function Register() {
               {/* 1. 비밀번호 */}
               <PasswordInput
                 name="password"
-                value={values.password}
-                onChange={onChangeHandler}
+                value={password}
+                onChange={onChangeInputHandler}
                 label="비밀번호"
                 placeholder="비밀번호"
                 inputwidth="243px"
                 bordercolor={
                   passwordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
                 }
-                onFocus={() => onFocusBorder('passwordBorder')}
-                onBlur={() => onBlurBorder('passwordBorder')}
+                onFocus={() => onFocusInputBorder('passwordBorder')}
+                onBlur={() => onBlurInputBorder('passwordBorder')}
                 inputboxheight="105px"
                 messageheight="57px"
                 messagewidth="335px"
@@ -379,16 +482,16 @@ function Register() {
               {/* 2. 비밀번호 확인 */}
               <PasswordInput
                 name="checkPassword"
-                value={values.checkPassword}
-                onChange={onChangeHandler}
+                value={checkPassword}
+                onChange={onChangeInputHandler}
                 label="비밀번호 확인"
                 placeholder="비밀번호 확인"
                 inputwidth="243px"
                 bordercolor={
                   checkPasswordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
                 }
-                onFocus={() => onFocusBorder('checkPasswordBorder')}
-                onBlur={() => onBlurBorder('checkPasswordBorder')}
+                onFocus={() => onFocusInputBorder('checkPasswordBorder')}
+                onBlur={() => onBlurInputBorder('checkPasswordBorder')}
                 inputboxheight="82px"
                 matchPwd={matchPwd}
                 errorMessage={pwdMatchErrorMessage}

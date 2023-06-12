@@ -21,11 +21,15 @@ import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
+import { connectClient, sendMessage } from '../core/sockJs/sockJs';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
 
 function Room() {
+  const [ischatOpen, setisChatOpen] = useState(false);
+  const [sessionActive, setSessionActive] = useState(true);
+  const params = useParams();
   const location = useLocation();
   const token = getCookie('AccessToken');
   const navigate = useNavigate();
@@ -45,7 +49,13 @@ function Room() {
 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
-  const [ischatOpen, setisChatOpen] = useState(false);
+
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+
+  const onChangeMessageHandler = (e) => {
+    setMessage(e.target.value);
+  };
 
   const [studyTime, setStudyTime] = useState(null);
 
@@ -64,17 +74,39 @@ function Room() {
     publisher.publishVideo(!videoEnabled);
   };
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onbeforeunload);
+  const handlePopState = async () => {
+    console.log('뒤로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
+    await leaveSession(roomData.sessionId);
+    // 원래 이벤트 처리를 원하는 경우 뒤로 가기 처리
+    // window.history.back();
+  };
 
+  const onbeforeunload = () => {
+    console.log('beforeunload event triggered');
+    console.log('새로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
+    leaveSession(roomData.sessionId);
+  };
+
+  useEffect(() => {
+    // 페이지를 빠져나갈 때 세션을 떠난다.
+    window.addEventListener('beforeunload', onbeforeunload);
+    console.log('beforeunload event listener added');
+
+    // 뒤로 가기 이벤트 처리
+    // window.addEventListener('popstate', () => handlePopState(roomData.sessionId));
+    window.addEventListener('popstate', async () => {
+      await handlePopState(roomData.sessionId);
+    });
+    console.log('popstate event listener added');
+
+    // Cleanup 함수 처리
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
+      console.log('beforeunload event listener removed');
+      window.removeEventListener('popstate', () => handlePopState(roomData.sessionId));
+      console.log('popstate event listener removed');
     };
   }, []);
-
-  const onbeforeunload = (event) => {
-    leaveSession();
-  };
 
   const handleChangeSessionId = (e) => {
     setState((prevState) => ({ ...prevState, mySessionId: e.target.value }));
@@ -89,25 +121,6 @@ function Room() {
       setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
     }
   };
-
-  // const deleteSubscriber = (streamManager) => {
-  //   // let subscribers = state.subscribers;
-  //   // let index = subscribers.indexOf(streamManager, 0);
-  //   // if (index > -1) {
-  //   //   const newSubscribers = subscribers.splice(index, 1);
-  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
-  //   // }
-  //   // setState((prevSubscribers) => {
-  //   //   const index = prevSubscribers.indexOf(streamManager);
-  //   //   if (index > -1) {
-  //   //     const newSubscribers = [...prevSubscribers];
-  //   //     newSubscribers.splice(index, 1);
-  //   //     return newSubscribers;
-  //   //   } else {
-  //   //     return prevSubscribers;
-  //   //   }
-  //   // });
-  // };
 
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
@@ -144,19 +157,21 @@ function Room() {
     }));
   };
 
-  // const videoRef = useRef(null);
+  const sendMessageHandler = (e) => {
+    e.preventDefault();
+    sendMessage({
+      sessionId: 'sessionId',
+      time: 'time',
+      profile: 'profileimg',
+      nickname: 'user_1',
+      message: message,
+    });
+    setMessage('');
+  };
 
-  // useEffect(() => {
-  //   const videoElement = videoRef.current;
-  //   if (publisher && videoElement) {
-  //     publisher.addVideoElement(videoElement);
-  //   }
-  //   return () => {
-  //     if (publisher && videoElement) {
-  //       publisher.removeVideoElement(videoElement);
-  //     }
-  //   };
-  // }, []);
+  const getChattingData = (data) => {
+    console.log(data);
+  };
 
   // useEffect(() => {
   //   if (token) {
@@ -168,31 +183,11 @@ function Room() {
 
   useEffect(() => {
     if (state.session) {
-      // const handleStream = (event) => {
-      //   let subscriber = state.session.subscribe(event.stream, undefined);
-      //   console.lot('###subscriber### ', subscriber);
-      //   setState((prevState) => ({
-      //     ...prevState,
-      //     subscribers: [...prevState.subscribers, subscriber],
-      //   }));
-      // };
-
-      // const handleStreamDestroyed = (event) => {
-      //   deleteSubscriber(event.stream.streamManager);
-      // };
-
-      // const handleException = (exception) => {
-      //   console.warn(exception);
-      // };
-
-      // state.session.on('stream', handleStream);
-      // state.session.on('streamDestroyed', handleStreamDestroyed);
-      // state.session.on('exception', handleException);
-
       (async function connectToken() {
         try {
           const token = await getToken();
           await state.session.connect(token, { clientData: getUserName });
+          connectClient(mySessionId, getChattingData);
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
@@ -233,17 +228,12 @@ function Room() {
         }
       })();
 
-      return () => {
-        // state.session.off('stream', handleStream);
-        // state.session.off('streamDestroyed', handleStreamDestroyed);
-        // state.session.off('exception', handleException);
-      };
+      return () => {};
     }
   }, [state.session]);
 
   const leaveSession = async (sessionId) => {
     const mySession = state.session; // init value: undefined
-    console.log('######sessionID====>', sessionId);
 
     if (mySession) {
       try {
@@ -253,6 +243,7 @@ function Room() {
         // const studyTime = handleSaveTime();
         const studytime = studyTime;
         console.log('STUDYTIME ======> ', studytime);
+
         const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
           params: {
             studytime: studytime,
@@ -332,7 +323,6 @@ function Room() {
     try {
       const sessionId = await createSession(mySessionId);
       const response = await createToken(mySessionId); // 토큰
-      console.log('4' + response);
       return response;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: getToken');
@@ -346,25 +336,13 @@ function Room() {
           'Content-Type': 'application/json',
         },
       });
-      // const response = await axios.post(
-      //   APPLICATION_SERVER_URL + 'openvidu/api/sessions',
-      //   {},
-      //   {
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
-      //     },
-      //   }
-      // );
-      console.log('2' + sessionId);
-      console.log('response========> ', response);
       return response.data;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
   }
-  console.log('###############subscribers', subscribers);
-  console.log('###############publisher', publisher);
+  // console.log('###############subscribers', subscribers);
+  // console.log('###############publisher', publisher);
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
@@ -377,14 +355,11 @@ function Room() {
           },
         }
       );
-      console.log('3333333RESPONSEEEEEE=====> ', response);
       return response.data.token; // token
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
-
-  console.log('SUBSCRIBERS===>', subscribers);
 
   return (
     <Stcontainer>
@@ -488,7 +463,7 @@ function Room() {
                       <StchatTime>00/00 00:00</StchatTime>
                       <StTochatName>이름</StTochatName>
                     </StTochatinner>
-                    <Stchattext>채팅내용 입력</Stchattext>
+                    <Stchattext>보내는 메세지</Stchattext>
                   </StchattextArea>
                   <img src={profileimg} alt="" />
                 </StTochat>
@@ -499,14 +474,20 @@ function Room() {
                       <StFromchatName>이름</StFromchatName>
                       <StchatTime>00/00 00:00</StchatTime>
                     </StTochatinner>
-                    <StFromchattext>채팅내용 입력</StFromchattext>
+                    <StFromchattext>받는 메세지</StFromchattext>
                   </StchattextArea>
                   <img src={profileimg} alt="" />
                 </StFromchat>
               </Stchatbox>
-              <Stsendarea>
-                <Stchatinput />
-                <Stsendbutton src={send} alt="" />
+              <Stsendarea onSubmit={sendMessageHandler}>
+                <Stchatinput
+                  type="text"
+                  value={message}
+                  onChange={onChangeMessageHandler}
+                />
+                <button>
+                  <Stsendbutton src={send} alt="" />
+                </button>
               </Stsendarea>
             </StChatarea>
           </div>
@@ -591,7 +572,7 @@ const Stchatinput = styled.input`
   padding-left: 10px;
 `;
 
-const Stsendarea = styled.div`
+const Stsendarea = styled.form`
   display: flex;
   align-items: center;
   gap: 13px;
