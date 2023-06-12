@@ -21,7 +21,7 @@ import { OpenVidu } from 'openvidu-browser';
 import Timer from '../components/Timer/Timer';
 import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
-import { connectClient } from '../core/sockJs/sockJs';
+import { connectClient, sendMessage } from '../core/sockJs/sockJs';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
@@ -49,6 +49,13 @@ function Room() {
 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
+
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState('');
+
+  const onChangeMessageHandler = (e) => {
+    setMessage(e.target.value);
+  };
 
   const handleSaveTime = (savedTime) => {
     // savedTime 값을 처리하는 로직을 작성
@@ -113,25 +120,6 @@ function Room() {
     }
   };
 
-  // const deleteSubscriber = (streamManager) => {
-  //   // let subscribers = state.subscribers;
-  //   // let index = subscribers.indexOf(streamManager, 0);
-  //   // if (index > -1) {
-  //   //   const newSubscribers = subscribers.splice(index, 1);
-  //   //   setState((prevState) => ({ ...prevState, subscribers: newSubscribers }));
-  //   // }
-  //   // setState((prevSubscribers) => {
-  //   //   const index = prevSubscribers.indexOf(streamManager);
-  //   //   if (index > -1) {
-  //   //     const newSubscribers = [...prevSubscribers];
-  //   //     newSubscribers.splice(index, 1);
-  //   //     return newSubscribers;
-  //   //   } else {
-  //   //     return prevSubscribers;
-  //   //   }
-  //   // });
-  // };
-
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
       const updatedSubscribers = prevState.subscribers.filter(
@@ -167,19 +155,21 @@ function Room() {
     }));
   };
 
-  // const videoRef = useRef(null);
+  const sendMessageHandler = (e) => {
+    e.preventDefault();
+    sendMessage({
+      sessionId: 'sessionId',
+      time: 'time',
+      profile: 'profileimg',
+      nickname: 'user_1',
+      message: message,
+    });
+    setMessage('');
+  };
 
-  // useEffect(() => {
-  //   const videoElement = videoRef.current;
-  //   if (publisher && videoElement) {
-  //     publisher.addVideoElement(videoElement);
-  //   }
-  //   return () => {
-  //     if (publisher && videoElement) {
-  //       publisher.removeVideoElement(videoElement);
-  //     }
-  //   };
-  // }, []);
+  const getChattingData = (data) => {
+    console.log(data);
+  };
 
   useEffect(() => {
     if (token) {
@@ -191,32 +181,11 @@ function Room() {
 
   useEffect(() => {
     if (state.session) {
-      // const handleStream = (event) => {
-      //   let subscriber = state.session.subscribe(event.stream, undefined);
-      //   console.lot('###subscriber### ', subscriber);
-      //   setState((prevState) => ({
-      //     ...prevState,
-      //     subscribers: [...prevState.subscribers, subscriber],
-      //   }));
-      // };
-
-      // const handleStreamDestroyed = (event) => {
-      //   deleteSubscriber(event.stream.streamManager);
-      // };
-
-      // const handleException = (exception) => {
-      //   console.warn(exception);
-      // };
-
-      // state.session.on('stream', handleStream);
-      // state.session.on('streamDestroyed', handleStreamDestroyed);
-      // state.session.on('exception', handleException);
-
       (async function connectToken() {
         try {
           const token = await getToken();
           await state.session.connect(token, { clientData: getUserName });
-          await connectClient();
+          connectClient(mySessionId, getChattingData);
 
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
@@ -257,26 +226,16 @@ function Room() {
         }
       })();
 
-      return () => {
-        // state.session.off('stream', handleStream);
-        // state.session.off('streamDestroyed', handleStreamDestroyed);
-        // state.session.off('exception', handleException);
-      };
+      return () => {};
     }
   }, [state.session]);
 
   const leaveSession = async (sessionId) => {
     const mySession = state.session; // init value: undefined
-    console.log('######sessionID====>', sessionId);
 
     if (mySession) {
       try {
-        // const params = new URLSearchParams();
-        // console.log('####params', params);
-        // params.append('studytime', Number(11111));
-        // const studyTime = handleSaveTime();
         const studyTime = 123456;
-        console.log('STUDYTIME ======> ', studyTime);
         const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
           params: {
             studytime: studyTime,
@@ -343,7 +302,6 @@ function Room() {
     try {
       const sessionId = await createSession(mySessionId);
       const response = await createToken(mySessionId); // 토큰
-      console.log('4' + response);
       return response;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: getToken');
@@ -357,25 +315,13 @@ function Room() {
           'Content-Type': 'application/json',
         },
       });
-      // const response = await axios.post(
-      //   APPLICATION_SERVER_URL + 'openvidu/api/sessions',
-      //   {},
-      //   {
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
-      //     },
-      //   }
-      // );
-      console.log('2' + sessionId);
-      console.log('response========> ', response);
       return response.data;
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createSession');
     }
   }
-  console.log('###############subscribers', subscribers);
-  console.log('###############publisher', publisher);
+  // console.log('###############subscribers', subscribers);
+  // console.log('###############publisher', publisher);
   async function createToken(sessionId) {
     try {
       const response = await axios.post(
@@ -388,14 +334,11 @@ function Room() {
           },
         }
       );
-      console.log('3333333RESPONSEEEEEE=====> ', response);
       return response.data.token; // token
     } catch (error) {
       console.error('인터넷 요청이 실패했습니다: createToken');
     }
   }
-
-  console.log('SUBSCRIBERS===>', subscribers);
 
   return (
     <Stcontainer>
@@ -499,7 +442,7 @@ function Room() {
                       <StchatTime>00/00 00:00</StchatTime>
                       <StTochatName>이름</StTochatName>
                     </StTochatinner>
-                    <Stchattext>채팅내용 입력</Stchattext>
+                    <Stchattext>보내는 메세지</Stchattext>
                   </StchattextArea>
                   <img src={profileimg} alt="" />
                 </StTochat>
@@ -510,14 +453,20 @@ function Room() {
                       <StFromchatName>이름</StFromchatName>
                       <StchatTime>00/00 00:00</StchatTime>
                     </StTochatinner>
-                    <StFromchattext>채팅내용 입력</StFromchattext>
+                    <StFromchattext>받는 메세지</StFromchattext>
                   </StchattextArea>
                   <img src={profileimg} alt="" />
                 </StFromchat>
               </Stchatbox>
-              <Stsendarea>
-                <Stchatinput />
-                <Stsendbutton src={send} alt="" />
+              <Stsendarea onSubmit={sendMessageHandler}>
+                <Stchatinput
+                  type="text"
+                  value={message}
+                  onChange={onChangeMessageHandler}
+                />
+                <button>
+                  <Stsendbutton src={send} alt="" />
+                </button>
               </Stsendarea>
             </StChatarea>
           </div>
@@ -602,7 +551,7 @@ const Stchatinput = styled.input`
   padding-left: 10px;
 `;
 
-const Stsendarea = styled.div`
+const Stsendarea = styled.form`
   display: flex;
   align-items: center;
   gap: 13px;
