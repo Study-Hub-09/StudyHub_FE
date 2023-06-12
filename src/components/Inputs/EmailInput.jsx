@@ -25,14 +25,14 @@ function EmailInput({
   value,
   validEmail,
   validCode,
-  emailVerification,
+  isEmailVerified,
   successMessage,
   errorMessage,
   ...inputprops
 }) {
   const getBordercolor = () => {
     if (value) {
-      return validCode || validEmail || emailVerification ? 'green' : 'red';
+      return validCode || validEmail || isEmailVerified ? 'green' : 'red';
     }
     return bordercolor;
   };
@@ -62,7 +62,7 @@ function EmailInput({
         </StInputDiv>
         {value && (
           <StIcon>
-            {validCode || validEmail || emailVerification ? (
+            {validCode || validEmail || isEmailVerified ? (
               <img src={checkIcon} alt="Green Check Icon" />
             ) : (
               <img src={errorIcon} alt="Red Error Icon" />
@@ -72,7 +72,7 @@ function EmailInput({
       </StInputFrame>
       {value && (
         <StMessage>
-          {validCode || validEmail || emailVerification ? successMessage : errorMessage}
+          {validCode || validEmail || isEmailVerified ? successMessage : errorMessage}
         </StMessage>
       )}
     </StInputBox>
