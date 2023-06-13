@@ -43,6 +43,13 @@ export const StLabel = styled.div`
 export const StInput = styled.input`
   width: ${(props) => props.inputwidth};
   padding: 4px;
+
+  // 확인, 발송 버튼 클릭 후 input 비활성화
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+  `}
 `;
 
 export const StIcon = styled.span`
