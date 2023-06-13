@@ -128,15 +128,14 @@ function Register() {
     if (!isEmailVerified) return alert('이메일 발송 확인해 주세요.');
     if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해 주세요.');
     if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
-      return alert('모든 약관에 동의해아 합니다.');
-    else {
-      registerMutation.mutate({
-        nickname,
-        email,
-        password,
-        checkPassword,
-      });
-    }
+      return alert('모든 약관에 동의해야 합니다.');
+
+    registerMutation.mutate({
+      nickname,
+      email,
+      password,
+      checkPassword,
+    });
   };
 
   // 이메일 확인 버튼 핸들러
