@@ -6,12 +6,18 @@ import sprout from '../../src/assets/Images/sprout.svg';
 import Crown from '../../src/assets/Images/👑.svg';
 import Arrow from '../../src/assets/Images/Arrow 1.svg';
 import Graph from '../components/Graph/Graph';
-import axios from 'axios';
 import { instance } from '../core/api/axios/instance';
 
 function Mypage() {
   const nickname = localStorage.member;
   const [token, setToken] = useState('');
+
+  const [dailyStudyChart, setDailyStudyChart] = useState([]);
+  const [dailyStudyTime, setDailyStudyTime] = useState(0);
+  const [monthlyStudyChart, setMonthlyStudyChart] = useState([]);
+  const [totalStudyTime, setTotalStudyTime] = useState(0);
+  const [weeklyStudyChart, setWeeklyStudyChart] = useState([]);
+  const [selectedGraph, setSelectedGraph] = useState('1D');
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
@@ -22,11 +28,119 @@ function Mypage() {
   const userData = async () => {
     try {
       const response = await instance.get(`/api/members/mypage`);
-      console.log('#######response', response);
-      console.log('#######response', response.data.data.dailyStudyChart);
+      console.log('#######response', response.data.data);
+
+      const {
+        dailyStudyChart,
+        dailyStudyTime,
+        monthlyStudyChart,
+        totalStudyTime,
+        weeklyStudyChart,
+      } = response.data.data;
+
+      setDailyStudyChart(dailyStudyChart);
+      setDailyStudyTime(dailyStudyTime);
+      setMonthlyStudyChart(monthlyStudyChart);
+      setTotalStudyTime(totalStudyTime);
+      setWeeklyStudyChart(weeklyStudyChart);
+      return response.data.data;
     } catch (error) {
       console.error('????error:', error);
     }
+  };
+
+  // 오늘날짜 00.00.(요일) 형식
+  const currentDate = today();
+  function today() {
+    const now = new Date();
+    const options = { weekday: 'short', month: '2-digit', day: '2-digit' };
+    const formattedDate = now.toLocaleDateString('ko-KR', options);
+
+    return formattedDate;
+  }
+
+  // 오늘 공부한 시간
+  const dailyTime = (dailyStudyTime) => {
+    const hours = Math.floor(dailyStudyTime / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((dailyStudyTime % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (dailyStudyTime % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  // 한 주 총 공부한 시간
+  const weeklyentries = Object.entries(dailyStudyChart);
+  weeklyentries.forEach(([key, value]) => {
+    // console.log(key, value); // 각 키와 값 출력
+  });
+
+  let weeklysum = 0;
+  for (const key in dailyStudyChart) {
+    weeklysum += dailyStudyChart[key];
+  }
+
+  const weeklyTime = (weeklysum) => {
+    const hours = Math.floor(weeklysum / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((weeklysum % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (weeklysum % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  // 총 공부한 시간
+  const totalTime = (totalStudyTime) => {
+    const hours = Math.floor(totalStudyTime / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((totalStudyTime % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (totalStudyTime % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  // 공부시간 비교
+  const compareRecentAndPreviousValues = () => {
+    if (Object.keys(weeklyStudyChart).length >= 2) {
+      const keys = Object.keys(weeklyStudyChart);
+      const recentObject = weeklyStudyChart[keys[keys.length - 1]];
+      const previousObject = weeklyStudyChart[keys[keys.length - 2]];
+      // recentObject와 previousObject의 값을 비교하고 원하는 작업 수행
+      // 예: 특정 속성 값을 비교하기
+      if (recentObject > previousObject) {
+        // 최근 값이 이전 값보다 큰 경우에 대한 작업 수행
+        return (
+          <div>
+            지난주 공부시간보다 <br /> 늘었습니다.
+          </div>
+        );
+      } else if (recentObject < previousObject) {
+        // 최근 값이 이전 값보다 작은 경우에 대한 작업 수행
+        return (
+          <div>
+            지난주 공부시간보다 <br /> 줄었습니다.
+          </div>
+        );
+      } else {
+        // 최근 값과 이전 값이 같은 경우에 대한 작업 수행
+        return (
+          <div>
+            지난주 공부시간과 <br /> 같습니다.
+          </div>
+        );
+      }
+    }
+  };
+  const result = compareRecentAndPreviousValues();
+
+  const handlePeriodChange = (period) => {
+    setSelectedGraph(period);
   };
 
   return (
@@ -63,28 +177,34 @@ function Mypage() {
                   <StContentMainTotalTimeTitel>
                     <StContentMainTotalTimeText>공부한 시간</StContentMainTotalTimeText>
 
-                    <StContentMainTotalTimeText2>00.00(월)</StContentMainTotalTimeText2>
+                    <StContentMainTotalTimeText2>
+                      {currentDate}
+                    </StContentMainTotalTimeText2>
                   </StContentMainTotalTimeTitel>
                 </StContentMainTotalTimeHead>
 
                 <StContentMainTotalTimeBody>
                   <StContentMainTotalTimeView>
-                    <StContentMainTotalTimeViewT>00:00:00</StContentMainTotalTimeViewT>
+                    <StContentMainTotalTimeViewT>
+                      {dailyTime(dailyStudyTime)}
+                    </StContentMainTotalTimeViewT>
                   </StContentMainTotalTimeView>
 
                   <StContentMainTotalTimerLayout>
                     <StContentMainTotalTimerTitle>
                       총 공부 시간
                     </StContentMainTotalTimerTitle>
-                    <StContentMainTotalTimer>00:00:00</StContentMainTotalTimer>
+                    <StContentMainTotalTimer>
+                      {totalTime(totalStudyTime)}
+                    </StContentMainTotalTimer>
 
                     <StContentMainTotalTimerTitle>
                       이번주 공부 시간
                     </StContentMainTotalTimerTitle>
-                    <StContentMainTotalTimer>00:00:00</StContentMainTotalTimer>
-                    <StContentMainTotalTimerTitle>
-                      지난주 평균 공부시간 <br /> 그 전주보다 늘었습니다.
-                    </StContentMainTotalTimerTitle>
+                    <StContentMainTotalTimer>
+                      {weeklyTime(weeklysum)}
+                    </StContentMainTotalTimer>
+                    <StContentMainTotalTimerTitle>{result}</StContentMainTotalTimerTitle>
                   </StContentMainTotalTimerLayout>
                 </StContentMainTotalTimeBody>
               </StContentMainTotalTimeLayout>
@@ -103,13 +223,19 @@ function Mypage() {
                 <StContentMainStatisticsTitl>통계</StContentMainStatisticsTitl>
 
                 <StContentMainStatisticsTitlBox>
-                  <StContentMainStatisticsTitlBoxList>
+                  <StContentMainStatisticsTitlBoxList
+                    onClick={() => handlePeriodChange('1D')}
+                  >
                     1D
                   </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList2>
+                  <StContentMainStatisticsTitlBoxList2
+                    onClick={() => handlePeriodChange('1W')}
+                  >
                     1W
                   </StContentMainStatisticsTitlBoxList2>
-                  <StContentMainStatisticsTitlBoxList3>
+                  <StContentMainStatisticsTitlBoxList3
+                    onClick={() => handlePeriodChange('1M')}
+                  >
                     1M
                   </StContentMainStatisticsTitlBoxList3>
                   {/* <StContentMainStatisticsTitlBoxList>
@@ -122,7 +248,13 @@ function Mypage() {
               </StContentMainStatisticsTitleH>
 
               <StContentMainStatisticsGraph>
-                <Graph token={token} />
+                <Graph
+                  token={token}
+                  dailyStudyChart={dailyStudyChart}
+                  monthlyStudyChart={monthlyStudyChart}
+                  weeklyStudyChart={weeklyStudyChart}
+                  selectedGraph={selectedGraph}
+                />
               </StContentMainStatisticsGraph>
 
               <StContentMainStatisticsSub>
@@ -341,7 +473,7 @@ const StContentMainTotalTimeText = styled.div`
   color: #000000;
 `;
 const StContentMainTotalTimeText2 = styled.div`
-  width: 62px;
+  width: 76px;
   height: 19px;
   font-family: 'Noto Sans';
   font-style: normal;
@@ -533,6 +665,8 @@ const StContentMainStatisticsGraph = styled.div`
   width: 479.36px;
   height: 172.9px;
   margin: 20px 0px 14px 0px;
+  display: flex;
+  justify-content: center;
   /* background: #eaeaea; */
 `;
 const StContentMainStatisticsSub = styled.div`
