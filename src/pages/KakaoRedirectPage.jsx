@@ -23,12 +23,13 @@ function KakaoRedirectPage() {
       instance
         .get(`/api/members/kakao/callback?code=${code}`)
         .then((response) => {
-          console.log(response);
           const statusCode = response.status;
           const accessToken = response.headers.get('access_token').split(' ')[1];
           const refreshToken = response.headers.get('refresh_token').split(' ')[1];
+          const nickname = response.data.data.nickname;
           setCookie('AccessToken', accessToken, { path: '/' });
           setCookie('RefreshToken', refreshToken, { path: '/' });
+          localStorage.setItem('member', nickname);
 
           if (statusCode === 200) {
             alert('로그인 성공!');
