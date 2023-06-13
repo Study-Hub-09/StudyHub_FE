@@ -46,26 +46,10 @@ function PasswordInput({
     return bordercolor;
   };
 
-  const onMouseEnter = () => {
-    setShowTooltip(!showTooltip);
-  };
-
-  const onMouseLeave = () => {
-    setShowTooltip(!showTooltip);
-  };
-
   return (
     <StInputBox inputboxwidth={inputboxwidth} inputboxheight={inputboxheight}>
       <StLabel>
         <label>{label}</label>
-        {/* {icon && (
-          <img
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            src={icon}
-            alt="Gray Alert Icon"
-          />
-        )} */}
       </StLabel>
       <StInputFrame>
         <StInputDiv
