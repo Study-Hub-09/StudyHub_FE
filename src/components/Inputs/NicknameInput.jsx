@@ -16,6 +16,7 @@ function NicknameInput({
   value,
   button,
   validNickname,
+  isNicknameVerified,
   successMessage,
   errorMessage,
   onFocus,
@@ -24,10 +25,7 @@ function NicknameInput({
   ...inputprops
 }) {
   const nicknameRef = useRef();
-
-  useEffect(() => {
-    nicknameRef.current.focus();
-  }, []);
+  const isButtonDisabled = isNicknameVerified;
 
   const getBordercolor = () => {
     if (value) {
@@ -35,6 +33,10 @@ function NicknameInput({
     }
     return bordercolor;
   };
+
+  useEffect(() => {
+    nicknameRef.current.focus();
+  }, []);
 
   return (
     <StInputBox>
@@ -49,17 +51,15 @@ function NicknameInput({
             padding="8px 27px"
             borderradius="47px"
             onClick={onClick}
+            disabled={isButtonDisabled}
           >
             {button}
           </Button>
         </StInputDiv>
         {value && (
           <StIcon>
-            {validNickname ? (
-              <img src={checkIcon} alt="Green Check Icon" />
-            ) : (
-              <img src={errorIcon} alt="Red Error Icon" />
-            )}
+            {(isNicknameVerified && <img src={checkIcon} alt="Green Check Icon" />) ||
+              (!validNickname && <img src={errorIcon} alt="Red Error Icon" />)}
           </StIcon>
         )}
       </StInputFrame>

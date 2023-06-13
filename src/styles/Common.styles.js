@@ -33,6 +33,15 @@ export const StButton = styled.button`
     background-color: var(--color-dark-green);
     color: var(--color-white);
   }
+
+  // 확인, 발송 버튼 클릭 후 버튼 비활성화
+  ${(props) =>
+    props.disabled &&
+    `
+    pointer-events: none;
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+  `}
 `;
 
 // ===============KAKAO BUTTON================ //
