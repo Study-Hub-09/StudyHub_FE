@@ -32,6 +32,8 @@ function Register() {
     isNicknameVerified: false,
     isEmailVerified: false,
     isEmailCodeVerified: false,
+    isTermsPolicyChecked: false,
+    isPersonalPolicyChecked: false,
   });
 
   const [values, setValues] = useState({
@@ -71,7 +73,13 @@ function Register() {
 
   const { nickname, email, checkCode, password, checkPassword } = values;
   const { validEmailCode, validPwd, matchPwd, validNickname, validEmail } = validations;
-  const { isNicknameVerified, isEmailVerified, isEmailCodeVerified } = verificationStatus;
+  const {
+    isNicknameVerified,
+    isEmailVerified,
+    isEmailCodeVerified,
+    isTermsPolicyChecked,
+    isPersonalPolicyChecked,
+  } = verificationStatus;
 
   const {
     nicknameSuccessMessage,
@@ -98,6 +106,12 @@ function Register() {
     setValues({ ...values, [name]: value });
   };
 
+  // Input checkbox 체크 여부 핸들러
+  const onChangeCheckboxHandler = (e) => {
+    const { name, checked } = e.target;
+    setVerificationStatus({ ...verificationStatus, [name]: checked });
+  };
+
   // 회원가입 폼 버튼 핸들러
   const onSubmitFormHandler = (e) => {
     e.preventDefault();
@@ -110,9 +124,11 @@ function Register() {
     )
       return alert('모든 칸을 입력해주세요.');
 
-    if (!isNicknameVerified) return alert('닉네임 중복 확인해주세요.');
-    if (!isEmailVerified) return alert('이메일 발송 확인해주세요.');
-    if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해주세요.');
+    if (!isNicknameVerified) return alert('닉네임 중복 확인해 주세요.');
+    if (!isEmailVerified) return alert('이메일 발송 확인해 주세요.');
+    if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해 주세요.');
+    if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
+      return alert('모든 약관에 동의해아 합니다.');
     else {
       registerMutation.mutate({
         nickname,
@@ -126,7 +142,7 @@ function Register() {
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
-    if (!email) {
+    if (!email || email.trim() === '') {
       alert('이메일을 입력해주세요');
     } else {
       validateEmailMutation.mutate({
@@ -138,7 +154,7 @@ function Register() {
   // 중복 닉네임 확인 버튼 핸들러
   const validateNicknameHandler = (e) => {
     e.preventDefault();
-    if (!nickname) {
+    if (!nickname || nickname.trim() === '') {
       alert('닉네임을 입력해주세요.');
     } else {
       validateNickNameMutation.mutate({
@@ -150,16 +166,24 @@ function Register() {
   // 이메일 인증번호 확인 버튼 핸들러
   const verificateEmailCodeHandler = (e) => {
     e.preventDefault();
-    if (!checkCode) alert('인증번호를 입력해주세요');
+    if (!checkCode || checkCode.trim() === '') alert('인증번호를 입력해주세요');
     if (checkCode === verificationCode) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: true,
       }));
+      setVerificationStatus((prevVerifications) => ({
+        ...prevVerifications,
+        isEmailCodeVerified: true,
+      }));
     } else {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: false,
+      }));
+      setVerificationStatus((prevVerifications) => ({
+        ...prevVerifications,
+        isEmailCodeVerified: false,
       }));
     }
   };
@@ -200,13 +224,13 @@ function Register() {
     async onSuccess(response) {
       const duplicateNickname = response.data.data;
       if (duplicateNickname) {
-        setVerificationStatus((prevVerifications) => ({
-          ...prevVerifications,
-          isNicknameVerified: true,
-        }));
         setMessages((prevMessages) => ({
           ...prevMessages,
           nicknameSuccessMessage: '닉네임 중복 확인되었습니다.',
+        }));
+        setVerificationStatus((prevVerifications) => ({
+          ...prevVerifications,
+          isNicknameVerified: true,
         }));
       } else if (!duplicateNickname) {
         setMessages((prevMessages) => ({
@@ -228,13 +252,13 @@ function Register() {
   const validateEmailMutation = useMutation(validateEmail, {
     async onSuccess(response) {
       const { data: verificationCode } = response;
-      setVerificationStatus((prevVerifications) => ({
-        ...prevVerifications,
-        isEmailVerified: true,
-      }));
       setMessages((prevMessages) => ({
         ...prevMessages,
         emailSuccessMessage: '이메일이 발송되었습니다.',
+      }));
+      setVerificationStatus((prevVerifications) => ({
+        ...prevVerifications,
+        isEmailVerified: true,
       }));
       setVerificationCode(verificationCode);
     },
@@ -268,7 +292,7 @@ function Register() {
       if (isValidNickname && nickname.length >= 2) {
         setMessages((prevMessages) => ({
           ...prevMessages,
-          nicknameSuccessMessage: '사용 가능한 닉네임입니다.',
+          nicknameSuccessMessage: '',
           nicknameErrorMessage: '',
         }));
       } else {
@@ -299,7 +323,7 @@ function Register() {
       if (isValidEmail) {
         setMessages((prevMessages) => ({
           ...prevMessages,
-          emailSuccessMessage: '사용가능한 이메일입니다.',
+          emailSuccessMessage: '',
           emailErrorMessage: '',
         }));
       } else {
@@ -323,18 +347,14 @@ function Register() {
     if (validEmailCode) {
       setMessages((prevMessages) => ({
         ...prevMessages,
-        emailCodeSuccessMessage: '이메일 인증이 완료 되었습니다.',
+        emailCodeSuccessMessage: '이메일 인증되었습니다.',
         emailCodeErrorMessage: '',
-      }));
-      setValidations((prevValidations) => ({
-        ...prevValidations,
-        isEmailCodeVerified: true,
       }));
     } else {
       setMessages((prevMessages) => ({
         ...prevMessages,
         emailCodeSuccessMessage: '',
-        emailCodeErrorMessage: '올바른 인증 코드를 입력해주세요.',
+        emailCodeErrorMessage: '올바른 인증 코드를 입력해 주세요.',
       }));
     }
   }, [validEmailCode]);
@@ -401,6 +421,7 @@ function Register() {
               placeholder="닉네임"
               inputwidth="193px"
               validNickname={validNickname}
+              isNicknameVerified={isNicknameVerified}
               button="확인"
               bordercolor={
                 nicknameBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
@@ -423,12 +444,12 @@ function Register() {
                 placeholder="이메일 주소"
                 inputwidth="193px"
                 validEmail={validEmail}
+                isEmailVerified={isEmailVerified}
                 bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
                 onFocus={() => onFocusInputBorder('emailBorder')}
                 onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
                 button="발송"
-                isEmailVerified={isEmailVerified}
                 successMessage={emailSuccessMessage}
                 errorMessage={emailErrorMessage}
               />
@@ -450,7 +471,8 @@ function Register() {
                 button="확인"
                 inputboxwidth="255px"
                 divwith="227px"
-                validCode={validEmailCode}
+                validEmailCode={validEmailCode}
+                isEmailCodeVerified={isEmailCodeVerified}
                 successMessage={emailCodeSuccessMessage}
                 errorMessage={emailCodeErrorMessage}
               />
@@ -505,11 +527,15 @@ function Register() {
                   label="서비스 약관에 동의합니다."
                   id="terms"
                   htmlFor="terms"
+                  name="isTermsPolicyChecked"
+                  onChange={onChangeCheckboxHandler}
                 />
                 <CheckboxInput
                   label="개인정보 수집 및 이용에 동의합니다."
                   id="personal"
+                  name="isPersonalPolicyChecked"
                   htmlFor="personal"
+                  onChange={onChangeCheckboxHandler}
                 />
               </StCheckboxInputField>
               <Button

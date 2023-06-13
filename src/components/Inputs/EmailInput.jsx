@@ -24,15 +24,18 @@ function EmailInput({
   message,
   value,
   validEmail,
-  validCode,
+  validEmailCode,
+  isEmailCodeVerified,
   isEmailVerified,
   successMessage,
   errorMessage,
   ...inputprops
 }) {
+  const isButtonDisabled = isEmailVerified || isEmailCodeVerified;
+
   const getBordercolor = () => {
     if (value) {
-      return validCode || validEmail || isEmailVerified ? 'green' : 'red';
+      return validEmailCode || validEmail || isEmailVerified ? 'green' : 'red';
     }
     return bordercolor;
   };
@@ -56,23 +59,28 @@ function EmailInput({
             padding="8px 27px"
             borderradius="47px"
             onClick={onClick}
+            disabled={isButtonDisabled}
           >
             {button}
           </Button>
         </StInputDiv>
         {value && (
           <StIcon>
-            {validCode || validEmail || isEmailVerified ? (
+            {(validEmail && isEmailVerified && (
               <img src={checkIcon} alt="Green Check Icon" />
-            ) : (
-              <img src={errorIcon} alt="Red Error Icon" />
-            )}
+            )) ||
+              (validEmailCode && <img src={checkIcon} alt="Green Check Icon" />) ||
+              (!validEmail && !isEmailVerified && (
+                <img src={errorIcon} alt="Red Error Icon" />
+              ))}
           </StIcon>
         )}
       </StInputFrame>
       {value && (
         <StMessage>
-          {validCode || validEmail || isEmailVerified ? successMessage : errorMessage}
+          {validEmailCode || validEmail || isEmailVerified
+            ? successMessage
+            : errorMessage}
         </StMessage>
       )}
     </StInputBox>
