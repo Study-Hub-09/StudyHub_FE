@@ -6,36 +6,43 @@ import { styled } from 'styled-components';
 function Timer({ onSaveTime }) {
   const [time, setTime] = useState(0);
   const [isPaused, setIsPaused] = useState(true);
-  const [timerlog, setTimerlog] = useState(null);
+  const [timerInterval, setTimerInterval] = useState(null);
   const [savedTime, setSavedTime] = useState(0);
 
   useEffect(() => {
     if (!isPaused) {
-      setTimerlog(
+      setTimerInterval(
         setInterval(() => {
           setTime((prevTime) => prevTime + 1);
         }, 1000)
       );
-    } else if (timerlog) {
-      clearInterval(timerlog);
+    } else {
+      clearInterval(timerInterval);
     }
 
     return () => {
-      clearInterval(timerlog);
+      clearInterval(timerInterval);
     };
   }, [isPaused]);
 
   const handlePause = () => {
-    setIsPaused((isPaused) => !isPaused);
-    if (!isPaused) {
-      onSaveTime(time); // 타이머 일시정지 시 현재 시간(time)을 저장
-    }
+    setIsPaused((prevIsPaused) => {
+      const newIsPaused = !prevIsPaused;
+      if (newIsPaused) {
+        clearInterval(timerInterval);
+      }
+      return newIsPaused;
+    });
   };
 
-  // const handleReset = () => {
-  //   setTime(0);
-  //   setSavedTime(0); // 저장된 시간을 초기화
-  // };
+  useEffect(() => {
+    onSaveTime(0);
+    if (!isPaused) {
+      onSaveTime(time);
+    } else {
+      onSaveTime(time);
+    }
+  }, [isPaused, time, onSaveTime]);
 
   console.log('#######SAVEDTIME=====> ', savedTime);
 
@@ -54,7 +61,6 @@ function Timer({ onSaveTime }) {
     <StTimerContainer>
       <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
       <StTimerImg src={isPaused ? play : pause} alt="" onClick={handlePause}></StTimerImg>
-      {/* <button onClick={handleReset}>Reset</button> 리셋 버튼 */}
     </StTimerContainer>
   );
 }
