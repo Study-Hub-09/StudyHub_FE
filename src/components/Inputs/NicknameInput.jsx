@@ -26,6 +26,7 @@ function NicknameInput({
 }) {
   const nicknameRef = useRef();
   const isButtonDisabled = isNicknameVerified;
+  const isInputDisabled = isNicknameVerified;
 
   const getBordercolor = () => {
     if (value) {
@@ -43,7 +44,13 @@ function NicknameInput({
       <label>닉네임</label>
       <StInputFrame>
         <StInputDiv bordercolor={getBordercolor()} onFocus={onFocus} onBlur={onBlur}>
-          <StInput ref={nicknameRef} type="text" value={value} {...inputprops} />
+          <StInput
+            ref={nicknameRef}
+            type="text"
+            value={value}
+            {...inputprops}
+            disabled={isInputDisabled}
+          />
           <Button
             width="82px"
             height="36px"

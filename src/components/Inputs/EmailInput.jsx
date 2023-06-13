@@ -32,6 +32,7 @@ function EmailInput({
   ...inputprops
 }) {
   const isButtonDisabled = isEmailVerified || isEmailCodeVerified;
+  const isInputDisabled = isEmailVerified || isEmailCodeVerified;
 
   const getBordercolor = () => {
     if (value) {
@@ -50,7 +51,7 @@ function EmailInput({
           onFocus={onFocus}
           onBlur={onBlur}
         >
-          <StInput type="text" value={value} {...inputprops} />
+          <StInput type="text" value={value} {...inputprops} disabled={isInputDisabled} />
           <Button
             type="button"
             width="82px"
