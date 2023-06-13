@@ -49,7 +49,7 @@ const Graph = ({
   //       type: 'linear', // 스케일 유형을 'linear'로 설정
   //       beginAtZero: true,
   //       min: 0, // y축 최소값을 0으로 설정
-  //       max: 24, // y축 최대값을 24로 설정
+  //       max: 20, // y축 최대값을 24로 설정
   //       ticks: {
   //         stepSize: 5,
   //         callback: function (value) {
@@ -86,7 +86,7 @@ const Graph = ({
           type: 'linear', // 스케일 유형을 'linear'로 설정
           beginAtZero: true,
           min: 0, // y축 최소값을 0으로 설정
-          max: 24, // y축 최대값을 24로 설정
+          max: 20, // y축 최대값을 24로 설정
           ticks: {
             stepSize: 4,
             callback: function (value) {
@@ -115,17 +115,19 @@ const Graph = ({
         return `${month}/${day}`;
       });
       studyTimes = Object.values(dailyStudyChart).map((value) => {
-        const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        // const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        const hours = Math.floor(value / 3600); // 초를 시간으로 변환
         return `${hours}`;
       });
-      options.scales.y.max = 24;
+      options.scales.y.max = 20;
     } else if (selectedGraph === '1W') {
       labels = Object.keys(weeklyStudyChart).map((key) => `${key}`);
       studyTimes = Object.values(weeklyStudyChart).map((value) => {
-        const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        // const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        const hours = Math.floor(value / 3600); // 초를 시간으로 변환
         return `${hours}`;
       });
-      options.scales.y.max = 168;
+      options.scales.y.max = 140;
     } else if (selectedGraph === '1M') {
       labels = Object.keys(monthlyStudyChart).map((key) => {
         const date = new Date(key);
@@ -134,10 +136,11 @@ const Graph = ({
         return `${year}/${month}`; // 년/월 형식으로 변경
       });
       studyTimes = Object.values(monthlyStudyChart).map((value) => {
-        const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        // const hours = Math.floor(value / 60); // 분을 시간으로 변환
+        const hours = Math.floor(value / 3600); // 초를 시간으로 변환
         return `${hours}`;
       });
-      options.scales.y.max = 720;
+      options.scales.y.max = 600;
     }
 
     return {

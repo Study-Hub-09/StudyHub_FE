@@ -7,25 +7,33 @@ import Crown from '../../src/assets/Images/👑.svg';
 import Arrow from '../../src/assets/Images/Arrow 1.svg';
 import Graph from '../components/Graph/Graph';
 import { instance } from '../core/api/axios/instance';
+import { useQuery } from 'react-query';
+import { getRoom } from '../api/api';
+import { useNavigate } from 'react-router-dom';
+import Joinmodal from '../components/Joinmodal';
+import ModalPortal from '../components/Modal/ModalPortal';
+import Pagination from '../components/Pagination/Pagination';
 
-function Mypage() {
+function Mypage({ onClose }) {
   const nickname = localStorage.member;
   const [token, setToken] = useState('');
 
-  const [dailyStudyChart, setDailyStudyChart] = useState([]);
   const [dailyStudyTime, setDailyStudyTime] = useState(0);
-  const [monthlyStudyChart, setMonthlyStudyChart] = useState([]);
   const [totalStudyTime, setTotalStudyTime] = useState(0);
+  const [dailyStudyChart, setDailyStudyChart] = useState([]);
   const [weeklyStudyChart, setWeeklyStudyChart] = useState([]);
+  const [monthlyStudyChart, setMonthlyStudyChart] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState('1D');
 
-  useEffect(() => {
-    const accessToken = getCookie('AccessToken');
-    setToken(accessToken);
-    userData();
-  }, []);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
-  const userData = async () => {
+  const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
+
+  const roomInfo = data?.data.content;
+
+  const userInfo = async () => {
     try {
       const response = await instance.get(`/api/members/mypage`);
       console.log('#######response', response.data.data);
@@ -48,6 +56,20 @@ function Mypage() {
       console.error('????error:', error);
     }
   };
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    setToken(accessToken);
+    userInfo();
+  }, []);
+
+  if (isLoading) {
+    return <p>로딩중입니다....!</p>;
+  }
+
+  if (isError) {
+    return <p>오류가 발생하였습니다...!</p>;
+  }
 
   // 오늘날짜 00.00.(요일) 형식
   const currentDate = today();
@@ -139,8 +161,28 @@ function Mypage() {
   };
   const result = compareRecentAndPreviousValues();
 
+  // 공부시간별 그래프
   const handlePeriodChange = (period) => {
     setSelectedGraph(period);
+  };
+
+  // modal을 이용한 방입장 및 취소
+  const openJoinModal = () => {
+    setIsJoinModalOpen(true);
+  };
+
+  const closeJoinModal = () => {
+    setIsJoinModalOpen(false);
+  };
+
+  // 페이지네이션
+  const nextpageHandler = () => {
+    setPage(page + 1);
+  };
+  const prevpageHandler = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
   };
 
   return (
@@ -238,12 +280,6 @@ function Mypage() {
                   >
                     1M
                   </StContentMainStatisticsTitlBoxList3>
-                  {/* <StContentMainStatisticsTitlBoxList>
-                    6M
-                  </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList>
-                    1Y
-                  </StContentMainStatisticsTitlBoxList> */}
                 </StContentMainStatisticsTitlBox>
               </StContentMainStatisticsTitleH>
 
@@ -299,15 +335,44 @@ function Mypage() {
               </StContentMainTitelRank>
 
               <StContentMainSubStudyRoom>
-                <StContentMainSubStudyRoomTitle>
-                  모집 중인 스터디
-                </StContentMainSubStudyRoomTitle>
-                <StContentMainSubStudyRoomList>
-                  <StContentMainSubStudyRoomName>
-                    스터디방 이름
-                  </StContentMainSubStudyRoomName>
-                  <StContentMainSubStudyRoomBtn>입장하기</StContentMainSubStudyRoomBtn>
-                </StContentMainSubStudyRoomList>
+                <StContentMainSubStudyRoomTM>
+                  <StContentMainSubStudyRoomTitle>
+                    모집 중인 스터디
+                  </StContentMainSubStudyRoomTitle>
+                  <StContentMainSubStudyRoomMore
+                    onClick={() => {
+                      navigate('/main');
+                    }}
+                  >
+                    더보기
+                  </StContentMainSubStudyRoomMore>
+                </StContentMainSubStudyRoomTM>
+                {roomInfo
+                  .sort((a, b) => b.updatedAt - a.updatedAt)
+                  .map((item, index) => {
+                    if (index === 0) {
+                      return (
+                        <StContentMainSubStudyRoomList>
+                          <StContentMainSubStudyRoomName>
+                            {item.roomName}
+                          </StContentMainSubStudyRoomName>
+                          <StContentMainSubStudyRoomBtn onClick={openJoinModal}>
+                            입장하기
+                          </StContentMainSubStudyRoomBtn>
+                          {isJoinModalOpen && (
+                            <ModalPortal>
+                              <Joinmodal roomData={item} onClose={closeJoinModal} />
+                            </ModalPortal>
+                          )}
+                        </StContentMainSubStudyRoomList>
+                      );
+                    }
+                    return null;
+                  })}
+                <Pagination
+                  prevpageHandler={prevpageHandler}
+                  nextpageHandler={nextpageHandler}
+                />
               </StContentMainSubStudyRoom>
             </StContentMainSubContainer>
           </StContentMainContainerB>
@@ -832,6 +897,11 @@ const StContentMainSubStudyRoom = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const StContentMainSubStudyRoomTM = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 const StContentMainSubStudyRoomTitle = styled.div`
   width: 140px;
   height: 27px;
@@ -842,6 +912,19 @@ const StContentMainSubStudyRoomTitle = styled.div`
   line-height: 27px;
   color: #000000;
   margin: 19px 0px 12px 25px;
+`;
+const StContentMainSubStudyRoomMore = styled.div`
+  width: 39px;
+  height: 19px;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19px;
+  color: #848484;
+  text-decoration-line: underline;
+  margin: 19px 26px 12px 0px;
+  cursor: pointer;
 `;
 const StContentMainSubStudyRoomList = styled.div`
   width: 401px;
