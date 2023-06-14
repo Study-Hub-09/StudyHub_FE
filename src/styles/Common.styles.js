@@ -22,17 +22,19 @@ export const StButton = styled.button`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   padding: ${(props) => props.padding};
-  color: var(--color-dark-green);
+  color: ${(props) => props.color || 'var(--color-dark-green)'};
   font-weight: var(--weight-bold);
   border-radius: ${(props) => props.borderradius};
   font-size: 15px;
   line-height: 20.43px;
-  background-color: #fefefe;
+  background-color: ${(props) => props.backgroundcolor || 'var(--color-white-gray)'};
 
-  &:hover {
+  ${(props) =>
+    props.hover ||
+    `&:hover {
     background-color: var(--color-dark-green);
     color: var(--color-white);
-  }
+  }`}
 
   // 확인, 발송 버튼 클릭 후 버튼 비활성화
   ${(props) =>
