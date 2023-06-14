@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { styled, css } from 'styled-components';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { OpenVidu } from 'openvidu-browser';
 import camOn from '../asset/camon.svg';
 import camoff from '../asset/camoff.svg';
 import chat from '../asset/chat.svg';
@@ -8,33 +10,19 @@ import micoff from '../asset/micoff.svg';
 import setting from '../asset/setting2.svg';
 import logout from '../asset/logout.svg';
 import view from '../asset/view.svg';
-import send from '../asset/send.svg';
-import cancel from '../asset/cancel.svg';
-import logo from '../asset/logo.svg';
-import profileimg from '../asset/user.svg';
 import Vector from '../asset/Vector.svg';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import UserVideoComponent from '../components/UserVideoComponent';
-import { useEffect, useRef } from 'react';
-import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
-import Timer from '../components/Timer/Timer';
-import { instance } from '../core/api/axios/instance';
 import { getCookie } from '../Cookies/Cookies';
 import { connectClient, sendMessage } from '../core/sockJs/sockJs';
-import { width } from '@mui/system';
+import { createToken, createSession, exitRoom } from '../core/api/openvidu/openvidu';
+import { instance } from '../core/api/axios/instance';
+import UserVideoComponent from '../components/UserVideoComponent';
+import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://studyhub-openvidu.shop/';
-
 function Room() {
-  const [ischatOpen, setisChatOpen] = useState(false);
-  const [sessionActive, setSessionActive] = useState(true);
-  const params = useParams();
   const location = useLocation();
-  const token = getCookie('AccessToken');
   const navigate = useNavigate();
+  const token = getCookie('AccessToken');
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
 
@@ -49,21 +37,27 @@ function Room() {
     subscribers: [],
   });
 
+  const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
+    state;
+
+  const [ischatOpen, setisChatOpen] = useState(false);
+
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
 
   const [chatDatas, setChatDatas] = useState([]);
   const [message, setMessage] = useState('');
 
+  const [studyTime, setStudyTime] = useState(null);
+
+  const [isConnected, setIsConnected] = useState(false);
+
   const onChangeMessageHandler = (e) => {
     setMessage(e.target.value);
   };
 
-  const [studyTime, setStudyTime] = useState(null);
-
   const handleSaveTime = (time) => {
     setStudyTime(time || 0);
-    console.log('@@@@Savetime', time);
   };
 
   const toggleAudioState = () => {
@@ -77,62 +71,100 @@ function Room() {
   };
 
   const handlePopState = async () => {
-    console.log('뒤로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
-    await leaveSession(roomData.sessionId);
+    await leaveSession();
     // 원래 이벤트 처리를 원하는 경우 뒤로 가기 처리
     // window.history.back();
   };
 
   const onbeforeunload = () => {
-    console.log('beforeunload event triggered');
-    console.log('새로세션나가기ㅣㅣㅣㅣㅣ', roomData.sessionId);
-    leaveSession(roomData.sessionId);
+    leaveSession();
   };
 
   useEffect(() => {
     // 페이지를 빠져나갈 때 세션을 떠난다.
     window.addEventListener('beforeunload', onbeforeunload);
-    console.log('beforeunload event listener added');
 
     // 뒤로 가기 이벤트 처리
     // window.addEventListener('popstate', () => handlePopState(roomData.sessionId));
     window.addEventListener('popstate', async () => {
       await handlePopState(roomData.sessionId);
     });
-    console.log('popstate event listener added');
 
     // Cleanup 함수 처리
     return () => {
       window.removeEventListener('beforeunload', onbeforeunload);
-      console.log('beforeunload event listener removed');
       window.removeEventListener('popstate', () => handlePopState(roomData.sessionId));
-      console.log('popstate event listener removed');
     };
   }, []);
 
-  const handleChangeSessionId = (e) => {
-    setState((prevState) => ({ ...prevState, mySessionId: e.target.value }));
-  };
-
-  const handleChangeUserName = (e) => {
-    setState((prevState) => ({ ...prevState, myUserName: e.target.value }));
-  };
-
   const handleMainVideoStream = (stream) => {
-    if (state.mainStreamManager !== stream) {
+    if (mainStreamManager !== stream) {
       setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
+    }
+  };
+
+  // 세션 입장을 위해 필요한 토큰을 가져오기
+  const getToken = async () => {
+    try {
+      createSession(mySessionId);
+      const response = await createToken(mySessionId);
+      return response;
+    } catch (error) {
+      console.error('인터넷 요청이 실패했습니다: getToken');
     }
   };
 
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
       const updatedSubscribers = prevState.subscribers.filter(
-        (sub) => sub !== streamManager
+        (sub) => sub.stream.streamId !== streamManager.stream.streamId
       );
       return { ...prevState, subscribers: updatedSubscribers };
     });
   };
 
+  // 세션 연결 함수
+  const connectSession = async () => {
+    try {
+      const token = await getToken();
+      await session.connect(token, { clientData: getUserName });
+      connectClient(mySessionId, getChattingData);
+
+      const publisher = await OV.current.initPublisherAsync(undefined, {
+        audioSource: undefined,
+        videoSource: undefined,
+        publishAudio: audioEnabled,
+        publishVideo: videoEnabled,
+        resolution: '1920x1080',
+        frameRate: 60,
+        insertMode: 'APPEND',
+        mirror: true,
+      });
+
+      session.publish(publisher);
+
+      const devices = await OV.current.getDevices();
+      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+      const currentVideoDeviceId = publisher.stream
+        .getMediaStream()
+        .getVideoTracks()[0]
+        .getSettings().deviceId;
+      const currentVideoDevice = videoDevices.find(
+        (device) => device.deviceId === currentVideoDeviceId
+      );
+
+      setState((prevState) => ({
+        ...prevState,
+        currentVideoDevice: currentVideoDevice,
+        mainStreamManager: publisher,
+        publisher: publisher,
+      }));
+    } catch (error) {
+      console.log('세션에 연결하는 중 오류가 발생했습니다:', error.code, error.message);
+    }
+  };
+
+  // 룸 입장 함수
   const joinSession = () => {
     OV.current = new OpenVidu();
     const mySession = OV.current.initSession();
@@ -157,64 +189,26 @@ function Room() {
       ...prevState,
       session: mySession,
     }));
-  };
 
-  const sendMessageHandler = (e) => {
-    e.preventDefault();
-    sendMessage({
-      sessionId: mySessionId,
-      profile: 'profileimg',
-      nickname: getUserName,
-      message,
-    });
-    setMessage('');
-  };
+    //채팅 연결 함수
+    connectClient(mySessionId, getChattingData);
 
-  const getChattingData = (data) => {
-    const newData = JSON.parse(data.body);
-    console.log('newDATA>>>> ', newData);
-
-    setChatDatas((prevChatDatas) => {
-      const receivedDatas = {
-        sessionId: newData.sessionId,
-        createdAt: newData.createdAt,
-        profile: newData.profile,
-        nickname: newData.nickname,
-        message: newData.message,
-      };
-      return [...prevChatDatas, receivedDatas];
-    });
-  };
-
-  // useEffect(() => {
-  //   if (token) {
-  //     joinSession();
-  //   } else {
-  //     navigate('/members/login');
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    if (state.session) {
-      (async function connectToken() {
-        try {
-          const token = await getToken();
-          await state.session.connect(token, { clientData: getUserName });
-          connectClient(mySessionId, getChattingData);
-
+    getToken().then((token) => {
+      mySession
+        .connect(token, { clientData: getUserName })
+        .then(async () => {
           const publisher = await OV.current.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
-            publishAudio: audioEnabled, // true
-            publishVideo: videoEnabled, // true
+            publishAudio: audioEnabled,
+            publishVideo: videoEnabled,
             resolution: '1920x1080',
             frameRate: 60,
             insertMode: 'APPEND',
             mirror: true,
           });
-          console.log('publiser=====> ', publisher);
 
-          state.session.publish(publisher);
+          mySession.publish(publisher);
 
           const devices = await OV.current.getDevices();
           const videoDevices = devices.filter((device) => device.kind === 'videoinput');
@@ -232,44 +226,61 @@ function Room() {
             mainStreamManager: publisher,
             publisher: publisher,
           }));
-        } catch (error) {
+          setIsConnected(true);
+        })
+        .catch((error) => {
           console.log(
             '세션에 연결하는 중 오류가 발생했습니다:',
             error.code,
             error.message
           );
-        }
-      })();
-
-      return () => {};
-    }
-  }, [state.session]);
-
-  const leaveSession = async (sessionId) => {
-    const mySession = state.session; // init value: undefined
-
-    if (mySession) {
-      try {
-        // const params = new URLSearchParams();
-        // console.log('####params', params);
-        // params.append('studytime', Number(11111));
-        // const studyTime = handleSaveTime();
-        const studytime = studyTime;
-        console.log('STUDYTIME ======> ', studytime);
-
-        const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
-          params: {
-            studytime: studytime,
-          },
         });
-        navigate(-1);
-        await state.session.unpublish(state.mainStreamManager); ////////////////
-        console.log('RESPONSE LEAVE SESSION####### ', response);
-        return response;
-      } catch (error) {
-        console.log('leaveSession ERROR ====> ', error);
-      }
-      mySession.disconnect();
+    });
+  };
+
+  const sendMessageHandler = (e) => {
+    e.preventDefault();
+    sendMessage({
+      sessionId: mySessionId,
+      profile: 'profileimg',
+      nickname: getUserName,
+      message,
+    });
+    setMessage('');
+  };
+
+  const getChattingData = (data) => {
+    const newData = JSON.parse(data.body);
+
+    setChatDatas((prevChatDatas) => {
+      const receivedDatas = {
+        sessionId: newData.sessionId,
+        createdAt: newData.createdAt,
+        profile: newData.profile,
+        nickname: newData.nickname,
+        message: newData.message,
+      };
+      return [...prevChatDatas, receivedDatas];
+    });
+  };
+
+  const leaveSession = () => {
+    if (session) {
+      exitRoom(studyTime, mySessionId)
+        .then((response) => {
+          const {
+            status: statusCode,
+            data: { message },
+          } = response;
+          if (statusCode === 200 && message === '스터디 룸 퇴장 성공') {
+            session.unpublish(mainStreamManager);
+            session.disconnect();
+            navigate('/main');
+          }
+        })
+        .catch((error) => {
+          console.log('퇴장 실패:', error);
+        });
     }
     OV.current = null;
     setState({
@@ -282,97 +293,27 @@ function Room() {
     });
   };
 
-  const switchCamera = async () => {
-    try {
-      const devices = await OV.current.getDevices();
-      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-
-      if (videoDevices && videoDevices.length > 1) {
-        const newVideoDevice = videoDevices.filter(
-          (device) => device.deviceId !== state.currentVideoDevice.deviceId
-        );
-
-        if (newVideoDevice.length > 0) {
-          const newPublisher = OV.current.initPublisher(undefined, {
-            videoSource: newVideoDevice[0].deviceId,
-            publishAudio: true,
-            publishVideo: true,
-            mirror: true,
-          });
-
-          await state.session.unpublish(state.mainStreamManager);
-
-          await state.session.publish(newPublisher);
-          setState((prevState) => ({
-            ...prevState,
-            currentVideoDevice: newVideoDevice[0],
-            mainStreamManager: newPublisher,
-            publisher: newPublisher,
-          }));
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // 다른화면으로 이동시 leaveSession
   useEffect(() => {
     if (token) {
+      console.log('<<<마운트>>>');
+      if (isConnected) {
+        leaveSession();
+      }
       joinSession();
     } else {
       navigate('/members/login');
     }
 
+    // beforeunload 이벤트 핸들러 등록
+    window.addEventListener('beforeunload', onbeforeunload);
+
+    // 컴포넌트 언마운트 시에 호출되는 함수
     return () => {
-      leaveSession(roomData?.sessionId);
+      console.log('<<<언마운트>>>');
+      leaveSession();
+      window.removeEventListener('beforeunload', onbeforeunload);
     };
   }, []);
-
-  const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
-    state;
-
-  async function getToken() {
-    try {
-      const sessionId = await createSession(mySessionId);
-      const response = await createToken(mySessionId); // 토큰
-      return response;
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: getToken');
-    }
-  }
-
-  async function createSession(sessionId) {
-    try {
-      const response = await instance.post(`api/rooms/${sessionId}/enter`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createSession');
-    }
-  }
-  // console.log('###############subscribers', subscribers);
-  // console.log('###############publisher', publisher);
-  async function createToken(sessionId) {
-    try {
-      const response = await axios.post(
-        APPLICATION_SERVER_URL + 'openvidu/api/sessions/' + sessionId + '/connection',
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI',
-          },
-        }
-      );
-      return response.data.token; // token
-    } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: createToken');
-    }
-  }
 
   return (
     <Stcontainer>
@@ -388,11 +329,12 @@ function Room() {
               </Stroomcount>
             </Sttitlebox>
           </Stheader>
-          <Stcamarea ischatOpen={ischatOpen}>
+          <Stcamarea>
             {publisher !== undefined ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
                 onClick={() => {
+                  console.log('handlemain====>');
                   handleMainVideoStream(publisher);
                 }}
               >
@@ -443,11 +385,7 @@ function Room() {
               />
               <Sticon src={view} alt="" />
               <Sticon src={setting} alt="" />
-              <Sticon
-                src={logout}
-                alt=""
-                onClick={() => leaveSession(roomData.sessionId)}
-              />
+              <Sticon src={logout} alt="" onClick={() => leaveSession()} />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>
@@ -534,13 +472,6 @@ const Stheader = styled.div`
   gap: 1vw;
   width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
   /* padding: 0px 40px; */
-`;
-const Sttimertext = styled.div`
-  /* color: #00573f; */
-  /* font-size: 52px; */
-  font-weight: 700;
-  /* gap: 27px; */
-  /* display: flex; */
 `;
 
 const Sttitlebox = styled.div`

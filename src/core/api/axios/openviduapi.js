@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from '../../../Cookies/Cookies';
 
-export const instance = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_URL,
+export const openviduapi = axios.create({
+  baseURL: process.env.REACT_APP_APPLICATION_SERVER_URL,
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
@@ -11,16 +11,17 @@ export const instance = axios.create({
 
 // HTTP 요청 가로채기
 // 요청은 AccessToken과 RefreshToken 담아서
-instance.interceptors.request.use(
+openviduapi.interceptors.request.use(
   // 요청을 보내기 전에 수행할 작업
   (config) => {
-    console.log('INSTANCE REQUEST SUCCESS===> ', config);
+    console.log('OPENVIDU REQUEST SUCCESS===> ', config);
     const accessToken = getCookie('AccessToken');
     const refreshToken = getCookie('RefreshToken');
 
     // 토큰이 존재하는 경우에만 헤더스에 추가
     if (accessToken && refreshToken) {
       config.headers['Access_Token'] = `Bearer ${accessToken}`;
+      config.headers['Authorization'] = 'Basic T1BFTlZJRFVBUFA6U1RVRFlIVUI';
     }
     return config;
   },
@@ -28,23 +29,23 @@ instance.interceptors.request.use(
   // 오류 요청을 보내기 전 수행되는 함수
   (error) => {
     console.log('인터셉터 요청 오류');
-    console.log('INSTANCE REQUEST ERROR=======> ', error);
+    console.log('OPENVIDU REQUEST ERROR=======> ', error);
     return Promise.reject(error);
   }
 );
 
 //HTTP 응답 가로채기
-instance.interceptors.response.use(
+openviduapi.interceptors.response.use(
   // 응답을 보내기 전 수행되는 함수
   (config) => {
-    console.log('INSTANCE RESPONSE SUCCESS======> ', config);
+    console.log('OPENVIDU RESPONSE SUCCESS======> ', config);
     return config;
   },
 
   // 오류 응답을 보내기 전 수행되는 함수
   async (error) => {
     console.log('인터셉터 응답 오류');
-    console.log('INSTANCE RESPONSE ERROR=======> ', error);
+    console.log('OPENVIDU RESPONSE ERROR=======> ', error);
 
     const {
       config,
