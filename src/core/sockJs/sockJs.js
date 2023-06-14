@@ -32,4 +32,11 @@ const sendMessage = async (payload) => {
   await stompClient.send(`/pub/chat/message`, {}, JSON.stringify(message));
 };
 
-export { connectClient, sendMessage };
+const disconnectClient = () => {
+  if (stompClient !== null) {
+    stompClient.disconnect();
+    console.log('frame====> 연결 해제 완료');
+  }
+};
+
+export { connectClient, sendMessage, disconnectClient };

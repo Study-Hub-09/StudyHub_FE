@@ -12,7 +12,7 @@ import logout from '../asset/logout.svg';
 import view from '../asset/view.svg';
 import Vector from '../asset/Vector.svg';
 import { getCookie } from '../Cookies/Cookies';
-import { connectClient, sendMessage } from '../core/sockJs/sockJs';
+import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
 import { createToken, createSession, exitRoom } from '../core/api/openvidu/openvidu';
 import { instance } from '../core/api/axios/instance';
 import UserVideoComponent from '../components/UserVideoComponent';
@@ -275,6 +275,7 @@ function Room() {
           if (statusCode === 200 && message === '스터디 룸 퇴장 성공') {
             session.unpublish(mainStreamManager);
             session.disconnect();
+            disconnectClient();
             navigate('/main');
           }
         })
