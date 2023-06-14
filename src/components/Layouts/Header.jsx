@@ -3,8 +3,8 @@ import LogoB from '../../assets/Images/LogoB.svg';
 import Button from '../Buttons/Button';
 import {
   StHeaderAuth,
-  StHeaderBox,
-  StHeaderContainer,
+  StHomeLayoutBox,
+  StHomeLayoutContainer,
   StHeaderLogo,
   StHeaderRegister,
 } from '../../styles/Layout.styles';
@@ -31,8 +31,8 @@ function Header() {
   }, []);
 
   return (
-    <StHeaderContainer>
-      <StHeaderBox>
+    <StHomeLayoutContainer>
+      <StHomeLayoutBox>
         <StHeaderLogo onClick={() => navigate('/')}>
           <img src={LogoB} alt="StudyHub Plant Logo" />
         </StHeaderLogo>
@@ -61,8 +61,8 @@ function Header() {
             {token ? '로그아웃' : '로그인'}
           </Button>
         </StHeaderAuth>
-      </StHeaderBox>
-    </StHeaderContainer>
+      </StHomeLayoutBox>
+    </StHomeLayoutContainer>
   );
 }
 
