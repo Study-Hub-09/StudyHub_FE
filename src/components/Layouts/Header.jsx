@@ -31,7 +31,7 @@ function Header() {
   }, []);
 
   return (
-    <StHomeLayoutContainer>
+    <StHomeLayoutContainer position="sticky" zindex="1" top="0px">
       <StHomeLayoutBox>
         <StHeaderLogo onClick={() => navigate('/')}>
           <img src={LogoB} alt="StudyHub Plant Logo" />

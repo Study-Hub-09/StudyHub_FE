@@ -7,14 +7,18 @@ export const StHomeLayoutContainer = styled.div`
   width: 100%;
   height: ${(props) => props.height || '96px'};
   background-color: ${(props) => props.backgroundcolor || 'var(--color-white)'};
+  position: ${(props) => props.position || 'inherit'};
+  top: ${(props) => props.top};
+  z-index: ${(props) => props.zindex};
 `;
 
 export const StHomeLayoutBox = styled.div`
   border: 1px solid red;
-  width: 1920px;
+  width: 100%;
   height: 100%;
   margin: 0 auto;
-  padding-block: ${(props) => props.paddingblock || 'none'};
+  padding-block: ${(props) => props.paddingblock || '0px'};
+  padding-inline: 360px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -47,7 +51,7 @@ export const StHeaderRegister = styled.div`
 
 export const StHeroLayoutContainer = styled.div`
   width: 100%;
-  height: 984px;
+  height: 985px;
   background-image: url(${herobg});
   background-repeat: no-repeat;
   background-size: cover;
@@ -60,7 +64,6 @@ export const StHeroContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-left: 280px;
   background-color: white;
 `;
 
