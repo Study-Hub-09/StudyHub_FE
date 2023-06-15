@@ -17,7 +17,6 @@ export const StContainer = styled.div`
 // ===============SECTION================ //
 
 export const StSection = styled.section`
-  border: 1px solid red;
   width: 100%;
   max-width: 1200px;
   height: 100%;
