@@ -24,15 +24,19 @@ function EmailInput({
   message,
   value,
   validEmail,
-  validCode,
-  emailVerification,
+  validEmailCode,
+  isEmailCodeVerified,
+  isEmailVerified,
   successMessage,
   errorMessage,
   ...inputprops
 }) {
+  const isButtonDisabled = isEmailVerified || isEmailCodeVerified;
+  const isInputDisabled = isEmailVerified || isEmailCodeVerified;
+
   const getBordercolor = () => {
     if (value) {
-      return validCode || validEmail || emailVerification ? 'green' : 'red';
+      return validEmailCode || validEmail || isEmailVerified ? 'green' : 'red';
     }
     return bordercolor;
   };
@@ -47,32 +51,36 @@ function EmailInput({
           onFocus={onFocus}
           onBlur={onBlur}
         >
-          <StInput type="text" value={value} {...inputprops} />
+          <StInput type="text" value={value} {...inputprops} disabled={isInputDisabled} />
           <Button
             type="button"
             width="82px"
             height="36px"
             border="var(--color-gray)"
-            padding="8px 27px"
             borderradius="47px"
             onClick={onClick}
+            disabled={isButtonDisabled}
           >
             {button}
           </Button>
         </StInputDiv>
         {value && (
           <StIcon>
-            {validCode || validEmail || emailVerification ? (
+            {(validEmail && isEmailVerified && (
               <img src={checkIcon} alt="Green Check Icon" />
-            ) : (
-              <img src={errorIcon} alt="Red Error Icon" />
-            )}
+            )) ||
+              (validEmailCode && <img src={checkIcon} alt="Green Check Icon" />) ||
+              (!validEmail && !isEmailVerified && (
+                <img src={errorIcon} alt="Red Error Icon" />
+              ))}
           </StIcon>
         )}
       </StInputFrame>
       {value && (
         <StMessage>
-          {validCode || validEmail || emailVerification ? successMessage : errorMessage}
+          {validEmailCode || validEmail || isEmailVerified
+            ? successMessage
+            : errorMessage}
         </StMessage>
       )}
     </StInputBox>

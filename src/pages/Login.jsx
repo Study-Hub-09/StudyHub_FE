@@ -150,7 +150,6 @@ function Login() {
               width="142px"
               height="48px"
               borderradius="30px"
-              padding="14px 50px"
               border="var(--color-gray)"
             >
               로그인

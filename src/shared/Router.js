@@ -24,9 +24,9 @@ function Router() {
         <Route element={<MainLayout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/rooms/:id/detail" element={<Room />} />
         </Route>
 
+        <Route path="/rooms/:id/detail" element={<Room />} />
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/register" element={<Register />} />
         <Route path="/api/members/kakao/callback" element={<KakaoRedirectPage />} />
