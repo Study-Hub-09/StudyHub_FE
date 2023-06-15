@@ -30,7 +30,7 @@ function Hero() {
               <img src={herobiglogo} alt="스터브 Study Hub Big Logo" />
             </StHeroDescriptionLogo>
             <p>
-              ‘스터브(STURB)’는 ‘study’와 ‘hub’의 합성어로 공부의 중심지를 의미합니다.
+              ‘스터브(STUB)’는 ‘study’와 ‘hub’의 합성어로 공부의 중심지를 의미합니다.
               혼자서는 공부에 집중하기 어렵다면 목표가 같은 동료들과 함께 성장해요!
             </p>
             <Button
