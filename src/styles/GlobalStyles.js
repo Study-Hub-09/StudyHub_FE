@@ -49,7 +49,7 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     body{
-        background-color: var(--color-light-white);
+        background-color: var(--color-white);
         color: var(--color-black);
     }
 
