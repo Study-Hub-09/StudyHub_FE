@@ -9,21 +9,10 @@ import {
   StHeroDescriptionLogo,
 } from '../../styles/Layout.styles';
 import Button from '../Buttons/Button';
-import { getCookie } from '../../Cookies/Cookies';
 import { useNavigate } from 'react-router-dom';
 
 function Hero() {
-  const token = getCookie('AccessToken');
   const navigate = useNavigate();
-
-  const addRoomHandler = () => {
-    if (token) {
-      navigate('/main');
-    } else {
-      alert('로그인 후 이용 가능한 페이지입니다.');
-      navigate('/members/login');
-    }
-  };
 
   return (
     <StHeroLayoutContainer>
@@ -51,9 +40,9 @@ function Hero() {
               hover="none"
               color="var(--color-white)"
               backgroundcolor="var(--color-dark-green)"
-              onClick={addRoomHandler}
+              onClick={() => navigate('/main')}
             >
-              스터디 만들기
+              스터디 둘러보기
             </Button>
           </StHeroDescription>
         </StHeroContent>
