@@ -12,11 +12,12 @@ export const StHomeLayoutContainer = styled.div`
 `;
 
 export const StHomeLayoutBox = styled.div`
+  border: 1px solid red;
   width: 100%;
   height: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding-block: ${(props) => props.paddingblock || '0px'};
-  padding-inline: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;

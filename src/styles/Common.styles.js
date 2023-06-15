@@ -17,11 +17,12 @@ export const StContainer = styled.div`
 // ===============SECTION================ //
 
 export const StSection = styled.section`
+  border: 1px solid red;
   width: 100%;
+  max-width: 1200px;
   height: 100%;
   margin: 0 auto;
   padding-block: ${(props) => props.paddingblock || '0px'};
-  padding-inline: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
