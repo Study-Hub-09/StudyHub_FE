@@ -31,6 +31,7 @@ function Mypage({ onClose }) {
   const [topRankedTotalStudyTime, setTopRankedTotalStudyTime] = useState(0);
   const [nextGradeRemainingTime, setNextGradeRemainingTime] = useState(0);
   const [title, setTitle] = useState('');
+  const [topRankedTitle, setTopRankedTitle] = useState('');
   const [isModalDdayOpen, setIsModalDdayOpen] = useState(false);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ function Mypage({ onClose }) {
         topRankedTotalStudyTime,
         nextGradeRemainingTime,
         title,
+        topRankedTitle,
       } = response.data.data;
 
       setDailyStudyChart(dailyStudyChart);
@@ -67,6 +69,7 @@ function Mypage({ onClose }) {
       setTopRankedTotalStudyTime(topRankedTotalStudyTime);
       setNextGradeRemainingTime(nextGradeRemainingTime);
       setTitle(title);
+      setTopRankedTitle(topRankedTitle);
       return response.data.data;
     } catch (error) {
       console.error('????error:', error);
@@ -363,6 +366,7 @@ function Mypage({ onClose }) {
                     totalRankTime={totalRankTime}
                     topRankedNickname={topRankedNickname}
                     topRankedTotalStudyTime={topRankedTotalStudyTime}
+                    topRankedTitle={topRankedTitle}
                   />
                 </StContentMainTitelRank>
 
