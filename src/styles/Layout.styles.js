@@ -64,7 +64,6 @@ export const StHeroContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
-  background-color: white;
 `;
 
 export const StHeroDescription = styled.div`
@@ -88,7 +87,6 @@ export const StHeroDescription = styled.div`
 export const StHeroDescriptionLogo = styled.div`
   width: 315px;
   height: 136px;
-  border: 1px solid pink;
 `;
 // ===============FOOTER================ //
 

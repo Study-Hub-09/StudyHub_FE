@@ -1,5 +1,6 @@
 import React from 'react';
 import herologo from '../../assets/Icons/herologo.svg';
+import herobiglogo from '../../assets/Icons/herobiglogo.svg';
 import {
   StHeroContent,
   StHeroLayoutContainer,
@@ -30,7 +31,7 @@ function Hero() {
       <StHomeLayoutBox>
         <StHeroContent>
           <div>
-            <img src={herologo} alt="Studyhub Logo" />
+            <img src={herologo} alt="Study Hub Plant Logo" />
           </div>
           <StHeroDescription>
             <h2>
@@ -38,7 +39,7 @@ function Hero() {
               함공하자!
             </h2>
             <StHeroDescriptionLogo>
-              <p>스터브</p>
+              <img src={herobiglogo} alt="스터브 Study Hub Big Logo" />
             </StHeroDescriptionLogo>
             <p>
               ‘스터브(STURB)’는 ‘study’와 ‘hub’의 합성어로 공부의 중심지를 의미합니다.
