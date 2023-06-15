@@ -352,19 +352,21 @@ function Mypage({ onClose }) {
               <StContentMainSubContainer>
                 <StContentMainTitelRank>
                   <StudyTitle
+                    token={token}
                     nextRankTime={nextRankTime}
                     nextGradeRemainingTime={nextGradeRemainingTime}
                     title={title}
                   />
 
                   <Rank
+                    token={token}
                     totalRankTime={totalRankTime}
                     topRankedNickname={topRankedNickname}
                     topRankedTotalStudyTime={topRankedTotalStudyTime}
                   />
                 </StContentMainTitelRank>
 
-                <RoomPagination />
+                <RoomPagination token={token} />
               </StContentMainSubContainer>
             </StContentMainContainerB>
           </StContentMain>
@@ -411,7 +413,7 @@ const StHeaderUserNameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 25%;
+  width: 35%;
   height: 38%;
   margin-bottom: 4.1%;
   /* border: 1px solid #ff8d8d; */
@@ -623,7 +625,7 @@ const StContentMainContainerB = styled.div`
 `;
 const StContentMainStatistics = styled.div`
   box-sizing: border-box;
-  width: 50%;
+  width: 55%;
   height: 90%;
   background: #ffffff;
   border: 1px solid #bfbfbfbf;
@@ -740,7 +742,7 @@ const StContentMainStatisticsSub = styled.div`
 //   background: #f8f8f8;
 // `;
 const StContentMainSubContainer = styled.div`
-  width: 50%;
+  width: 45%;
   height: 90%;
   display: flex;
   flex-direction: column;
