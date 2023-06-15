@@ -3,16 +3,15 @@ import { Stomp } from '@stomp/stompjs';
 import { getCookie } from '../../Cookies/Cookies';
 
 let stompClient = null;
-const accessToken = getCookie('AccessToken');
-const refreshToken = getCookie('RefreshToken');
 
 const connectClient = (sessionId, getChattingData) => {
-  console.log('sessionId shipporrrrrrrr>>>', sessionId);
+  const accessToken = getCookie('AccessToken');
+  const refreshToken = getCookie('RefreshToken');
   const socket = new SockJs(`${process.env.REACT_APP_SERVER_URL}/ws-stomp`);
   stompClient = Stomp.over(() => socket);
   stompClient.connect(
     {
-      Authorization: `Bearer ${accessToken}`,
+      Access_Token: `Bearer ${accessToken}`,
       Refresh_Token: `Bearer ${refreshToken}`,
     },
     (frame) => {
