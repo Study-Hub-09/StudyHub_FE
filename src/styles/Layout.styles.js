@@ -13,10 +13,10 @@ export const StHomeLayoutContainer = styled.div`
 
 export const StHomeLayoutBox = styled.div`
   width: 100%;
+  max-width: 1200px;
   height: 100%;
   margin: 0 auto;
   padding-block: ${(props) => props.paddingblock || '0px'};
-  padding-inline: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +49,7 @@ export const StHeaderRegister = styled.div`
 
 export const StHeroLayoutContainer = styled.div`
   width: 100%;
-  height: 985px;
+  height: 980px;
   background-image: url(${herobg});
   background-repeat: no-repeat;
   background-size: cover;

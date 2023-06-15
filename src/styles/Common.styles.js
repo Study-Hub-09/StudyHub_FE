@@ -18,10 +18,10 @@ export const StContainer = styled.div`
 
 export const StSection = styled.section`
   width: 100%;
+  max-width: 1200px;
   height: 100%;
   margin: 0 auto;
   padding-block: ${(props) => props.paddingblock || '0px'};
-  padding-inline: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
