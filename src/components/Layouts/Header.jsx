@@ -27,7 +27,9 @@ function Header() {
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
-    setToken(accessToken);
+    if (accessToken) {
+      setToken(accessToken);
+    }
   }, []);
 
   return (
