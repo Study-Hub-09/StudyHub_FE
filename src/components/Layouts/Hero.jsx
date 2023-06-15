@@ -6,7 +6,6 @@ import {
   StHeroLayoutContainer,
   StHomeLayoutBox,
   StHeroDescription,
-  StHeroLogo,
   StHeroDescriptionLogo,
 } from '../../styles/Layout.styles';
 import Button from '../Buttons/Button';

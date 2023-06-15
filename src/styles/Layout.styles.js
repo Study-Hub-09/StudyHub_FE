@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import herobg from '../assets/Images/herobg.png';
+import herobg from '../assets/Images/LandingPage/herobg.png';
 
 // ===============LAYOUT COMMON STYLES================ //
 export const StHomeLayoutContainer = styled.div`
-  border: 1px solid blue;
   width: 100%;
   height: ${(props) => props.height || '96px'};
   background-color: ${(props) => props.backgroundcolor || 'var(--color-white)'};
@@ -13,12 +12,11 @@ export const StHomeLayoutContainer = styled.div`
 `;
 
 export const StHomeLayoutBox = styled.div`
-  border: 1px solid red;
   width: 100%;
   height: 100%;
   margin: 0 auto;
   padding-block: ${(props) => props.paddingblock || '0px'};
-  padding-inline: 360px;
+  padding-inline: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,6 +86,36 @@ export const StHeroDescriptionLogo = styled.div`
   width: 315px;
   height: 136px;
 `;
+
+// ===============SECTION================ //
+
+export const StSectionDescription = styled.div`
+  width: ${(props) => props.width};
+  height: 233px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h3 {
+    font-weight: var(--weight-bold);
+    line-height: 27px;
+    color: var(--color-light-green);
+    text-align: ${(props) => props.textalign};
+  }
+
+  h1 {
+    font-size: 39px;
+    font-weight: var(--weight-bold);
+    line-height: 53px;
+    text-align: ${(props) => props.textalign};
+  }
+
+  p {
+    font-weight: var(--weight-bold);
+    text-align: ${(props) => props.textalign};
+  }
+`;
+
 // ===============FOOTER================ //
 
 export const StFooterInfo = styled.div`
@@ -100,6 +128,7 @@ export const StFooterInfo = styled.div`
 // FooterNavbar Component
 export const StNavbar = styled.nav`
   font-size: 18px;
+  cursor: pointer;
   ul {
     display: flex;
     flex-direction: column;

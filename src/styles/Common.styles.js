@@ -14,6 +14,21 @@ export const StContainer = styled.div`
   gap: ${(props) => props.gap};
 `;
 
+// ===============SECTION================ //
+
+export const StSection = styled.section`
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding-block: ${(props) => props.paddingblock || '0px'};
+  padding-inline: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: ${(props) => props.flexdirection || 'row'};
+  color: ${(props) => props.color || 'var(--color-black)'};
+`;
+
 // ===============BUTTONS================ //
 // ===============COMMON BUTTON================ //
 
