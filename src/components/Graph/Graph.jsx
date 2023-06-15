@@ -160,7 +160,49 @@ const Graph = ({
     };
   };
 
-  const data = token ? getChartData() : null;
+  const data = token
+    ? getChartData()
+    : {
+        labels: ['Day', 'Day', 'Day', 'Day', 'Day'],
+        datasets: [
+          {
+            label: '누적 공부시간',
+            data: [0, 0, 0, 0, 0],
+            borderColor: '#90B54C',
+            tension: 0.4,
+            pointStyle: 'circle',
+            pointRadius: 4,
+            pointBackgroundColor: '#90B54C',
+          },
+        ],
+
+        options: {
+          scales: {
+            y: {
+              type: 'linear', // 스케일 유형을 'linear'로 설정
+              beginAtZero: true,
+              min: 0, // y축 최소값을 0으로 설정
+              max: 20, // y축 최대값을 24로 설정
+              ticks: {
+                stepSize: 4,
+                callback: function (value) {
+                  return value + 'h';
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              position: 'bottom', // 레이블을 아래로 설정
+            },
+          },
+          layout: {
+            padding: {
+              bottom: -10, // 그래프와 레이블 간의 간격을 조절
+            },
+          },
+        },
+      };
 
   // const options = {
   //   scales: {
@@ -200,8 +242,8 @@ const Graph = ({
 export default Graph;
 
 const StGraphContainer = styled.div`
-  height: 100%;
-  width: 100%;
+  height: 110%;
+  width: 110%;
   display: flex;
   justify-content: center;
 `;

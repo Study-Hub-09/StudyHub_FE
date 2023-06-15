@@ -8,7 +8,7 @@ import Joinmodal from '../Joinmodal';
 import { useQuery } from 'react-query';
 import { getRoom } from '../../api/api';
 
-function RoomPagination() {
+function RoomPagination({ token }) {
   const navigate = useNavigate();
 
   const [isJoinModalsOpen, setIsJoinModalsOpen] = useState(false);
@@ -70,7 +70,7 @@ function RoomPagination() {
           더보기
         </StContentMainSubStudyRoomMore>
       </StContentMainSubStudyRoomTM>
-      {currentRoom && (
+      {currentRoom && token && (
         <StContentMainSubStudyRoomList>
           <StContentMainSubStudyRoomNaCa>
             <StContentMainSubStudyRoomName>
@@ -128,11 +128,11 @@ const StContentMainSubStudyRoomTitle = styled.div`
   font-size: 1.25rem;
   line-height: 27px;
   color: #000000;
-  margin: 13px 0px 10px 25px;
+  margin: 10px 0px 10px 25px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomMore = styled.div`
-  width: 9%;
+  width: 11%;
   height: 35%;
   font-style: normal;
   font-weight: 500;
@@ -188,7 +188,7 @@ const StContentMainSubStudyRoomBtn = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 25%;
+  width: 28%;
   height: 80%;
   background: #fefefefe;
   border: 1px solid #bfbfbfbf;
@@ -197,7 +197,7 @@ const StContentMainSubStudyRoomBtn = styled.button`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomBtnF = styled.button`
-  width: 55%;
+  width: 60%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
@@ -209,8 +209,8 @@ const StContentMainSubStudyRoomBtnF = styled.button`
   /* border: 1px solid #8cacff; */
 `;
 const Stallowbox = styled.div`
-  height: 35%;
-  width: 15%;
+  height: 33%;
+  width: 8%;
   padding: 15px 10px;
   margin-left: 348px;
   display: flex;

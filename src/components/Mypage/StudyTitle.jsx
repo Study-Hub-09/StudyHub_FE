@@ -3,14 +3,14 @@ import { styled } from 'styled-components';
 import Arrow from '../../assets/Images/Arrow 1.svg';
 import Seed from '../../assets/Icons/Seed.png';
 
-function StudyTitle({ nextRankTime, nextGradeRemainingTime, title }) {
+function StudyTitle({ nextRankTime, nextGradeRemainingTime, title, token }) {
   return (
     <StContentMainTitel>
       <StContentMainMyTitel>내 칭호</StContentMainMyTitel>
 
       <StContentMainTitelName>
         <StContentMainTitelImg src={Seed} alt="오류" />
-        <StContentMainTitelN>{title}</StContentMainTitelN>
+        <StContentMainTitelN>{token ? title : '씨앗'}</StContentMainTitelN>
       </StContentMainTitelName>
 
       <StContentMainTitelEx>
@@ -50,7 +50,7 @@ const StContentMainMyTitel = styled.div`
   font-size: 0.75rem;
   line-height: 16px;
   color: #848484;
-  margin-left: 30px;
+  margin-left: 18px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelName = styled.div`
@@ -61,7 +61,7 @@ const StContentMainTitelName = styled.div`
   font-size: 1.125rem;
   line-height: 25px;
   color: #303031;
-  margin: 7px 0px 7px 30px;
+  margin: 7px 0px 7px 18px;
   display: flex;
   align-items: center;
   /* border: 1px solid #8cacff; */
@@ -72,7 +72,7 @@ const StContentMainTitelImg = styled.img`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelN = styled.div`
-  width: 50%;
+  width: 100%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
@@ -91,14 +91,14 @@ const StContentMainTitelEx = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelNextEx = styled.div`
-  width: 38%;
+  width: 42%;
   height: 90%;
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 19px;
   color: #848484;
-  margin-left: 30px;
+  margin-left: 18px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelNextAro = styled.div`
