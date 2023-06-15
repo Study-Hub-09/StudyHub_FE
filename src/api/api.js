@@ -8,10 +8,13 @@ const getToken2 = getCookie('RefreshToken');
 
 // 게시글 조회
 const getRoom = async (page) => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_SERVER_URL}/api/main?page=${page}`
-  );
-  return response.data;
+  try {
+    const response = await instance.get(`/api/main?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 // 게시글 생성
 const addRoom = async (newRoom) => {
@@ -23,6 +26,7 @@ const addRoom = async (newRoom) => {
     });
 
     console.log('인증에 성공했습니다:', response.data);
+    return response.data;
   } catch (error) {
     alert(JSON.stringify(error.response.data));
     console.log(getToken, getToken2);
@@ -49,20 +53,23 @@ const getRoomDetail = async (sessionId) => {
 
 // 스터디룸 입장
 const joinRoom = async (sessionId, memberData) => {
-  const token = getToken;
-  const token2 = getToken2;
-
-  const response = await axios.post(
-    `${process.env.REACT_APP_SERVER_URL}/api/rooms/${sessionId}/enter`,
-    memberData,
-    {
-      headers: {
-        ACCESS_KEY: `Bearer ${token}`,
-        REFRESH_KEY: `Bearer ${token2}`,
-      },
-    }
-  );
-  return response.data;
+  try {
+    const response = await instance.post(`/api/rooms/${sessionId}/enter`, memberData);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
-export { getRoom, addRoom, getRoomDetail, joinRoom };
+// 카테고리,검색 조회
+const getSearchRoom = async (url) => {
+  try {
+    const response = await instance.get(`${url}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+export { getRoom, addRoom, getRoomDetail, joinRoom, getSearchRoom };

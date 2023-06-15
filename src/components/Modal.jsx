@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { styled, keyframes, css } from 'styled-components';
 import { addRoom } from '../api/api';
 import cancel from '../asset/cancel.svg';
@@ -20,34 +20,62 @@ import bookClick from '../asset/bookClick.svg';
 import officialClick from '../asset/officialClick.svg';
 import teacherClick from '../asset/teacherClick.svg';
 import etcClick from '../asset/etcClick.svg';
-
+import dayjs from 'dayjs';
 import BasicDatePicker from './Datepicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useNavigate } from 'react-router-dom';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
   const [roomContent, setRoomContent] = useState('');
   const [lock, setLock] = useState(false);
   const [animate, setAnimate] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCategoriesB, setSelectedCategoriesB] = useState([]);
-
+  const [selectDate, setSelectDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const [roomPassword, setRoomPassword] = useState('');
+  const [uploadedImage, setUploadedImage] = useState(null);
   const outside = useRef();
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const mutation = useMutation(addRoom, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries('rooms');
+      // console.log(data.data);
+      navigate(`/rooms/${data.data.sessionId}/detail`, {
+        state: { roomData: data.data },
+      });
     },
   });
+  // 이미지업로드
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다.');
+      return;
+    }
+
+    // 이미지 미리보기 설정
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setUploadedImage(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+  // 방생성 핸들러
   const addbuttonHandler = async () => {
+    const unarrayselectedCategories = selectedCategories.join(',');
     if (roomName !== '' && roomContent !== '') {
       const content = {
         roomName,
         roomContent,
-        category: selectedCategories,
+        roomPassword,
+        secret: lock,
+        category: unarrayselectedCategories,
+        expirationDate: selectDate,
       };
-      console.log(content);
-
       // FormData에 데이터 추가
       const formData = new FormData();
 
@@ -57,8 +85,11 @@ const Modal = ({ onClose }) => {
         new Blob([contentrString], { type: 'application/json' })
       );
       // 이미지 추가
-      formData.append('image', '');
-
+      if (uploadedImage) {
+        formData.append('image', uploadedImage);
+      } else {
+        formData.append('image', '');
+      }
       try {
         mutation.mutate(formData);
         onClose(false);
@@ -73,12 +104,16 @@ const Modal = ({ onClose }) => {
       }
     }
   };
-
+  // 비번방 버튼
   const lockbuttonHandler = () => {
     setAnimate(true);
     setLock(!lock);
   };
 
+  const handleDateChange = (date) => {
+    setSelectDate(date);
+  };
+  // 카테고리 버튼 배열
   const buttonInfo = [
     {
       name: '어학',
@@ -145,8 +180,6 @@ const Modal = ({ onClose }) => {
       setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
     }
   };
-  console.log(selectedCategories);
-  console.log(selectedCategoriesB);
   if (!onClose) return null;
 
   return (
@@ -211,12 +244,35 @@ const Modal = ({ onClose }) => {
             <div>
               <Stdatepickerbox>
                 <Stfont>만료일</Stfont>
-                <BasicDatePicker />
+                <BasicDatePicker
+                  selectedDate={selectDate}
+                  onDateChange={handleDateChange}
+                  inputFormat={'yyyy-MM-dd'}
+                />
               </Stdatepickerbox>
-              <Stthumnailbox>
+              <Stthumnailarea>
                 <Stfont>대표이미지</Stfont>
-                <Stthumbnail />
-              </Stthumnailbox>
+                <Stthumnailbox>
+                  <Stthumbnail>
+                    {uploadedImage ? (
+                      <img src={uploadedImage} alt="Uploaded" width={136} height={100} />
+                    ) : null}
+                  </Stthumbnail>
+                  <div>
+                    <StthumbnailbuttonA>랜덤이미지</StthumbnailbuttonA>
+                    <StthumbnailbuttonB for="inputImage">
+                      PC에서 업로드
+                    </StthumbnailbuttonB>
+                    <input
+                      type="file"
+                      id="inputImage"
+                      style={{ display: 'none' }}
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                </Stthumnailbox>
+              </Stthumnailarea>
               <Stlockbox>
                 <Stfont>비밀방 설정</Stfont>
                 <Stlockboxinner>
@@ -231,7 +287,15 @@ const Modal = ({ onClose }) => {
                       </Stfontcolor>
                       <div>
                         <img src={lockimg} alt="" width={10} height={14} />
-                        <StpasswordInput type="text" placeholder="1234" />
+                        <StpasswordInput
+                          type="text"
+                          placeholder="1234"
+                          maxLength="5"
+                          value={roomPassword}
+                          onChange={(e) => {
+                            setRoomPassword(e.target.value);
+                          }}
+                        />
                       </div>
                     </>
                   ) : (
@@ -388,12 +452,30 @@ const Stthumbnail = styled.div`
   border-radius: 12px;
 `;
 
+const StthumbnailbuttonA = styled.button`
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #e8e8e8;
+  }
+`;
+const StthumbnailbuttonB = styled.label`
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  &:hover {
+    background-color: #e8e8e8;
+  }
+`;
+
 const StpasswordInput = styled.input`
   width: 68px;
   height: 32px;
-  background-color: #e8e8e8;
-  border-radius: 12px;
-  padding-left: 10px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  padding-left: 14px;
+  border: 1px solid #9d9d9d;
   margin-left: 14px;
 `;
 
@@ -465,17 +547,23 @@ const Stdatepickerbox = styled.div`
   gap: 53.19px;
   margin-bottom: 31px;
 `;
-const Stthumnailbox = styled.div`
+const Stthumnailarea = styled.div`
   height: 100px;
   display: flex;
   gap: 20.19px;
 `;
-
+const Stthumnailbox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  height: 140px;
+`;
 const Stlockbox = styled.div`
   height: 166px;
   display: flex;
   gap: 20.19px;
-  padding-top: 14px;
+  padding-top: 38px;
+  margin-top: 11px;
 `;
 
 const Stlockboxinner = styled.div`
