@@ -104,7 +104,7 @@ const StContentMainTodoListRoom = styled.div`
 `;
 const StContentMainTodoListRoomList = styled.div`
   width: 85%;
-  height: 30%;
+  height: 31%;
   background: rgba(144, 181, 76, 0.2);
   border-radius: 12px;
   display: flex;
@@ -143,12 +143,11 @@ const StContentMainTodoListRoomCa = styled.div`
 `;
 const StContentMainTodoListRoomBtn = styled.button`
   box-sizing: border-box;
-  width: 34%;
+  width: 36%;
   height: 75%;
   display: flex;
   align-items: center;
   padding: 12px 24px;
-  gap: 10px;
   background: #fefefefe;
   border: 1px solid #bfbfbfbf;
   border-radius: 30px;

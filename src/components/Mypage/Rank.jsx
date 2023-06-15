@@ -3,14 +3,16 @@ import { styled } from 'styled-components';
 import Arrow from '../../assets/Images/Arrow 1.svg';
 import Seed from '../../assets/Icons/Seed.png';
 
-function Rank({ totalRankTime, topRankedNickname, topRankedTotalStudyTime }) {
+function Rank({ totalRankTime, topRankedNickname, topRankedTotalStudyTime, token }) {
   return (
     <StContentMainRank>
       <StContentMainRankTitle>전체 등급</StContentMainRankTitle>
 
       <StContentMainRankName>
         <StContentMainRankImg src={Seed} alt="오류" />
-        <StContentMainRankNic>{topRankedNickname}</StContentMainRankNic>
+        <StContentMainRankNic>
+          {token ? topRankedNickname : '공부왕'}
+        </StContentMainRankNic>
       </StContentMainRankName>
 
       <StContentMainRankEx>
@@ -47,7 +49,7 @@ const StContentMainRankTitle = styled.div`
   font-size: 0.75rem;
   line-height: 16px;
   color: #848484;
-  margin-left: 30px;
+  margin-left: 18px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainRankName = styled.div`
@@ -58,17 +60,17 @@ const StContentMainRankName = styled.div`
   font-size: 1.125rem;
   line-height: 25px;
   color: #303031;
-  margin: 7px 0px 7px 30px;
+  margin: 7px 0px 7px 18px;
   display: flex;
   align-items: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainRankImg = styled.img`
   width: 30%;
-  height: 110%;
+  height: 100%;
 `;
 const StContentMainRankNic = styled.div`
-  width: 50%;
+  width: 100%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
@@ -81,7 +83,7 @@ const StContentMainRankNic = styled.div`
 const StContentMainRankEx = styled.div`
   width: 80%;
   height: 22%;
-  margin-left: 30px;
+  margin-left: 18px;
   display: flex;
   align-items: baseline;
   /* border: 1px solid #8cacff; */
