@@ -192,7 +192,7 @@ const Graph = ({
   return (
     <StGraphContainer>
       {/* <Line data={data} options={options} width={430} height={210} /> */}
-      {data && <Line data={data} options={data.options} width={430} height={210} />}
+      {data && <Line data={data} options={data.options} />}
     </StGraphContainer>
   );
 };
@@ -200,8 +200,8 @@ const Graph = ({
 export default Graph;
 
 const StGraphContainer = styled.div`
-  height: 210px;
-  width: 430px;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
 `;

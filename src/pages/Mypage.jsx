@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getCookie } from '../Cookies/Cookies';
-import profileLogo from '../../src/assets/Images/Frame 20.svg';
-import sprout from '../../src/assets/Images/sprout.svg';
-import Crown from '../../src/assets/Images/👑.svg';
-import Arrow from '../../src/assets/Images/Arrow 1.svg';
+import profileLogo from '../../src/assets/Images/Frame 19.svg';
 import Graph from '../components/Graph/Graph';
 import { instance } from '../core/api/axios/instance';
 import { useQuery } from 'react-query';
 import { getRoom } from '../api/api';
 import { useNavigate } from 'react-router-dom';
-import Joinmodal from '../components/Joinmodal';
-import ModalPortal from '../components/Modal/ModalPortal';
-import Pagination from '../components/Pagination/Pagination';
+import ModalDday from '../components/Modal/ModalDday';
+import RoomPagination from '../components/Mypage/RoomPagination';
+import JoinStudyRoom from '../components/Mypage/JoinStudyRoom';
+import Rank from '../components/Mypage/Rank';
+import StudyTitle from '../components/Mypage/StudyTitle';
 
 function Mypage({ onClose }) {
   const nickname = localStorage.member;
   const [token, setToken] = useState('');
+  const [ddayList, setDdayList] = useState([]);
+  const [showChild, setShowChild] = useState(false);
 
   const [dailyStudyTime, setDailyStudyTime] = useState(0);
   const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [dailyStudyChart, setDailyStudyChart] = useState([]);
   const [weeklyStudyChart, setWeeklyStudyChart] = useState([]);
   const [monthlyStudyChart, setMonthlyStudyChart] = useState([]);
+  const [myRooms, setMyRooms] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState('1D');
 
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [topRankedNickname, setTopRankedNickname] = useState('');
+  const [topRankedTotalStudyTime, setTopRankedTotalStudyTime] = useState(0);
+  const [nextGradeRemainingTime, setNextGradeRemainingTime] = useState(0);
+  const [title, setTitle] = useState('');
+  const [isModalDdayOpen, setIsModalDdayOpen] = useState(false);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
@@ -44,6 +50,11 @@ function Mypage({ onClose }) {
         monthlyStudyChart,
         totalStudyTime,
         weeklyStudyChart,
+        myRooms,
+        topRankedNickname,
+        topRankedTotalStudyTime,
+        nextGradeRemainingTime,
+        title,
       } = response.data.data;
 
       setDailyStudyChart(dailyStudyChart);
@@ -51,6 +62,11 @@ function Mypage({ onClose }) {
       setMonthlyStudyChart(monthlyStudyChart);
       setTotalStudyTime(totalStudyTime);
       setWeeklyStudyChart(weeklyStudyChart);
+      setMyRooms(myRooms);
+      setTopRankedNickname(topRankedNickname);
+      setTopRankedTotalStudyTime(topRankedTotalStudyTime);
+      setNextGradeRemainingTime(nextGradeRemainingTime);
+      setTitle(title);
       return response.data.data;
     } catch (error) {
       console.error('????error:', error);
@@ -127,6 +143,30 @@ function Mypage({ onClose }) {
     return `${hours}:${minutes}:${seconds}`;
   };
 
+  // 총 공부한시간(1등)
+  const totalRankTime = (topRankedTotalStudyTime) => {
+    const hours = Math.floor(topRankedTotalStudyTime / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((topRankedTotalStudyTime % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (topRankedTotalStudyTime % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  // 다음 등급까지 남은 공부시간
+  const nextRankTime = (nextGradeRemainingTime) => {
+    const hours = Math.floor(nextGradeRemainingTime / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((nextGradeRemainingTime % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (nextGradeRemainingTime % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   // 공부시간 비교
   const compareRecentAndPreviousValues = () => {
     if (Object.keys(weeklyStudyChart).length >= 2) {
@@ -167,218 +207,170 @@ function Mypage({ onClose }) {
   };
 
   // modal을 이용한 방입장 및 취소
-  const openJoinModal = () => {
-    setIsJoinModalOpen(true);
+  const openModalDday = () => {
+    setIsModalDdayOpen(true);
   };
 
-  const closeJoinModal = () => {
-    setIsJoinModalOpen(false);
+  const closeModalDday = () => {
+    setIsModalDdayOpen(false);
   };
 
-  // 페이지네이션
-  const nextpageHandler = () => {
-    setPage(page + 1);
+  // const handleDdayChange = (ddayValue) => {
+  //   setDday(ddayValue);
+  // };
+
+  const handleClick = () => {
+    setShowChild(true);
   };
-  const prevpageHandler = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
+
+  const handleDdayListChange = (list) => {
+    setDdayList(list);
   };
 
   return (
-    <StMainContainer>
-      <StHeaderContainer>
-        <StHeaderLeft></StHeaderLeft>
+    <>
+      <div>
+        {isModalDdayOpen && (
+          <ModalDday onClose={closeModalDday} onDdayChange={handleDdayListChange} />
+        )}
+      </div>
+      <StMainContainer>
+        <StHeaderContainer>
+          <StHeaderLeft></StHeaderLeft>
 
-        <StHeaderMain>
-          <StHeaderMainContainer>
-            <StHeaderUserNameContainer>
-              <StHeaderUserName>Hello, {token ? nickname : 'Guest!'}!</StHeaderUserName>
-              <StHeaderUserIntro>나의 모든 공부 데이터 모아보기</StHeaderUserIntro>
-            </StHeaderUserNameContainer>
+          <StHeaderMain>
+            <StHeaderMainContainer>
+              <StHeaderUserNameContainer>
+                <StHeaderUserName>Hello, {token ? nickname : 'Guest!'}!</StHeaderUserName>
+                <StHeaderUserIntro>나의 모든 공부 데이터 모아보기</StHeaderUserIntro>
+              </StHeaderUserNameContainer>
 
-            <StHeaderDdayProfile>
-              <StHeaderDday>{token ? 'D-100' : 'D-00'}</StHeaderDday>
+              <StHeaderDdayProfile>
+                <StHeaderDdayCon>
+                  <StHeaderDday>{token ? 'D-100' : 'D-00'}</StHeaderDday>
+                  <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp>
+                  {/* <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
+                  {showChild && <DdayList />} */}
+                </StHeaderDdayCon>
 
-              <StHeaderProfile>
-                <StHeaderProfileImg src={profileLogo} alt="오류" />
-              </StHeaderProfile>
-            </StHeaderDdayProfile>
-          </StHeaderMainContainer>
-        </StHeaderMain>
-      </StHeaderContainer>
+                <StHeaderProfile>
+                  <StHeaderProfileImg src={profileLogo} alt="오류" />
+                </StHeaderProfile>
+              </StHeaderDdayProfile>
+            </StHeaderMainContainer>
+          </StHeaderMain>
+        </StHeaderContainer>
 
-      <StContentContainer>
-        <StContentLeft></StContentLeft>
+        <StContentContainer>
+          <StContentLeft></StContentLeft>
 
-        <StContentMain>
-          <StContentMainContainerT>
-            <StContentMainTotalTime>
-              <StContentMainTotalTimeLayout>
-                <StContentMainTotalTimeHead>
-                  <StContentMainTotalTimeTitel>
-                    <StContentMainTotalTimeText>공부한 시간</StContentMainTotalTimeText>
+          <StContentMain>
+            <StContentMainContainerT>
+              <StContentMainTotalTime>
+                <StContentMainTotalTimeLayout>
+                  <StContentMainTotalTimeHead>
+                    <StContentMainTotalTimeTitel>
+                      <StContentMainTotalTimeText>공부한 시간</StContentMainTotalTimeText>
 
-                    <StContentMainTotalTimeText2>
-                      {currentDate}
-                    </StContentMainTotalTimeText2>
-                  </StContentMainTotalTimeTitel>
-                </StContentMainTotalTimeHead>
+                      <StContentMainTotalTimeText2>
+                        {currentDate}
+                      </StContentMainTotalTimeText2>
+                    </StContentMainTotalTimeTitel>
+                  </StContentMainTotalTimeHead>
 
-                <StContentMainTotalTimeBody>
-                  <StContentMainTotalTimeView>
-                    <StContentMainTotalTimeViewT>
-                      {dailyTime(dailyStudyTime)}
-                    </StContentMainTotalTimeViewT>
-                  </StContentMainTotalTimeView>
+                  <StContentMainTotalTimeBody>
+                    <StContentMainTotalTimeView>
+                      <StContentMainTotalTimeViewT>
+                        {dailyTime(dailyStudyTime)}
+                      </StContentMainTotalTimeViewT>
+                    </StContentMainTotalTimeView>
 
-                  <StContentMainTotalTimerLayout>
-                    <StContentMainTotalTimerTitle>
-                      총 공부 시간
-                    </StContentMainTotalTimerTitle>
-                    <StContentMainTotalTimer>
-                      {totalTime(totalStudyTime)}
-                    </StContentMainTotalTimer>
+                    <StContentMainTotalTimerLayout>
+                      <StContentMainTotalTimerTitle>
+                        총 공부 시간
+                      </StContentMainTotalTimerTitle>
+                      <StContentMainTotalTimer>
+                        {totalTime(totalStudyTime)}
+                      </StContentMainTotalTimer>
 
-                    <StContentMainTotalTimerTitle>
-                      이번주 공부 시간
-                    </StContentMainTotalTimerTitle>
-                    <StContentMainTotalTimer>
-                      {weeklyTime(weeklysum)}
-                    </StContentMainTotalTimer>
-                    <StContentMainTotalTimerTitle>{result}</StContentMainTotalTimerTitle>
-                  </StContentMainTotalTimerLayout>
-                </StContentMainTotalTimeBody>
-              </StContentMainTotalTimeLayout>
-            </StContentMainTotalTime>
+                      <StContentMainTotalTimerTitle>
+                        이번주 공부 시간
+                      </StContentMainTotalTimerTitle>
+                      <StContentMainTotalTimer>
+                        {weeklyTime(weeklysum)}
+                      </StContentMainTotalTimer>
+                      <StContentMainTotalTimerTitle>
+                        {result}
+                      </StContentMainTotalTimerTitle>
+                    </StContentMainTotalTimerLayout>
+                  </StContentMainTotalTimeBody>
+                </StContentMainTotalTimeLayout>
+              </StContentMainTotalTime>
 
-            <StContentMainTodoList>
-              <StContentMainTodoListTitle>
-                현재 페이지 <br /> 준비중입니다.
-              </StContentMainTodoListTitle>
-            </StContentMainTodoList>
-          </StContentMainContainerT>
+              <JoinStudyRoom />
+            </StContentMainContainerT>
 
-          <StContentMainContainerB>
-            <StContentMainStatistics>
-              <StContentMainStatisticsTitleH>
-                <StContentMainStatisticsTitl>통계</StContentMainStatisticsTitl>
+            <StContentMainContainerB>
+              <StContentMainStatistics>
+                <StContentMainStatisticsTitleH>
+                  <StContentMainStatisticsTitl>통계</StContentMainStatisticsTitl>
 
-                <StContentMainStatisticsTitlBox>
-                  <StContentMainStatisticsTitlBoxList
-                    onClick={() => handlePeriodChange('1D')}
-                  >
-                    1D
-                  </StContentMainStatisticsTitlBoxList>
-                  <StContentMainStatisticsTitlBoxList2
-                    onClick={() => handlePeriodChange('1W')}
-                  >
-                    1W
-                  </StContentMainStatisticsTitlBoxList2>
-                  <StContentMainStatisticsTitlBoxList3
-                    onClick={() => handlePeriodChange('1M')}
-                  >
-                    1M
-                  </StContentMainStatisticsTitlBoxList3>
-                </StContentMainStatisticsTitlBox>
-              </StContentMainStatisticsTitleH>
+                  <StContentMainStatisticsTitlBox>
+                    <StContentMainStatisticsTitlBoxList
+                      onClick={() => handlePeriodChange('1D')}
+                    >
+                      1D
+                    </StContentMainStatisticsTitlBoxList>
+                    <StContentMainStatisticsTitlBoxList2
+                      onClick={() => handlePeriodChange('1W')}
+                    >
+                      1W
+                    </StContentMainStatisticsTitlBoxList2>
+                    <StContentMainStatisticsTitlBoxList3
+                      onClick={() => handlePeriodChange('1M')}
+                    >
+                      1M
+                    </StContentMainStatisticsTitlBoxList3>
+                  </StContentMainStatisticsTitlBox>
+                </StContentMainStatisticsTitleH>
 
-              <StContentMainStatisticsGraph>
-                <Graph
-                  token={token}
-                  dailyStudyChart={dailyStudyChart}
-                  monthlyStudyChart={monthlyStudyChart}
-                  weeklyStudyChart={weeklyStudyChart}
-                  selectedGraph={selectedGraph}
-                />
-              </StContentMainStatisticsGraph>
+                <StContentMainStatisticsGraph>
+                  <Graph
+                    token={token}
+                    dailyStudyChart={dailyStudyChart}
+                    monthlyStudyChart={monthlyStudyChart}
+                    weeklyStudyChart={weeklyStudyChart}
+                    selectedGraph={selectedGraph}
+                  />
+                </StContentMainStatisticsGraph>
 
-              <StContentMainStatisticsSub>
-                {/* <StContentMainStatisticsSubT></StContentMainStatisticsSubT> */}
-              </StContentMainStatisticsSub>
-            </StContentMainStatistics>
+                {/* <StContentMainStatisticsSub>
+                  <StContentMainStatisticsSubT></StContentMainStatisticsSubT>
+                </StContentMainStatisticsSub> */}
+              </StContentMainStatistics>
 
-            <StContentMainSubContainer>
-              <StContentMainTitelRank>
-                <StContentMainTitel>
-                  <StContentMainMyTitel>내 칭호</StContentMainMyTitel>
+              <StContentMainSubContainer>
+                <StContentMainTitelRank>
+                  <StudyTitle
+                    nextRankTime={nextRankTime}
+                    nextGradeRemainingTime={nextGradeRemainingTime}
+                    title={title}
+                  />
 
-                  <StContentMainTitelName>
-                    <img src={sprout} alt="오류" />
-                    &nbsp; 공부 초보
-                  </StContentMainTitelName>
+                  <Rank
+                    totalRankTime={totalRankTime}
+                    topRankedNickname={topRankedNickname}
+                    topRankedTotalStudyTime={topRankedTotalStudyTime}
+                  />
+                </StContentMainTitelRank>
 
-                  <StContentMainTitelEx>
-                    <StContentMainTitelNextEx>다음 등급</StContentMainTitelNextEx>
-                    <StContentMainTitelNextAro>
-                      <img src={Arrow} alt="오류" />
-                    </StContentMainTitelNextAro>
-                    <StContentMainTitelNextTime>00:00:00</StContentMainTitelNextTime>
-                  </StContentMainTitelEx>
-                </StContentMainTitel>
-
-                <StContentMainRank>
-                  <StContentMainRankTitle>???</StContentMainRankTitle>
-
-                  <StContentMainRankName>
-                    <img src={Crown} alt="오류" />
-                    &nbsp; 랭킹 유저명
-                  </StContentMainRankName>
-
-                  <StContentMainRankEx>
-                    <StContentMainRankNextAro>
-                      <img src={Arrow} alt="오류" />
-                    </StContentMainRankNextAro>
-                    <StContentMainRankTime>00:00:00</StContentMainRankTime>
-                  </StContentMainRankEx>
-                </StContentMainRank>
-              </StContentMainTitelRank>
-
-              <StContentMainSubStudyRoom>
-                <StContentMainSubStudyRoomTM>
-                  <StContentMainSubStudyRoomTitle>
-                    모집 중인 스터디
-                  </StContentMainSubStudyRoomTitle>
-                  <StContentMainSubStudyRoomMore
-                    onClick={() => {
-                      navigate('/main');
-                    }}
-                  >
-                    더보기
-                  </StContentMainSubStudyRoomMore>
-                </StContentMainSubStudyRoomTM>
-                {roomInfo
-                  .sort((a, b) => b.updatedAt - a.updatedAt)
-                  .map((item, index) => {
-                    if (index === 0) {
-                      return (
-                        <StContentMainSubStudyRoomList>
-                          <StContentMainSubStudyRoomName>
-                            {item.roomName}
-                          </StContentMainSubStudyRoomName>
-                          <StContentMainSubStudyRoomBtn onClick={openJoinModal}>
-                            입장하기
-                          </StContentMainSubStudyRoomBtn>
-                          {isJoinModalOpen && (
-                            <ModalPortal>
-                              <Joinmodal roomData={item} onClose={closeJoinModal} />
-                            </ModalPortal>
-                          )}
-                        </StContentMainSubStudyRoomList>
-                      );
-                    }
-                    return null;
-                  })}
-                <Pagination
-                  prevpageHandler={prevpageHandler}
-                  nextpageHandler={nextpageHandler}
-                />
-              </StContentMainSubStudyRoom>
-            </StContentMainSubContainer>
-          </StContentMainContainerB>
-        </StContentMain>
-      </StContentContainer>
-    </StMainContainer>
+                <RoomPagination />
+              </StContentMainSubContainer>
+            </StContentMainContainerB>
+          </StContentMain>
+        </StContentContainer>
+      </StMainContainer>
+    </>
   );
 }
 
@@ -393,23 +385,23 @@ const StMainContainer = styled.div`
 `;
 const StHeaderContainer = styled.div`
   width: 100%;
-  height: 254px;
+  height: 20%;
   display: flex;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderLeft = styled.div`
-  width: 332px;
-  height: 254px;
+  width: 10%;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderMain = styled.div`
-  width: calc(100% - 332px);
-  height: 254px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderMainContainer = styled.div`
-  width: 995px;
-  height: 254px;
+  width: 80%;
+  height: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -419,102 +411,120 @@ const StHeaderUserNameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 234px;
-  height: 75.39px;
-  margin-bottom: 48.39px;
+  width: 25%;
+  height: 38%;
+  margin-bottom: 4.1%;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderUserName = styled.div`
-  width: 250px;
-  height: 44px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 700;
-  font-size: 32px;
+  font-size: 2rem;
   line-height: 44px;
   color: #000000;
   margin: 0px 0px 9.39px 0px;
 `;
 const StHeaderUserIntro = styled.div`
-  width: 234px;
-  height: 22px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 120%;
   color: #9d9d9d;
 `;
 const StHeaderDdayProfile = styled.div`
-  width: 234px;
-  height: 75.39px;
+  width: 30%;
+  height: 38%;
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin-bottom: 48.39px;
   margin-right: 20px;
+  /* border: 1px solid #ff8d8d; */
+`;
+const StHeaderDdayCon = styled.div`
+  width: 100%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderDday = styled.div`
-  width: 89px;
-  height: 44px;
-  font-family: 'Noto Sans';
+  width: 100%;
+  height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 32px;
+  font-size: 2rem;
   line-height: 44px;
   color: #00573f;
+  /* border: 1px solid #ff8d8d; */
+`;
+const StHeaderDdayOp = styled.div`
+  width: 50%;
+  height: 50%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 19px;
+  text-decoration-line: underline;
+  color: #848484;
+  margin: 0px 0px 10px 13px;
+  cursor: pointer;
 `;
 const StHeaderProfile = styled.div`
-  width: 46.67px;
-  height: 46.67px;
-  margin-left: 90px;
+  width: 30%;
+  height: 60%;
+  margin-left: 50px;
 `;
 const StHeaderProfileImg = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: 100%;
   /* background: #9d9d9d; */
 `;
 const StContentContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 254px);
+  height: 80%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentLeft = styled.div`
-  width: 332px;
-  height: calc(100vh - 254px);
+  width: 10%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMain = styled.div`
-  width: calc(100% - 332px);
-  height: calc(100vh - 254px);
+  width: 80%;
+  margin-left: 8%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainContainerT = styled.div`
-  width: 100%;
-  height: 345px;
+  width: 80%;
+  height: 45%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTime = styled.div`
   box-sizing: border-box;
-  width: 587px;
-  height: 345px;
+  width: 60%;
   background: #ffffff;
   border: 1px solid #bfbfbf;
   border-radius: 12px;
-  margin-right: 13px;
+  margin-right: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeLayout = styled.div`
-  width: 550px;
-  height: 303px;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeHead = styled.div`
-  width: 550px;
-  height: 63px;
+  width: 90%;
+  height: 15%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -524,158 +534,140 @@ const StContentMainTotalTimeTitel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180.19px;
-  height: 27px;
+  width: 45%;
+  height: 70%;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeText = styled.div`
-  width: 98px;
-  height: 27px;
-  font-family: 'Noto Sans';
+  width: 50%;
+  height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 27px;
   color: #000000;
+  margin-right: 7%;
 `;
 const StContentMainTotalTimeText2 = styled.div`
-  width: 76px;
-  height: 19px;
-  font-family: 'Noto Sans';
+  width: 40%;
+  height: 80%;
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 19px;
   color: #848484;
 `;
 const StContentMainTotalTimeBody = styled.div`
-  width: 550px;
-  height: 240px;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeView = styled.div`
-  width: 360px;
-  height: 210px;
-  background: #eaeaea;
+  width: 100%;
+  height: 80%;
+  background: #d9efe9;
   border-radius: 14.266px;
   margin-right: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeViewT = styled.div`
-  width: 129px;
-  height: 44px;
-  font-family: 'Noto Sans';
+  width: 42%;
+  height: 23%;
   font-style: normal;
   font-weight: 700;
-  font-size: 32px;
+  font-size: 2rem;
   line-height: 44px;
   color: #303031;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimerLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 150px;
-  height: 202.27px;
+  width: 40%;
+  height: 82%;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimerTitle = styled.div`
-  width: 150px;
-  height: 20px;
-  font-family: 'Noto Sans';
+  width: 100%;
+  height: 9%;
   font-style: normal;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 0.938rem;
   line-height: 20px;
   color: #747475;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimer = styled.div`
-  width: 150px;
-  height: 35px;
-  font-family: 'Noto Sans';
+  width: 100%;
+  height: 18%;
   font-style: normal;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 1.625rem;
   line-height: 35px;
   color: #303031;
-  margin: 7px 0px 19px 0px;
-`;
-const StContentMainTodoList = styled.div`
-  box-sizing: border-box;
-  width: 395px;
-  height: 345px;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const StContentMainTodoListTitle = styled.div`
-  width: 117px;
-  height: 54px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 27px;
-  text-align: center;
-  color: #e8e8e8e8;
+  margin: 7px 0px 17px 0px;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainContainerB = styled.div`
-  width: 100%;
-  height: 395px;
+  width: 80%;
+  height: 45%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatistics = styled.div`
   box-sizing: border-box;
-  width: 530px;
-  height: 296px;
+  width: 50%;
+  height: 90%;
   background: #ffffff;
   border: 1px solid #bfbfbfbf;
   border-radius: 12px;
-  margin: 13px 13px 0px 0px;
+  margin: 1% 1% 0% 0%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitleH = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 479.36px;
-  height: 29.36px;
+  width: 100%;
+  height: 10%;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitl = styled.div`
-  width: 37px;
-  height: 27px;
-  font-family: 'Noto Sans';
+  width: 9%;
+  height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 27px;
   color: #303031;
   margin-right: 45px;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitlBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 236.89px;
-  height: 29.36px;
+  width: 53%;
+  height: 100%;
   background: #f4f4f4;
   border-radius: 3.34103px;
   margin-right: 8px;
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitlBoxList = styled.div`
-  width: 16px;
-  height: 16px;
-  font-family: 'Noto Sans';
+  width: 6%;
+  height: 50%;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -683,17 +675,16 @@ const StContentMainStatisticsTitlBoxList = styled.div`
   color: #848484;
   cursor: pointer;
   &:hover {
-    width: 50px;
-    height: 16px;
+    width: 20%;
+    height: 50%;
     padding: 0px 0px 0px 18px;
     margin: 0px -15px 0px -18px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsTitlBoxList2 = styled.div`
-  width: 16px;
-  height: 16px;
-  font-family: 'Noto Sans';
+  width: 6%;
+  height: 50%;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -701,17 +692,16 @@ const StContentMainStatisticsTitlBoxList2 = styled.div`
   color: #848484;
   cursor: pointer;
   &:hover {
-    width: 50px;
-    height: 16px;
+    width: 20%;
+    height: 50%;
     padding: 0px 0px 0px 16px;
     margin: 0px -20px 0px -18px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsTitlBoxList3 = styled.div`
-  width: 16px;
-  height: 16px;
-  font-family: 'Noto Sans';
+  width: 6%;
+  height: 50%;
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -719,26 +709,28 @@ const StContentMainStatisticsTitlBoxList3 = styled.div`
   color: #848484;
   cursor: pointer;
   &:hover {
-    width: 50px;
-    height: 16px;
+    width: 20%;
+    height: 50%;
     padding: 0px 0px 0px 16px;
     margin: 0px -18px 0px -15px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsGraph = styled.div`
-  width: 479.36px;
-  height: 172.9px;
+  width: 100%;
+  height: 63%;
   margin: 20px 0px 14px 0px;
   display: flex;
   justify-content: center;
   /* background: #eaeaea; */
+  /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsSub = styled.div`
   display: flex;
   align-items: flex-start;
   width: 164.55px;
   height: 16px;
+  /* border: 1px solid #8cacff; */
 `;
 // const StContentMainStatisticsSubT = styled.div`
 //   display: flex;
@@ -748,215 +740,16 @@ const StContentMainStatisticsSub = styled.div`
 //   background: #f8f8f8;
 // `;
 const StContentMainSubContainer = styled.div`
-  width: 452px;
-  height: 296px;
+  width: 50%;
+  height: 90%;
   display: flex;
   flex-direction: column;
-  margin-top: 13px;
+  margin-top: 1%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelRank = styled.div`
-  width: 452px;
-  height: 123px;
+  width: 100%;
+  height: 50%;
   display: flex;
   /* border: 1px solid #8cacff; */
-`;
-const StContentMainTitel = styled.div`
-  box-sizing: border-box;
-  width: 220px;
-  height: 123px;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 12px;
-  margin-right: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const StContentMainMyTitel = styled.div`
-  width: 37px;
-  height: 16px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  color: #848484;
-  margin-left: 25px;
-`;
-const StContentMainTitelName = styled.div`
-  width: 95px;
-  height: 25px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 25px;
-  color: #303031;
-  margin: 7px 0px 7px 25px;
-`;
-const StContentMainTitelEx = styled.div`
-  display: flex;
-  align-items: baseline;
-  width: 162px;
-  height: 19px;
-`;
-const StContentMainTitelNextEx = styled.div`
-  width: 81px;
-  height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #848484;
-  margin-left: 25px;
-`;
-const StContentMainTitelNextAro = styled.div`
-  box-sizing: border-box;
-  width: 10px;
-  height: 0px;
-  margin: 0px 8px 0px 9px;
-  //div -> img 변경
-`;
-const StContentMainTitelNextTime = styled.div`
-  width: 56px;
-  height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #90b54c;
-`;
-const StContentMainRank = styled.div`
-  box-sizing: border-box;
-  width: 220px;
-  height: 123px;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-const StContentMainRankTitle = styled.div`
-  width: 59px;
-  height: 16px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  color: #848484;
-  margin-left: 25px;
-`;
-const StContentMainRankName = styled.div`
-  width: 118px;
-  height: 25px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 25px;
-  color: #303031;
-  margin: 7px 0px 7px 25px;
-`;
-const StContentMainRankEx = styled.div`
-  width: 81px;
-  height: 19px;
-  margin-left: 25px;
-  display: flex;
-  align-items: baseline;
-`;
-const StContentMainRankNextAro = styled.div`
-  box-sizing: border-box;
-  width: 10px;
-  height: 0px;
-  margin: 0px 8px 0px 0px;
-  //div -> img 변경
-`;
-const StContentMainRankTime = styled.div`
-  width: 56px;
-  height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #90b54c;
-`;
-const StContentMainSubStudyRoom = styled.div`
-  box-sizing: border-box;
-  width: 452px;
-  height: 160px;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 12px;
-  margin-top: 13px;
-  display: flex;
-  flex-direction: column;
-`;
-const StContentMainSubStudyRoomTM = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-const StContentMainSubStudyRoomTitle = styled.div`
-  width: 140px;
-  height: 27px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 27px;
-  color: #000000;
-  margin: 19px 0px 12px 25px;
-`;
-const StContentMainSubStudyRoomMore = styled.div`
-  width: 39px;
-  height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #848484;
-  text-decoration-line: underline;
-  margin: 19px 26px 12px 0px;
-  cursor: pointer;
-`;
-const StContentMainSubStudyRoomList = styled.div`
-  width: 401px;
-  height: 54px;
-  background: rgba(144, 181, 76, 0.2);
-  border-radius: 12px;
-  margin-left: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-const StContentMainSubStudyRoomName = styled.div`
-  width: 108px;
-  height: 19px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 19px;
-  color: #000000;
-  margin: 0px 0px 0px 23.57px;
-`;
-const StContentMainSubStudyRoomBtn = styled.button`
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 104px;
-  height: 40px;
-  background: #fefefefe;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 30px;
-  margin-right: 10px;
 `;
