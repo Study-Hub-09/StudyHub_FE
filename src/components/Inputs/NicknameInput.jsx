@@ -55,7 +55,6 @@ function NicknameInput({
             width="82px"
             height="36px"
             border="var(--color-gray)"
-            padding="8px 27px"
             borderradius="47px"
             onClick={onClick}
             disabled={isButtonDisabled}

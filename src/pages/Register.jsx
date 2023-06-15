@@ -540,7 +540,6 @@ function Register() {
               <Button
                 width="156px"
                 height="48px"
-                padding="14px 50px"
                 border="var(--color-gray)"
                 borderradius="30px"
               >
