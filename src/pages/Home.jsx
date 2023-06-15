@@ -27,13 +27,13 @@ function Home() {
           <h3>한눈에 보이는 시간관리</h3>
           <h1>타이머로 한눈에 하루 공부시간 알아보기</h1>
           <p>
-            하루에 얼마나 목표달성을 위해 노력했는지, 얼마나 꾸준히 지켜나갔는지,
-            <br /> 매일, 매 주, 매 달의 성취 시간을 분석해서 통계를 확인해줘요.
+            하루에 얼마나 목표달성을 위해 노력했는지, 얼마나 꾸준히 지켜나갔는지, 매일, 매
+            주, 매 달의 성취 시간을 분석해서 통계를 확인해줘요.
           </p>
         </StSectionDescription>
       </Section>
       <Section height="780px">
-        <StSectionDescription width="446px">
+        <StSectionDescription width="446px" pwidth="353px">
           <h3>귀여운 칭호로 의욕UP!</h3>
           <h1>목표를 정하고 한 발 나아간 나를 위한 지표</h1>
           <p>
