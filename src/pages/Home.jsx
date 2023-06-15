@@ -19,10 +19,10 @@ function Home() {
             성취를 이뤄낼 수 있을거에요.
           </p>
         </StSectionDescription>
-        <img src={section1_rooms} alt="" />
+        <img src={section1_rooms} alt="Study Rooms and Categories List" />
       </Section>
       <Section height="688px" backgroundcolor="var(--color-yellow)">
-        <img src={section2_graph} alt="" />
+        <img src={section2_graph} alt="My Study Timer Graph" />
         <StSectionDescription width="450px" textalign="right">
           <h3>한눈에 보이는 시간관리</h3>
           <h1>타이머로 한눈에 하루 공부시간 알아보기</h1>
@@ -41,7 +41,7 @@ function Home() {
             의욕적으로 나아가요.
           </p>
         </StSectionDescription>
-        <img src={section3_level} alt="" />
+        <img src={section3_level} alt="My Study Hub Title" />
       </Section>
     </div>
   );
