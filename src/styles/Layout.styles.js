@@ -14,6 +14,7 @@ export const StHomeLayoutContainer = styled.div`
 export const StHomeLayoutBox = styled.div`
   border: 1px solid red;
   width: 100%;
+  max-width: 1200px;
   height: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -50,7 +51,7 @@ export const StHeaderRegister = styled.div`
 
 export const StHeroLayoutContainer = styled.div`
   width: 100%;
-  height: 985px;
+  height: 980px;
   background-image: url(${herobg});
   background-repeat: no-repeat;
   background-size: cover;
