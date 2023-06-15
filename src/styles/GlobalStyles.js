@@ -45,10 +45,10 @@ export const GlobalStyles = createGlobalStyle`
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        font-family: 'Noto Sans KR', sans-serif;
     }
 
     body{
-        font-family: 'Noto Sans', sans-serif;
         background-color: var(--color-light-white);
         color: var(--color-black);
     }
