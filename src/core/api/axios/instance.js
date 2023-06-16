@@ -36,9 +36,20 @@ instance.interceptors.request.use(
 //HTTP 응답 가로채기
 instance.interceptors.response.use(
   // 응답을 보내기 전 수행되는 함수
-  (config) => {
-    console.log('INSTANCE RESPONSE SUCCESS======> ', config);
-    return config;
+  (response) => {
+    console.log('INSTANCE RESPONSE SUCCESS======> ', response);
+    const {
+      status: statusCode,
+      data: { message: responseMessage, data: nickname },
+    } = response;
+    if (statusCode === 200 && responseMessage === '로그인 성공') {
+      const accessToken = response.headers.get('access_token').split(' ')[1];
+      const refreshToken = response.headers.get('refresh_token').split(' ')[1];
+      setCookie('AccessToken', accessToken, { path: '/' });
+      setCookie('RefreshToken', refreshToken, { path: '/' });
+      localStorage.setItem('member', nickname);
+    }
+    return response;
   },
 
   // 오류 응답을 보내기 전 수행되는 함수
