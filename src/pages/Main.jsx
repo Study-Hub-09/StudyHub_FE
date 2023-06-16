@@ -31,7 +31,6 @@ function Main() {
     setfilterData({ category: selectCategory, keyword: search });
   }, [search, selectCategory]);
 
-  const searchData = useSearchData(url);
   const roomData = useRoomData(page);
   const objectToQueryString = (obj) => {
     let queryString = '';
@@ -51,10 +50,8 @@ function Main() {
     return queryString;
   };
 
-  useEffect(() => {
-    const queryString = objectToQueryString(filterData);
-    setUrl(`/api/main?page=${page}&${queryString}`);
-  }, [page, filterData]);
+  const queryString = objectToQueryString(filterData);
+  const searchData = useSearchData(page, queryString);
 
   if (roomData.isLoading) {
     return <p>로딩중입니다....!</p>;
@@ -151,7 +148,8 @@ function Main() {
                 )}
                 <Stfont>입장 가능한 방만 보기</Stfont>
                 <Stfont>
-                  분야 필터 <img src={allow} alt="" onClick={selectToggleHandler} />
+                  분야 필터
+                  <StCategoryButton src={allow} alt="" onClick={selectToggleHandler} />
                 </Stfont>
                 {isSelectOpen && <Selectbox handleCategory={handleCategory} />}
               </Stfilterbox>
@@ -370,4 +368,8 @@ const Stallowicon = styled.img`
 
 const Stfont = styled.div`
   font-family: 'Noto Sans';
+`;
+
+const StCategoryButton = styled.img`
+  cursor: pointer;
 `;
