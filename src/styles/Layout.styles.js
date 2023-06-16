@@ -111,6 +111,7 @@ export const StSectionDescription = styled.div`
   }
 
   p {
+    width: ${(props) => props.pwidth};
     font-weight: var(--weight-bold);
     font-size: 15px;
     text-align: ${(props) => props.textalign};

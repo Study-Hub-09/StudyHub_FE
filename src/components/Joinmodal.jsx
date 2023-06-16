@@ -7,66 +7,43 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
 import { getCookie } from '../Cookies/Cookies';
+import { createSession } from '../core/api/openvidu/openvidu';
+import lockimg from '../asset/lock.svg';
 
 function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
   const navigate = useNavigate();
   const token = getCookie('AccessToken');
+  const [roomPassword, setRoomPassword] = useState('');
 
   const joinbuttonHandler = async () => {
     const memberData = {
-      member: {
-        id: 0,
-        kakaoId: 0,
-        nickname: 'string',
-        email: 'string',
-        password: 'string',
-        totalStudyTime: {
-          seconds: 0,
-          nano: 0,
-          negative: true,
-          zero: true,
-          units: [
-            {
-              dateBased: true,
-              timeBased: true,
-              duration: {
-                seconds: 0,
-                nano: 0,
-                negative: true,
-                zero: true,
-              },
-              durationEstimated: true,
-            },
-          ],
-        },
-      },
-      enabled: true,
-      username: 'string',
-      authorities: [
-        {
-          authority: `Bearer`,
-        },
-      ],
-      password: 'string',
-      accountNonExpired: true,
-      accountNonLocked: true,
-      credentialsNonExpired: true,
+      roomPassword,
     };
-    console.log(roomData);
-    try {
-      // await joinRoom(roomData.sessionId, memberData);
-      if (token) {
-        navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
-      } else {
-        alert('로그인이 필요한 페이지입니다.');
-        navigate('/members/login');
-      }
-      onClose(false);
-    } catch (error) {
-      console.error('방 입장 중 오류가 발생했습니다', error);
+    // await joinRoom(roomData.sessionId, memberData);
+    if (token) {
+      // createSession(roomData.sessionId)
+      //   .then((response) => {
+      //     console.log('createSession 함수>>>>>>>>>', response);
+      //     if (response.status === 200) {
+      //       navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log('joinModalError>>>> ', error);
+      //   });
+      createSession(roomData.sessionId);
+      navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+    } else {
+      alert('로그인이 필요한 페이지입니다.');
+      navigate('/members/login');
     }
+    onClose(false);
   };
+  const categoryHashtag = roomData?.category
+    .split(',')
+    .map((tag) => `#${tag}`)
+    .join(' ');
 
   return (
     <Stcontainer
@@ -96,9 +73,25 @@ function Joinmodal({ onClose, roomData }) {
             </Stheadericon>
           </Stheaderbox>
           <Sttitle>{roomData?.roomName}</Sttitle>
-          <Stcategory>카테고리</Stcategory>
+          <Stcategory>{categoryHashtag}</Stcategory>
           <Stcontent>{roomData?.roomContent}</Stcontent>
           <Stjoinbuttonlayout>
+            {roomData.secret ? (
+              <>
+                <img src={lockimg} alt="" width={10} height={14} />
+                <StpasswordInput
+                  type="text"
+                  placeholder="1234"
+                  maxLength="5"
+                  value={roomPassword}
+                  onChange={(e) => {
+                    setRoomPassword(e.target.value);
+                  }}
+                />
+              </>
+            ) : (
+              ''
+            )}
             <Stjoinbutton onClick={joinbuttonHandler}>입장하기</Stjoinbutton>
           </Stjoinbuttonlayout>
         </StLayout>
@@ -185,7 +178,6 @@ const StroomCount = styled.div`
 const Stjoinbuttonlayout = styled.div`
   display: flex;
   align-items: center;
-  display: flex;
   justify-content: end;
 `;
 
@@ -202,8 +194,19 @@ const Stjoinbutton = styled.button`
   background-color: #fefefe;
   color: #00574f;
   border: 1px solid #bfbfbf;
+  margin-left: 17px;
   &:hover {
     background-color: #00574f;
     color: #fefefe;
   }
+`;
+
+const StpasswordInput = styled.input`
+  width: 68px;
+  height: 32px;
+  background-color: #ffffff;
+  border-radius: 7px;
+  padding-left: 14px;
+  border: 1px solid #9d9d9d;
+  margin-left: 14px;
 `;

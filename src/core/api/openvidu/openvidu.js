@@ -5,9 +5,10 @@ import { openviduapi } from '../axios/openviduapi';
 const createSession = async (sessionId) => {
   try {
     const response = await instance.post(`api/rooms/${sessionId}/enter`);
-    return response.data;
+    return response;
   } catch (error) {
     console.error('인터넷 요청이 실패했습니다: enterRoomSession');
+    throw error;
   }
 };
 
@@ -21,6 +22,7 @@ const createToken = async (sessionId) => {
     return response.data.token;
   } catch (error) {
     console.error('인터넷 요청이 실패했습니다: createToken');
+    throw error;
   }
 };
 
@@ -35,6 +37,7 @@ const exitRoom = async (studyTime, sessionId) => {
     return response;
   } catch (error) {
     console.log('leaveSession ERROR ====> ', error);
+    throw error;
   }
 };
 

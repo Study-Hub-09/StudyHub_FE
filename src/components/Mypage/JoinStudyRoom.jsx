@@ -48,7 +48,11 @@ function JoinStudyRoom() {
                       {item.roomName}
                     </StContentMainTodoListRoomNa>
                     <StContentMainTodoListRoomCa>
-                      {item.category}
+                      {item.category &&
+                        item.category
+                          .split(',')
+                          .map((tag) => `#${tag}`)
+                          .join(' ')}
                     </StContentMainTodoListRoomCa>
                   </StContentMainTodoListRoomNaCa>
 

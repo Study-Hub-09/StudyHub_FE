@@ -13,8 +13,7 @@ import view from '../asset/view.svg';
 import Vector from '../asset/Vector.svg';
 import { getCookie } from '../Cookies/Cookies';
 import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
-import { createToken, createSession, exitRoom } from '../core/api/openvidu/openvidu';
-import { instance } from '../core/api/axios/instance';
+import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
@@ -30,27 +29,22 @@ function Room() {
 
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
-    myUserName: 'Participant' + Math.floor(Math.random() * 100),
     session: undefined,
     mainStreamManager: undefined,
     publisher: undefined,
     subscribers: [],
   });
 
-  const { mySessionId, myUserName, mainStreamManager, publisher, subscribers, session } =
-    state;
-
   const [ischatOpen, setisChatOpen] = useState(false);
+  const [chatDatas, setChatDatas] = useState([]);
+  const [message, setMessage] = useState('');
 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
 
-  const [chatDatas, setChatDatas] = useState([]);
-  const [message, setMessage] = useState('');
-
   const [studyTime, setStudyTime] = useState(null);
 
-  const [isConnected, setIsConnected] = useState(false);
+  const { mySessionId, mainStreamManager, publisher, subscribers, session } = state;
 
   const onChangeMessageHandler = (e) => {
     setMessage(e.target.value);
@@ -70,43 +64,23 @@ function Room() {
     publisher.publishVideo(!videoEnabled);
   };
 
-  const handlePopState = async () => {
-    await leaveSession();
-    // 원래 이벤트 처리를 원하는 경우 뒤로 가기 처리
-    // window.history.back();
-  };
-
-  const onbeforeunload = () => {
-    leaveSession();
-  };
-
-  useEffect(() => {
-    // 페이지를 빠져나갈 때 세션을 떠난다.
-    window.addEventListener('beforeunload', onbeforeunload);
-
-    // 뒤로 가기 이벤트 처리
-    // window.addEventListener('popstate', () => handlePopState(roomData.sessionId));
-    window.addEventListener('popstate', async () => {
-      await handlePopState(roomData.sessionId);
-    });
-
-    // Cleanup 함수 처리
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunload);
-      window.removeEventListener('popstate', () => handlePopState(roomData.sessionId));
-    };
-  }, []);
-
   const handleMainVideoStream = (stream) => {
     if (mainStreamManager !== stream) {
       setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
     }
   };
 
+  window.onpopstate = () => {
+    leaveSession(studyTime, mySessionId);
+  };
+
+  // window.onbeforeunload = () => {
+  //   navigate('/main', { replace: true });
+  // };
+
   // 세션 입장을 위해 필요한 토큰을 가져오기
   const getToken = async () => {
     try {
-      createSession(mySessionId);
       const response = await createToken(mySessionId);
       return response;
     } catch (error) {
@@ -114,6 +88,7 @@ function Room() {
     }
   };
 
+  // 구독자 삭제 함수
   const deleteSubscriber = (streamManager) => {
     setState((prevState) => {
       const updatedSubscribers = prevState.subscribers.filter(
@@ -123,51 +98,11 @@ function Room() {
     });
   };
 
-  // 세션 연결 함수
-  const connectSession = async () => {
-    try {
-      const token = await getToken();
-      await session.connect(token, { clientData: getUserName });
-      connectClient(mySessionId, getChattingData);
-
-      const publisher = await OV.current.initPublisherAsync(undefined, {
-        audioSource: undefined,
-        videoSource: undefined,
-        publishAudio: audioEnabled,
-        publishVideo: videoEnabled,
-        resolution: '1920x1080',
-        frameRate: 60,
-        insertMode: 'APPEND',
-        mirror: true,
-      });
-
-      session.publish(publisher);
-
-      const devices = await OV.current.getDevices();
-      const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-      const currentVideoDeviceId = publisher.stream
-        .getMediaStream()
-        .getVideoTracks()[0]
-        .getSettings().deviceId;
-      const currentVideoDevice = videoDevices.find(
-        (device) => device.deviceId === currentVideoDeviceId
-      );
-
-      setState((prevState) => ({
-        ...prevState,
-        currentVideoDevice: currentVideoDevice,
-        mainStreamManager: publisher,
-        publisher: publisher,
-      }));
-    } catch (error) {
-      console.log('세션에 연결하는 중 오류가 발생했습니다:', error.code, error.message);
-    }
-  };
-
   // 룸 입장 함수
   const joinSession = () => {
     OV.current = new OpenVidu();
-    const mySession = OV.current.initSession();
+    const session = OV.current.initSession();
+    const mySession = session;
 
     mySession.on('streamCreated', (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
@@ -190,9 +125,10 @@ function Room() {
       session: mySession,
     }));
 
-    //채팅 연결 함수
+    // 룸 채팅 연결
     connectClient(mySessionId, getChattingData);
 
+    // 룸 세션 연결
     getToken().then((token) => {
       mySession
         .connect(token, { clientData: getUserName })
@@ -226,7 +162,7 @@ function Room() {
             mainStreamManager: publisher,
             publisher: publisher,
           }));
-          setIsConnected(true);
+          // setIsConnected(true);
         })
         .catch((error) => {
           console.log(
@@ -238,6 +174,7 @@ function Room() {
     });
   };
 
+  // 메시지 보내는 함수
   const sendMessageHandler = (e) => {
     e.preventDefault();
     sendMessage({
@@ -249,6 +186,7 @@ function Room() {
     setMessage('');
   };
 
+  // 서버에서 받는 채팅 데이터
   const getChattingData = (data) => {
     const newData = JSON.parse(data.body);
 
@@ -264,24 +202,24 @@ function Room() {
     });
   };
 
-  const leaveSession = () => {
+  // 룸 세션 나가기 함수
+  const leaveSession = async (studyTime, mySessionId) => {
     if (session) {
-      exitRoom(studyTime, mySessionId)
-        .then((response) => {
-          const {
-            status: statusCode,
-            data: { message },
-          } = response;
-          if (statusCode === 200 && message === '스터디 룸 퇴장 성공') {
-            session.unpublish(mainStreamManager);
-            session.disconnect();
-            disconnectClient();
-            navigate('/main');
-          }
-        })
-        .catch((error) => {
-          console.log('퇴장 실패:', error);
-        });
+      try {
+        const response = await exitRoom(studyTime, mySessionId);
+        const {
+          status: statusCode,
+          data: { message },
+        } = response;
+        if (statusCode === 200 && message === '스터디 룸 퇴장 성공') {
+          session.unpublish(mainStreamManager);
+          session.disconnect(); // 세션 종료
+          disconnectClient(); // 채팅 종료
+          navigate('/main');
+        }
+      } catch (error) {
+        console.log('퇴장 실패:', error);
+      }
     }
     OV.current = null;
     setState({
@@ -296,24 +234,11 @@ function Room() {
 
   useEffect(() => {
     if (token) {
-      console.log('<<<마운트>>>');
-      if (isConnected) {
-        leaveSession();
-      }
       joinSession();
     } else {
+      alert('로그인 후 이용 가능한 페이지입니다');
       navigate('/members/login');
     }
-
-    // beforeunload 이벤트 핸들러 등록
-    window.addEventListener('beforeunload', onbeforeunload);
-
-    // 컴포넌트 언마운트 시에 호출되는 함수
-    return () => {
-      console.log('<<<언마운트>>>');
-      leaveSession();
-      window.removeEventListener('beforeunload', onbeforeunload);
-    };
   }, []);
 
   return (
@@ -386,7 +311,11 @@ function Room() {
               />
               <Sticon src={view} alt="" />
               <Sticon src={setting} alt="" />
-              <Sticon src={logout} alt="" onClick={() => leaveSession()} />
+              <Sticon
+                src={logout}
+                alt=""
+                onClick={() => leaveSession(studyTime, mySessionId)}
+              />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>
@@ -431,6 +360,7 @@ const size = {
 };
 
 const Stcontainer = styled.div`
+  background-color: #1e1e1e;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -486,6 +416,7 @@ const Sttitlebox = styled.div`
 `;
 
 const Sttitle = styled.div`
+  color: #b6b6b6;
   display: flex;
   flex: 1;
   flex-direction: column;

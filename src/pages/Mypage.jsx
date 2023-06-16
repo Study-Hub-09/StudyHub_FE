@@ -31,13 +31,12 @@ function Mypage({ onClose }) {
   const [topRankedTotalStudyTime, setTopRankedTotalStudyTime] = useState(0);
   const [nextGradeRemainingTime, setNextGradeRemainingTime] = useState(0);
   const [title, setTitle] = useState('');
+  const [topRankedTitle, setTopRankedTitle] = useState('');
   const [isModalDdayOpen, setIsModalDdayOpen] = useState(false);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
-
-  const roomInfo = data?.data.content;
 
   const userInfo = async () => {
     try {
@@ -55,6 +54,7 @@ function Mypage({ onClose }) {
         topRankedTotalStudyTime,
         nextGradeRemainingTime,
         title,
+        topRankedTitle,
       } = response.data.data;
 
       setDailyStudyChart(dailyStudyChart);
@@ -67,6 +67,7 @@ function Mypage({ onClose }) {
       setTopRankedTotalStudyTime(topRankedTotalStudyTime);
       setNextGradeRemainingTime(nextGradeRemainingTime);
       setTitle(title);
+      setTopRankedTitle(topRankedTitle);
       return response.data.data;
     } catch (error) {
       console.error('????error:', error);
@@ -363,6 +364,7 @@ function Mypage({ onClose }) {
                     totalRankTime={totalRankTime}
                     topRankedNickname={topRankedNickname}
                     topRankedTotalStudyTime={topRankedTotalStudyTime}
+                    topRankedTitle={topRankedTitle}
                   />
                 </StContentMainTitelRank>
 
@@ -425,6 +427,7 @@ const StHeaderUserName = styled.div`
   line-height: 44px;
   color: #000000;
   margin: 0px 0px 9.39px 0px;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderUserIntro = styled.div`
   font-style: normal;

@@ -2,14 +2,48 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Arrow from '../../assets/Images/Arrow 1.svg';
 import Seed from '../../assets/Icons/Seed.png';
+import Sprout from '../../assets/Icons/Sprout.png';
+import Sapling from '../../assets/Icons/Sapling.png';
+import Tree from '../../assets/Icons/Tree.png';
+import BigTree from '../../assets/Icons/BigTree.png';
+import CenturyTree from '../../assets/Icons/CenturyTree.png';
+import WorldTree from '../../assets/Icons/WorldTree.png';
 
-function Rank({ totalRankTime, topRankedNickname, topRankedTotalStudyTime, token }) {
+function Rank({
+  totalRankTime,
+  topRankedNickname,
+  topRankedTotalStudyTime,
+  token,
+  topRankedTitle,
+}) {
+  const getRankingImage = () => {
+    // 랭킹 이미지를 랭킹에 따라 매핑합니다.
+    if (token) {
+      if (topRankedTitle === '씨앗') {
+        return Seed;
+      } else if (topRankedTitle === '새싹') {
+        return Sprout;
+      } else if (topRankedTitle === '잎줄기') {
+        return Sapling;
+      } else if (topRankedTitle === '묘목') {
+        return Tree;
+      } else if (topRankedTitle === '나무') {
+        return BigTree;
+      } else if (topRankedTitle === '거목') {
+        return CenturyTree;
+      } else if (topRankedTitle === '세계수') {
+        return WorldTree;
+      }
+    }
+    return Seed;
+  };
+
   return (
     <StContentMainRank>
       <StContentMainRankTitle>전체 등급</StContentMainRankTitle>
 
       <StContentMainRankName>
-        <StContentMainRankImg src={Seed} alt="오류" />
+        <StContentMainRankImg src={getRankingImage()} alt="오류" />
         <StContentMainRankNic>
           {token ? topRankedNickname : '공부왕'}
         </StContentMainRankNic>

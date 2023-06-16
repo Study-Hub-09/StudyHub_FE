@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import Subtract from '../asset/Subtract.svg';
 import Vector from '../asset/Vector.svg';
@@ -10,28 +10,59 @@ import rightallow from '../asset/rightallow.svg';
 import studyhub from '../asset/studyhub.svg';
 import emptyRoom from '../asset/emptyarea.svg';
 import Modal from '../components/Modal';
-import { useQuery } from 'react-query';
-import { getRoom } from '../api/api';
 import Joinmodal from '../components/Joinmodal';
-import OpenviduComponent from '../components/Openvidu';
+import lockimg from '../asset/lock.svg';
+import Selectbox from '../components/Selectbox';
+import { useRoomData, useSearchData } from '../components/Customhook';
 
 function Main() {
   const [checked, setChecked] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isSelectOpen, setSelectOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [page, setPage] = useState(1);
-  const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
+  const [search, setSearch] = useState('');
+  const [selectCategory, setSelectCategory] = useState('');
+  const [url, setUrl] = useState('');
+  const [filterData, setfilterData] = useState('');
 
-  if (isLoading) {
+  useEffect(() => {
+    setfilterData({ category: selectCategory, keyword: search });
+  }, [search, selectCategory]);
+
+  const roomData = useRoomData(page);
+  const objectToQueryString = (obj) => {
+    let queryString = '';
+
+    Object.entries(obj).forEach(([key, value], index) => {
+      if (Array.isArray(value)) {
+        queryString += `${key}=${value.join(',')}`;
+      } else {
+        queryString += `${key}=${value}`;
+      }
+
+      if (index < Object.entries(obj).length - 1) {
+        queryString += '&';
+      }
+    });
+
+    return queryString;
+  };
+
+  const queryString = objectToQueryString(filterData);
+  const searchData = useSearchData(page, queryString);
+
+  if (roomData.isLoading) {
     return <p>로딩중입니다....!</p>;
   }
 
-  if (isError) {
+  if (roomData.isError) {
     return <p>오류가 발생하였습니다...!</p>;
   }
-
-  const roomData = data.data.content;
+  // undefined 일 시 빈배열 할당
+  const currentPageData = roomData.data?.currentPageData || [];
+  const nextPageData = roomData.data?.nextPageData || [];
 
   const checkBoxHandler = () => {
     setChecked(!checked);
@@ -40,21 +71,32 @@ function Main() {
   const modalToggleHandler = () => {
     setModalOpen(true);
   };
-
+  const selectToggleHandler = () => {
+    setSelectOpen(!isSelectOpen);
+  };
   const joinmodalToggleHandler = (id) => {
     setJoinModalOpen(true);
     setSelectedRoomId(id);
   };
 
   const nextpageHandler = () => {
-    setPage(page + 1);
+    if (nextPageData.length > 0) {
+      setPage(page + 1);
+    }
   };
   const prevpageHandler = () => {
     if (page > 1) {
       setPage(page - 1);
     }
   };
-  console.log(roomData);
+  // 하위컴포넌트에서 데이터를 가지고오는 코드
+  const handleCategory = (selectedOptions) => {
+    setSelectCategory(selectedOptions);
+  };
+
+  // 최종 데이터
+  let pageData = searchData?.data?.content ? searchData?.data?.content : currentPageData;
+
   return (
     <>
       <div>
@@ -67,7 +109,7 @@ function Main() {
         )}
         {joinModalOpen && (
           <Joinmodal
-            roomData={roomData.find((item) => item.sessionId === selectedRoomId)}
+            roomData={pageData.find((item) => item.sessionId === selectedRoomId)}
             onClose={() => {
               setJoinModalOpen(false);
             }}
@@ -83,11 +125,18 @@ function Main() {
             </StTitlebox>
             <StSearchbox>
               <StSearchicon src={Subtract} alt="" />
-              <StSearchinput type="text" placeholder="스터디방 이름 검색" />
+              <StSearchinput
+                type="text"
+                placeholder="스터디방 이름 검색"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
               <StButton onClick={modalToggleHandler}>스터디 만들기</StButton>
             </StSearchbox>
           </StTopline>
-          {roomData.length === 0 ? (
+          {pageData.length === 0 ? (
             <img src={emptyRoom} alt="" width={1020} height={599} />
           ) : (
             <>
@@ -99,11 +148,13 @@ function Main() {
                 )}
                 <Stfont>입장 가능한 방만 보기</Stfont>
                 <Stfont>
-                  분야 필터 <img src={allow} alt="" />
+                  분야 필터
+                  <StCategoryButton src={allow} alt="" onClick={selectToggleHandler} />
                 </Stfont>
+                {isSelectOpen && <Selectbox handleCategory={handleCategory} />}
               </Stfilterbox>
               <StroomArea>
-                {roomData.map((item) => {
+                {pageData.map((item) => {
                   return (
                     <Stroombox
                       key={item.sessionId}
@@ -118,10 +169,13 @@ function Main() {
                           <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>
                         </Stroomtext>
                         <div>
-                          <Stroomcount>
-                            <span>{item.userCount} / 9</span>
-                            <img src={Vector} alt="" />
-                          </Stroomcount>
+                          <Stroomcountarea>
+                            {item.secret ? <img src={lockimg} alt="" /> : ''}
+                            <Stroomcount>
+                              <span>{item.userCount} / 9</span>
+                              <img src={Vector} alt="" />
+                            </Stroomcount>
+                          </Stroomcountarea>
                         </div>
                       </Stroomboxlayout>
                     </Stroombox>
@@ -280,15 +334,20 @@ const Stroomsubtitle = styled.div`
   font-size: 15px;
 `;
 
-const Stroomcount = styled.div`
-  color: #90b54c;
-  font-size: 15px;
-  font-weight: 500;
-  transform: translate3d(0px, 40px, 0px);
+const Stroomcountarea = styled.div`
   display: flex;
+  gap: 17px;
+  transform: translate3d(0px, 40px, 0px);
   align-items: center;
+`;
+
+const Stroomcount = styled.div`
+  display: flex;
   gap: 10px;
-  width: 100%;
+  font-size: 15px;
+  color: #90b54c;
+  width: 65px;
+  font-weight: 500;
 `;
 
 const Stcheckboximg = styled.img`
@@ -309,4 +368,8 @@ const Stallowicon = styled.img`
 
 const Stfont = styled.div`
   font-family: 'Noto Sans';
+`;
+
+const StCategoryButton = styled.img`
+  cursor: pointer;
 `;

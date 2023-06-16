@@ -5,8 +5,7 @@ import rightallow from '../../asset/rightallow.svg';
 import { useNavigate } from 'react-router-dom';
 import ModalPortal from '../Modal/ModalPortal';
 import Joinmodal from '../Joinmodal';
-import { useQuery } from 'react-query';
-import { getRoom } from '../../api/api';
+import { useRoomData } from '../Customhook';
 
 function RoomPagination({ token }) {
   const navigate = useNavigate();
@@ -15,37 +14,30 @@ function RoomPagination({ token }) {
   const [currentRoomIndex, setCurrentRoomIndex] = useState(0);
   const [page, setPage] = useState(1);
 
-  const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
+  const roomInfo = useRoomData(page);
 
-  const roomInfo = data?.data.content;
+  const currentPageData = roomInfo?.data?.currentPageData || [];
 
-  if (isLoading) {
-    return <p>로딩중입니다....!</p>;
-  }
-
-  if (isError) {
-    return <p>오류가 발생하였습니다...!</p>;
-  }
-
-  const currentRoom = roomInfo[currentRoomIndex];
+  const currentRoom = currentPageData[currentRoomIndex];
 
   const nextpageHandler = () => {
-    if (currentRoomIndex < roomInfo.length - 1) {
+    if (currentRoomIndex < currentPageData.length - 1) {
       setCurrentRoomIndex(currentRoomIndex + 1);
     } else {
-      if (currentRoomIndex + 1 === roomInfo.length) {
+      if (currentRoomIndex + 1 === currentPageData.length) {
         setPage(page + 1);
         setCurrentRoomIndex(0);
       }
     }
   };
+
   const prevpageHandler = () => {
     if (currentRoomIndex > 0) {
       setCurrentRoomIndex(currentRoomIndex - 1);
     } else {
       if (page > 1) {
         setPage(page - 1);
-        setCurrentRoomIndex(roomInfo.length - 1);
+        setCurrentRoomIndex(currentPageData.length - 1);
       }
     }
   };
@@ -77,7 +69,11 @@ function RoomPagination({ token }) {
               {currentRoom.roomName}
             </StContentMainSubStudyRoomName>
             <StContentMainSubStudyRoomCa>
-              {currentRoom.category}
+              {currentRoom.category &&
+                currentRoom.category
+                  .split(',')
+                  .map((tag) => `#${tag}`)
+                  .join(' ')}
             </StContentMainSubStudyRoomCa>
           </StContentMainSubStudyRoomNaCa>
 
