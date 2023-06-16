@@ -25,7 +25,7 @@ function Room() {
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
 
-  const { roomData } = location.state;
+  const { roomData } = location.state || {};
 
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
@@ -74,8 +74,13 @@ function Room() {
     leaveSession(studyTime, mySessionId);
   };
 
+  window.onbeforeunload = () => {
+    leaveSession(studyTime, mySessionId);
+  };
+
   // window.onbeforeunload = () => {
-  //   navigate('/main', { replace: true });
+  //   leaveSession(studyTime, state.mySessionId);
+  //   navigate('/main');
   // };
 
   // 세션 입장을 위해 필요한 토큰을 가져오기
