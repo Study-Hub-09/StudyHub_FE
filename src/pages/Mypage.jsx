@@ -36,8 +36,6 @@ function Mypage({ onClose }) {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
-  const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
-
   const userInfo = async () => {
     try {
       const response = await instance.get(`/api/members/mypage`);
@@ -79,14 +77,6 @@ function Mypage({ onClose }) {
     setToken(accessToken);
     userInfo();
   }, []);
-
-  if (isLoading) {
-    return <p>로딩중입니다....!</p>;
-  }
-
-  if (isError) {
-    return <p>오류가 발생하였습니다...!</p>;
-  }
 
   // 오늘날짜 00.00.(요일) 형식
   const currentDate = today();
@@ -248,7 +238,7 @@ function Mypage({ onClose }) {
 
               <StHeaderDdayProfile>
                 <StHeaderDdayCon>
-                  <StHeaderDday>{token ? 'D-100' : 'D-00'}</StHeaderDday>
+                  <StHeaderDday>{token ? 'D-day' : 'D-00'}</StHeaderDday>
                   <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp>
                   {/* <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
                   {showChild && <DdayList />} */}

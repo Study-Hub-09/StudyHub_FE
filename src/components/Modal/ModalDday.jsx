@@ -90,7 +90,6 @@ const StDdayModalH = styled.div`
 const StDdayHeader = styled.div`
   width: 100px;
   height: 21px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 17.426px;
@@ -125,7 +124,6 @@ const StDdayTitle = styled.div`
 const StDdayday = styled.div`
   width: 87px;
   height: 60px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
@@ -138,7 +136,6 @@ const StDdayCon = styled.div`
 const StDday = styled.div`
   width: 49px;
   height: 20.62px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
