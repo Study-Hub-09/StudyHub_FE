@@ -17,7 +17,13 @@ import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
-
+import Typed from 'react-typed';
+import {
+  StKakaoRedirectBox,
+  StKakaoRedirectContainer,
+  StKakaoRedirectContent,
+  StKakaoRedirectHeader,
+} from '../styles/Common.styles';
 function Room() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,7 +49,7 @@ function Room() {
   const [videoEnabled, setVideoEnabled] = useState(true);
 
   const [studyTime, setStudyTime] = useState(null);
-
+  const [loadingstate, setLoadingState] = useState(true);
   const { mySessionId, mainStreamManager, publisher, subscribers, session } = state;
 
   const onChangeMessageHandler = (e) => {
@@ -246,7 +252,24 @@ function Room() {
     }
   }, []);
 
-  return (
+  setTimeout(() => {
+    setLoadingState(false);
+  }, 2000);
+  return loadingstate ? (
+    <StKakaoRedirectContainer>
+      <StKakaoRedirectBox>
+        <StKakaoRedirectHeader>
+          <h1>
+            <Typed strings={['loading']} typeSpeed={120} backSpeed={150} loop />
+          </h1>
+        </StKakaoRedirectHeader>
+        <StKakaoRedirectContent>
+          <p width="506px">Strive for progress, not perfection</p>
+          <p width="387px">redirecting to study hub...</p>
+        </StKakaoRedirectContent>
+      </StKakaoRedirectBox>
+    </StKakaoRedirectContainer>
+  ) : (
     <Stcontainer>
       <StLayout>
         <StViewArea>
