@@ -48,11 +48,16 @@ instance.interceptors.response.use(
       status: statusCode,
       data: { message: responseMessage, data: nickname },
     } = response;
-    if (statusCode === 200 && responseMessage === '로그인 성공') {
+    if (
+      (statusCode === 200 && responseMessage === '로그인 성공') ||
+      (statusCode === 200 && responseMessage === '카카오 로그인 성공')
+    ) {
       const accessToken = response.headers.get('access_token').split(' ')[1];
       const refreshToken = response.headers.get('refresh_token').split(' ')[1];
       setCookie('AccessToken', accessToken, { path: '/' });
       setCookie('RefreshToken', refreshToken, { path: '/' });
+    }
+    if (statusCode === 200 && responseMessage === '로그인 성공') {
       localStorage.setItem('member', nickname);
     }
     return response;
@@ -69,7 +74,6 @@ instance.interceptors.response.use(
 
     const originalRequest = config;
     const refreshToken = getCookie('RefreshToken');
-    console.log('RESPONSE MESSAGE', status);
 
     if (status === 403 && data === 'Access Token Expired') {
       try {
@@ -151,7 +155,6 @@ openviduapi.interceptors.response.use(
 
     const originalRequest = config;
     const refreshToken = getCookie('RefreshToken');
-    console.log('RESPONSE MESSAGE', status);
 
     if (status === 403 && data === 'Access Token Expired') {
       try {

@@ -5,4 +5,9 @@ const login = async (member) => {
   return response;
 };
 
-export { login };
+const kakaoLogin = async (code) => {
+  const response = await instance.get(`/api/members/kakao/callback?code=${code}`);
+  return response;
+};
+
+export { login, kakaoLogin };

@@ -1,5 +1,5 @@
 import { instance } from '../axios/instance';
-import { openviduapi } from '../axios/openviduapi';
+import { openviduapi } from '../axios/instance';
 
 // 세션 생성 함수
 const createSession = async (sessionId, memberData) => {

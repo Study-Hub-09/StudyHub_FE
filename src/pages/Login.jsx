@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { login } from '../core/api/auth/login';
 import { setCookie } from '../Cookies/Cookies';
@@ -89,18 +89,20 @@ function Login() {
         alert('비밀번호를 입력해주세요');
       }
     } else {
-      const accessToken = getCookie('AccessToken');
-      if (accessToken) {
-        alert('이미 로그인되어 있습니다.');
-        navigate('/main');
-      } else {
-        loginMutation.mutate({
-          email: values.email,
-          password: values.password,
-        });
-      }
+      loginMutation.mutate({
+        email: values.email,
+        password: values.password,
+      });
     }
   };
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    if (accessToken) {
+      alert('이미 로그인되어 있습니다.');
+      navigate('/main');
+    }
+  }, []);
 
   return (
     <Container
