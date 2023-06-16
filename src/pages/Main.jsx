@@ -5,8 +5,10 @@ import Vector from '../asset/Vector.svg';
 import check from '../asset/check.svg';
 import noncheck from '../asset/noncheck.svg';
 import allow from '../asset/Polygon 3.svg';
-import leftallow from '../asset/leftallow.svg';
-import rightallow from '../asset/rightallow.svg';
+import leftAllow from '../asset/leftArrow.svg';
+import rightAllow from '../asset/rightArrow.svg';
+import hoverLeftAllow from '../asset/hoverLeftArrow.svg';
+import hoverRightAllow from '../asset/hoverRightArrow.svg';
 import studyhub from '../asset/studyhub.svg';
 import emptyRoom from '../asset/emptyarea.svg';
 import Modal from '../components/Modal';
@@ -146,14 +148,14 @@ function Main() {
           ) : (
             <>
               <Stfilterbox>
-                {checked ? (
+                {/* {checked ? (
                   <Stcheckboximg onClick={checkBoxHandler} src={check} alt="" />
                 ) : (
                   <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
                 )}
-                <Stfont>입장 가능한 방만 보기</Stfont>
+                <Stfont>입장 가능한 방만 보기</Stfont> */}
                 <Stfont>
-                  분야 필터
+                  <span>분야 필터</span>
                   <StCategoryButton src={allow} alt="" onClick={selectToggleHandler} />
                 </Stfont>
                 {isSelectOpen && <Selectbox handleCategory={handleCategory} />}
@@ -198,8 +200,16 @@ function Main() {
           )}
         </StContents>
         <Stallowbox>
-          <Stallowicon src={leftallow} alt="" onClick={prevpageHandler} />
-          <Stallowicon src={rightallow} alt="" onClick={nextpageHandler} />
+          <Stallowicon
+            src={page > 1 ? hoverLeftAllow : leftAllow}
+            alt=""
+            onClick={prevpageHandler}
+          />
+          <Stallowicon
+            src={nextPageData.length > 0 ? hoverRightAllow : rightAllow}
+            alt=""
+            onClick={nextpageHandler}
+          />
         </Stallowbox>
       </Stcontainer>
     </>
@@ -296,6 +306,7 @@ const Stroombox = styled.div`
   justify-content: center;
   padding: 19px 24px;
   cursor: pointer;
+  background-color: white;
 `;
 
 const Stfilterbox = styled.div`
@@ -366,7 +377,7 @@ const Stallowbox = styled.div`
   width: 1018px;
   display: flex;
   justify-content: end;
-  gap: 21px;
+  /* gap: 21px; */
 `;
 
 const Stallowicon = styled.img`
@@ -377,4 +388,5 @@ const Stfont = styled.div``;
 
 const StCategoryButton = styled.img`
   cursor: pointer;
+  margin-left: 10px;
 `;

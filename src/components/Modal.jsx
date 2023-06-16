@@ -36,7 +36,7 @@ const Modal = ({ onClose }) => {
   const [animate, setAnimate] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCategoriesB, setSelectedCategoriesB] = useState([]);
-  const [selectDate, setSelectDate] = useState(dayjs().format('YYYY-MM-DD'));
+  const [selectDate, setSelectDate] = useState('');
   const [roomPassword, setRoomPassword] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [readerImage, setReaderImage] = useState(null);
@@ -79,10 +79,11 @@ const Modal = ({ onClose }) => {
     setrandomImage(imageArray[randomIndex]);
     console.log(randomImage);
   };
+  console.log(selectDate);
   // 방생성 핸들러
   const addbuttonHandler = async () => {
     const unarrayselectedCategories = selectedCategories.join(',');
-    if (roomName !== '' && roomContent !== '') {
+    if (roomName !== '' && roomContent !== '' && selectDate !== '') {
       const content = {
         roomName,
         roomContent,
@@ -119,6 +120,9 @@ const Modal = ({ onClose }) => {
         alert('제목을 입력해 주세요');
       } else if (roomContent === '') {
         alert('내용을 입력해 주세요');
+      }
+      if (selectDate === '') {
+        alert('만료일을 입력해 주세요');
       }
     }
   };
@@ -194,8 +198,12 @@ const Modal = ({ onClose }) => {
         selectedCategories.filter((category) => category !== customCategoryName)
       );
     } else {
-      setSelectedCategories([...selectedCategories, categoryName]);
-      setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
+      if (selectedCategories.length < 4) {
+        setSelectedCategories([...selectedCategories, categoryName]);
+        setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
+      } else {
+        alert('최대 4개의 카테고리만 선택할 수 있습니다');
+      }
     }
   };
   if (!onClose) return null;
