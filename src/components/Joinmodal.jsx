@@ -22,18 +22,18 @@ function Joinmodal({ onClose, roomData }) {
     };
     // await joinRoom(roomData.sessionId, memberData);
     if (token) {
-      // createSession(roomData.sessionId)
-      //   .then((response) => {
-      //     console.log('createSession 함수>>>>>>>>>', response);
-      //     if (response.status === 200) {
-      //       navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log('joinModalError>>>> ', error);
-      //   });
-      createSession(roomData.sessionId);
-      navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      createSession(roomData.sessionId, memberData)
+        .then((response) => {
+          console.log('createSession 함수>>>>>>>>>', response);
+          if (response.status === 200) {
+            navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+          }
+        })
+        .catch((error) => {
+          console.log('joinModalError>>>> ', error);
+        });
+      // createSession(roomData.sessionId, memberData);
+      // navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
     } else {
       alert('로그인이 필요한 페이지입니다.');
       navigate('/members/login');
