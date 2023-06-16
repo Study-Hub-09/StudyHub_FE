@@ -38,8 +38,6 @@ function Mypage({ onClose }) {
 
   const { isLoading, isError, data } = useQuery(['rooms', page], () => getRoom(page));
 
-  const roomInfo = data?.data.content;
-
   const userInfo = async () => {
     try {
       const response = await instance.get(`/api/members/mypage`);
@@ -429,6 +427,7 @@ const StHeaderUserName = styled.div`
   line-height: 44px;
   color: #000000;
   margin: 0px 0px 9.39px 0px;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderUserIntro = styled.div`
   font-style: normal;
