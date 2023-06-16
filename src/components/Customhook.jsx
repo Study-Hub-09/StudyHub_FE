@@ -1,8 +1,10 @@
 import { useQuery } from 'react-query';
 import { getSearchRoom, getRoom } from '../api/api';
 
-const useSearchData = (url) => {
-  return useQuery(['searchRoom', url], () => getSearchRoom(url));
+const useSearchData = (page, queryString) => {
+  return useQuery(['searchRoom', page, queryString], () =>
+    getSearchRoom(page, queryString)
+  );
 };
 const useRoomData = (page) => {
   return useQuery(

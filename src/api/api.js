@@ -63,9 +63,9 @@ const joinRoom = async (sessionId, memberData) => {
 };
 
 // 카테고리,검색 조회
-const getSearchRoom = async (url) => {
+const getSearchRoom = async (page, queryString) => {
   try {
-    const response = await instance.get(`${url}`);
+    const response = await instance.get(`/api/main?page=${page}&${queryString}`);
     return response.data.data;
   } catch (error) {
     console.log(error);
