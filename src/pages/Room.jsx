@@ -360,6 +360,7 @@ const size = {
 };
 
 const Stcontainer = styled.div`
+  background-color: #1e1e1e;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -415,6 +416,7 @@ const Sttitlebox = styled.div`
 `;
 
 const Sttitle = styled.div`
+  color: #b6b6b6;
   display: flex;
   flex: 1;
   flex-direction: column;

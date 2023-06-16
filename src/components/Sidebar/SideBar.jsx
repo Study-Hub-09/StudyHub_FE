@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
+import { instance } from '../../core/api/axios/instance';
 
 function SideBar({ children }) {
   const navigate = useNavigate();
@@ -22,10 +23,27 @@ function SideBar({ children }) {
   const toggle = () => setIsOpen(!isOpen);
 
   const [token, setToken] = useState('');
+  const [totalStudyTime, setTotalStudyTime] = useState(0);
+
+  const userInfo = async () => {
+    try {
+      const response = await instance.get(`/api/members/mypage`);
+      // console.log('#######response', response.data.data);
+
+      const { totalStudyTime } = response.data.data;
+
+      setTotalStudyTime(totalStudyTime);
+
+      return response.data.data;
+    } catch (error) {
+      console.error('????error:', error);
+    }
+  };
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     setToken(accessToken);
+    userInfo();
   }, []);
 
   const tokenHandler = () => {
@@ -36,6 +54,17 @@ function SideBar({ children }) {
       setToken('');
       window.location.reload();
     }
+  };
+
+  const totalTime = (totalStudyTime) => {
+    const hours = Math.floor(totalStudyTime / 3600)
+      .toString()
+      .padStart(2, '0');
+    const minutes = Math.floor((totalStudyTime % 3600) / 60)
+      .toString()
+      .padStart(2, '0');
+    const seconds = (totalStudyTime % 60).toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
   };
 
   const menuItem = [
@@ -125,7 +154,7 @@ function SideBar({ children }) {
               </StPofileImgText>
 
               <StPofileText2 isOpen={isOpen}>
-                {token ? '누적시간 00:00:00' : '로그인하여 이용하기'}
+                {token ? `누적시간 ${totalTime(totalStudyTime)}` : '로그인하여 이용하기'}
               </StPofileText2>
             </StPofileTextFreame>
           </StProfileLaout>

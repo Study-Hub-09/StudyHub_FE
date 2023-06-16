@@ -11,7 +11,7 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    return `${day}/${month}`;
+    return `${month}/${day}`;
   };
 
   // 메시지가 추가될 때마다 자동 스크롤
@@ -124,10 +124,12 @@ const StChatarea = styled.form`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  border-left: 1px solid #bfbfbf;
+  border-left: 1px solid #b6b6b6;
+  padding: 10px 0px;
 `;
 
 const Stchatbox = styled.div`
+  background-color: white;
   width: 280px;
   height: 100%;
   border: 1px solid #bfbfbf;
@@ -161,6 +163,7 @@ const Stchatinput = styled.input`
   border: 1px solid #bfbfbf;
   border-radius: 7px;
   padding-left: 10px;
+  background-color: white;
 `;
 
 const Stsendarea = styled.div`
@@ -186,6 +189,7 @@ const Stchatheaderfont = styled.span`
   font-size: 18px;
   font-weight: 700;
   margin-left: 11px;
+  color: #b6b6b6;
 `;
 
 const StTochat = styled.div`

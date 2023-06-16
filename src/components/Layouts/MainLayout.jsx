@@ -17,4 +17,5 @@ const StMainLayout = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  background: rgba(230, 234, 224, 0.3);
 `;

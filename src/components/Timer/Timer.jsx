@@ -89,7 +89,7 @@ const StTimer = styled.div`
   ${({ isPaused }) =>
     !isPaused &&
     `
-    color: #00573f;
+    color: #ffffff;
   `}
 `;
 const StTimerImg = styled.img`
