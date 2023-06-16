@@ -168,7 +168,14 @@ function Main() {
                       }}
                     >
                       <Stroomboxlayout>
-                        <img src={item.imageUrl} alt="" width={82} height={82} />
+                        <img
+                          src={
+                            item.imageUrl === '대표 이미지 URL' ? studyhub : item.imageUrl
+                          }
+                          alt=""
+                          width={82}
+                          height={82}
+                        />
                         <Stroomtext>
                           <Stroomtitle>{item.roomName}</Stroomtitle>
                           <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>

@@ -39,6 +39,7 @@ const Modal = ({ onClose }) => {
   const [selectDate, setSelectDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [roomPassword, setRoomPassword] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [readerImage, setReaderImage] = useState(null);
   const [randomImage, setrandomImage] = useState(null);
   const outside = useRef();
   const queryClient = useQueryClient();
@@ -56,7 +57,8 @@ const Modal = ({ onClose }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
+    console.log(file);
+    setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
       alert('이미지 파일만 업로드 가능합니다.');
       return;
@@ -65,15 +67,17 @@ const Modal = ({ onClose }) => {
     // 이미지 미리보기 설정
     const reader = new FileReader();
     reader.onload = (event) => {
-      setUploadedImage(event.target.result);
+      setReaderImage(event.target.result);
     };
     reader.readAsDataURL(file);
+    console.log('reader', reader);
   };
   // 랜덤 이미지 설정
   const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
   const randomImageHandler = () => {
     const randomIndex = Math.floor(Math.random() * imageArray.length);
     setrandomImage(imageArray[randomIndex]);
+    console.log(randomImage);
   };
   // 방생성 핸들러
   const addbuttonHandler = async () => {
@@ -268,16 +272,16 @@ const Modal = ({ onClose }) => {
                 <Stfont>대표이미지</Stfont>
                 <Stthumnailbox>
                   <Stthumbnail>
-                    {uploadedImage ? (
-                      <img src={uploadedImage} alt="" width={136} height={100} />
+                    {readerImage ? (
+                      <img src={readerImage} alt="" width={136} height={100} />
                     ) : randomImage ? (
                       <img src={randomImage} alt="" width={136} height={100} />
                     ) : null}
                   </Stthumbnail>
                   <div>
-                    <StthumbnailbuttonA onClick={randomImageHandler}>
+                    {/* <StthumbnailbuttonA onClick={randomImageHandler}>
                       랜덤이미지
-                    </StthumbnailbuttonA>
+                    </StthumbnailbuttonA> */}
                     <StthumbnailbuttonB for="inputImage">
                       PC에서 업로드
                     </StthumbnailbuttonB>
