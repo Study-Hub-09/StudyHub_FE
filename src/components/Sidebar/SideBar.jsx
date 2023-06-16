@@ -241,7 +241,6 @@ const StIcon = styled.div`
 const StName = styled.div`
   width: 101px;
   height: 20px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
@@ -279,7 +278,6 @@ const StSymbol = styled.img`
 const StSymbolName = styled.div`
   width: 50px;
   height: 25px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -377,7 +375,6 @@ const StPofileName = styled.div`
 const StPofileText2 = styled.div`
   width: 129px;
   height: 28px;
-  font-family: 'Noto Sans';
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
