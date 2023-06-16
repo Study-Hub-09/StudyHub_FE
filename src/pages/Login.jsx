@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { login } from '../core/api/auth/login';
-import { setCookie } from '../Cookies/Cookies';
 import { getCookie } from '../Cookies/Cookies';
 import { Link, useNavigate } from 'react-router-dom';
 import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
