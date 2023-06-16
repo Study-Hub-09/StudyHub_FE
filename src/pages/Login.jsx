@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import { login } from '../core/api/auth/login';
-import { setCookie } from '../Cookies/Cookies';
 import { getCookie } from '../Cookies/Cookies';
 import { Link, useNavigate } from 'react-router-dom';
 import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
@@ -53,34 +52,30 @@ function Login() {
   };
 
   const loginMutation = useMutation(login, {
-    async onSuccess(response) {
-      console.log('RESPONSE LOGIN.JSX LINE19 =====> ', response);
-      const statusCode = response.status;
-      const responseMessage = response.data.message;
-      const accessToken = response.headers.get('access_token').split(' ')[1];
-      const refreshToken = response.headers.get('refresh_token').split(' ')[1];
-      const nickname = response.data.data;
-      setCookie('AccessToken', accessToken, { path: '/' });
-      setCookie('RefreshToken', refreshToken, { path: '/' });
-      localStorage.setItem('member', nickname);
+    onSuccess: (response) => {
+      const {
+        status: statusCode,
+        data: { message: responseMessage },
+      } = response;
 
-      if (statusCode === 200) {
+      if (statusCode === 200 && responseMessage === '로그인 성공') {
         alert(responseMessage);
         navigate('/');
       }
     },
-    async onError(error) {
-      console.log(error);
-      const statusCode = error.response.status;
-      const message = error.response.data.message;
-      if (statusCode === 400) {
-        alert(message);
+    onError: (error) => {
+      const {
+        response: {
+          status: statusCode,
+          data: { message: errorMessage },
+        },
+      } = error;
+      if (statusCode === 400 && errorMessage === '비밀번호를 다시 입력해주세요.') {
+        alert(errorMessage);
       }
-      if (statusCode === 404) {
-        alert(message); //해당 유저 정보를 찾을 수 없습니다 -> 서버에서 응답하는 메세지
-        // 유효하지 않은 로그인 정보입니다
+      if (statusCode === 404 && errorMessage === '해당 유저 정보를 찾을 수 없습니다') {
+        alert(errorMessage);
       }
-      console.log('onError Login.jsx===> ', statusCode);
     },
   });
 
@@ -93,18 +88,20 @@ function Login() {
         alert('비밀번호를 입력해주세요');
       }
     } else {
-      const accessToken = getCookie('AccessToken');
-      if (accessToken) {
-        alert('이미 로그인되어 있습니다.');
-        navigate('/main');
-      } else {
-        loginMutation.mutate({
-          email: values.email,
-          password: values.password,
-        });
-      }
+      loginMutation.mutate({
+        email: values.email,
+        password: values.password,
+      });
     }
   };
+
+  useEffect(() => {
+    const accessToken = getCookie('AccessToken');
+    if (accessToken) {
+      alert('이미 로그인되어 있습니다.');
+      navigate('/main');
+    }
+  }, []);
 
   return (
     <Container

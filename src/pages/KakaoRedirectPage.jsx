@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setCookie, getCookie } from '../Cookies/Cookies';
-import { instance } from '../core/api/axios/instance';
+import { getCookie } from '../Cookies/Cookies';
+import { kakaoLogin } from '../core/api/auth/login';
 import Typed from 'react-typed';
 import {
   StKakaoRedirectBox,
@@ -20,33 +20,27 @@ function KakaoRedirectPage() {
       alert('이미 로그인된 유저입니다');
       navigate('/main');
     } else {
-      instance
-        .get(`/api/members/kakao/callback?code=${code}`)
+      kakaoLogin(code)
         .then((response) => {
-          const statusCode = response.status;
-          const accessToken = response.headers.get('access_token').split(' ')[1];
-          const refreshToken = response.headers.get('refresh_token').split(' ')[1];
-          const nickname = response.data.data.nickname;
-          setCookie('AccessToken', accessToken, { path: '/' });
-          setCookie('RefreshToken', refreshToken, { path: '/' });
-          localStorage.setItem('member', nickname);
+          const {
+            status: statusCode,
+            data: {
+              message: responseMessage,
+              data: { nickname },
+            },
+          } = response;
 
-          if (statusCode === 200) {
-            alert('로그인 성공!');
+          if (statusCode === 200 && responseMessage === '카카오 로그인 성공') {
+            localStorage.setItem('member', nickname);
+            alert(responseMessage);
             navigate('/');
-          } else {
-            alert('로그인 실패!');
-            navigate('/members/login');
           }
         })
         .catch((error) => {
           console.log(error);
           const statusCode = error.response?.status;
           if (statusCode === 401) {
-            alert('이미 로그인된 유저입니다.');
-            navigate('/main');
-          } else {
-            alert('로그인 실패!');
+            alert('로그인 실패');
             navigate('/members/login');
           }
         });

@@ -1,10 +1,10 @@
 import { instance } from '../axios/instance';
-import { openviduapi } from '../axios/openviduapi';
+import { openviduapi } from '../axios/instance';
 
 // 세션 생성 함수
-const createSession = async (sessionId) => {
+const createSession = async (sessionId, memberData) => {
   try {
-    const response = await instance.post(`api/rooms/${sessionId}/enter`);
+    const response = await instance.post(`api/rooms/${sessionId}/enter`, memberData);
     return response;
   } catch (error) {
     console.error('인터넷 요청이 실패했습니다: enterRoomSession');
