@@ -51,7 +51,12 @@ function Main() {
   };
 
   const queryString = objectToQueryString(filterData);
-  const searchData = useSearchData(page, queryString);
+  // 검색및 필터링 시 사용하는 요청
+  const searchData = useSearchData(
+    page,
+    queryString,
+    search !== '' || selectCategory !== ''
+  );
 
   if (roomData.isLoading) {
     return <p>로딩중입니다....!</p>;
@@ -163,7 +168,7 @@ function Main() {
                       }}
                     >
                       <Stroomboxlayout>
-                        <img src={studyhub} alt="" width={82} height={82} />
+                        <img src={item.imageUrl} alt="" width={82} height={82} />
                         <Stroomtext>
                           <Stroomtitle>{item.roomName}</Stroomtitle>
                           <Stroomsubtitle>{item.roomContent}</Stroomsubtitle>
@@ -226,14 +231,12 @@ const StTitlebox = styled.div`
 const StTitle = styled.div`
   font-size: 32px;
   font-weight: 700;
-  font-family: 'Noto Sans';
 `;
 
 const Stsubtitle = styled.div`
   font-size: 18px;
   font-weight: 400;
   color: #84848484;
-  font-family: 'Noto Sans';
 `;
 
 const StSearchbox = styled.div`
@@ -251,7 +254,6 @@ const StSearchinput = styled.input`
   border-radius: 12px;
   padding-left: 43px;
   font-size: 15px;
-  font-family: 'Noto Sans';
 `;
 
 const StSearchicon = styled.img`
@@ -263,12 +265,11 @@ const StSearchicon = styled.img`
 const StButton = styled.button`
   width: 141px;
   height: 44px;
-  padding: 12px 27px;
+  padding: 11px 26px;
   gap: 10px;
   border-radius: 30px;
   font-size: 15px;
   font-weight: 700;
-  font-family: 'Noto Sans';
   color: #00573f;
   border: 1px solid #bfbfbf;
   &:hover {
@@ -296,7 +297,6 @@ const Stfilterbox = styled.div`
   gap: 21px;
   margin-top: 90px;
   margin-bottom: 10px;
-  font-family: 'Noto Sans';
 `;
 
 const StroomArea = styled.div`
@@ -366,9 +366,7 @@ const Stallowicon = styled.img`
   cursor: pointer;
 `;
 
-const Stfont = styled.div`
-  font-family: 'Noto Sans';
-`;
+const Stfont = styled.div``;
 
 const StCategoryButton = styled.img`
   cursor: pointer;

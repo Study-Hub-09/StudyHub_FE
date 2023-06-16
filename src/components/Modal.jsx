@@ -24,6 +24,10 @@ import dayjs from 'dayjs';
 import BasicDatePicker from './Datepicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
+import roomimageA from '../asset/roomimageA.svg';
+import roomimageB from '../asset/roomimageB.svg';
+import roomimageC from '../asset/roomimageC.svg';
+import roomimageD from '../asset/roomimageD.svg';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
@@ -35,6 +39,7 @@ const Modal = ({ onClose }) => {
   const [selectDate, setSelectDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [roomPassword, setRoomPassword] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
+  const [randomImage, setrandomImage] = useState(null);
   const outside = useRef();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -64,6 +69,12 @@ const Modal = ({ onClose }) => {
     };
     reader.readAsDataURL(file);
   };
+  // 랜덤 이미지 설정
+  const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
+  const randomImageHandler = () => {
+    const randomIndex = Math.floor(Math.random() * imageArray.length);
+    setrandomImage(imageArray[randomIndex]);
+  };
   // 방생성 핸들러
   const addbuttonHandler = async () => {
     const unarrayselectedCategories = selectedCategories.join(',');
@@ -78,7 +89,7 @@ const Modal = ({ onClose }) => {
       };
       // FormData에 데이터 추가
       const formData = new FormData();
-
+      console.log(formData);
       const contentrString = JSON.stringify(content);
       await formData.append(
         'content',
@@ -87,6 +98,9 @@ const Modal = ({ onClose }) => {
       // 이미지 추가
       if (uploadedImage) {
         formData.append('image', uploadedImage);
+      }
+      if (randomImage) {
+        formData.append('image', randomImage);
       } else {
         formData.append('image', '');
       }
@@ -255,11 +269,15 @@ const Modal = ({ onClose }) => {
                 <Stthumnailbox>
                   <Stthumbnail>
                     {uploadedImage ? (
-                      <img src={uploadedImage} alt="Uploaded" width={136} height={100} />
+                      <img src={uploadedImage} alt="" width={136} height={100} />
+                    ) : randomImage ? (
+                      <img src={randomImage} alt="" width={136} height={100} />
                     ) : null}
                   </Stthumbnail>
                   <div>
-                    <StthumbnailbuttonA>랜덤이미지</StthumbnailbuttonA>
+                    <StthumbnailbuttonA onClick={randomImageHandler}>
+                      랜덤이미지
+                    </StthumbnailbuttonA>
                     <StthumbnailbuttonB for="inputImage">
                       PC에서 업로드
                     </StthumbnailbuttonB>
