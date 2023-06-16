@@ -205,23 +205,27 @@ function Register() {
 
   // 회원가입 뮤테이션 훅
   const registerMutation = useMutation(register, {
-    async onSuccess(response) {
-      console.log(response.data.message);
-      const statusCode = response.status;
-      if (statusCode === 200) {
-        alert('회원가입 성공!');
+    onSuccess: (response) => {
+      const {
+        status: statusCode,
+        data: { message: responseMessage },
+      } = response;
+      if (statusCode === 200 && responseMessage === '회원가입 성공') {
+        alert('회원가입 성공');
         navigate('/members/login');
       }
     },
-    async onError(error) {
-      console.log('Register.jsx ERROR=====> ', error);
+    onError: (error) => {
+      alert('회원가입 실패');
     },
   });
 
   // 중복 닉네임 확인 뮤테이션 훅
   const validateNickNameMutation = useMutation(validateNickname, {
-    async onSuccess(response) {
-      const duplicateNickname = response.data.data;
+    onSuccess: (response) => {
+      const {
+        data: { data: duplicateNickname },
+      } = response;
       if (duplicateNickname) {
         setMessages((prevMessages) => ({
           ...prevMessages,
@@ -242,14 +246,14 @@ function Register() {
         }));
       }
     },
-    async onError(error) {
+    onError: (error) => {
       console.log(error);
     },
   });
 
   // 이메일 중복 확인 뮤테이션 훅
   const validateEmailMutation = useMutation(validateEmail, {
-    async onSuccess(response) {
+    onSuccess: (response) => {
       const { data: verificationCode } = response;
       setMessages((prevMessages) => ({
         ...prevMessages,
@@ -261,10 +265,14 @@ function Register() {
       }));
       setVerificationCode(verificationCode);
     },
-    async onError(error) {
-      const statusCode = error.response.data.statusCode;
+    onError: (error) => {
+      const {
+        response: {
+          data: { message: errorMessage, statusCode },
+        },
+      } = error;
 
-      if (statusCode === 400) {
+      if (statusCode === 400 && errorMessage === '중복된 email 입니다.') {
         setMessages((prevMessages) => ({
           ...prevMessages,
           emailErrorMessage: '이미 회원가입된 이메일입니다.',
