@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
 import { getCookie } from '../Cookies/Cookies';
+import { createSession } from '../core/api/openvidu/openvidu';
 
 function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
@@ -53,19 +54,25 @@ function Joinmodal({ onClose, roomData }) {
       accountNonLocked: true,
       credentialsNonExpired: true,
     };
-    console.log(roomData);
-    try {
-      // await joinRoom(roomData.sessionId, memberData);
-      if (token) {
-        navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
-      } else {
-        alert('로그인이 필요한 페이지입니다.');
-        navigate('/members/login');
-      }
-      onClose(false);
-    } catch (error) {
-      console.error('방 입장 중 오류가 발생했습니다', error);
+    // await joinRoom(roomData.sessionId, memberData);
+    if (token) {
+      // createSession(roomData.sessionId)
+      //   .then((response) => {
+      //     console.log('createSession 함수>>>>>>>>>', response);
+      //     if (response.status === 200) {
+      //       navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log('joinModalError>>>> ', error);
+      //   });
+      createSession(roomData.sessionId);
+      navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+    } else {
+      alert('로그인이 필요한 페이지입니다.');
+      navigate('/members/login');
     }
+    onClose(false);
   };
 
   return (
