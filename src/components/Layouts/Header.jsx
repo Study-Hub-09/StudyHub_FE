@@ -29,6 +29,8 @@ function Header() {
             removeCookie('RefreshToken', { path: '/' });
             localStorage.removeItem('member');
             setToken('');
+            alert(responseMessage);
+            window.location.reload();
           }
         })
         .catch((error) => {
