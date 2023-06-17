@@ -71,6 +71,8 @@ function Register() {
     checkPasswordBorder: false,
   });
 
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
+
   const { nickname, email, checkCode, password, checkPassword } = values;
   const { validEmailCode, validPwd, matchPwd, validNickname, validEmail } = validations;
   const {
@@ -144,6 +146,7 @@ function Register() {
     if (!email || email.trim() === '') {
       alert('이메일을 입력해주세요');
     } else {
+      setIsEmailLoading(true);
       validateEmailMutation.mutate({
         email,
       });
@@ -255,6 +258,7 @@ function Register() {
   const validateEmailMutation = useMutation(validateEmail, {
     onSuccess: (response) => {
       const { data: verificationCode } = response;
+      setIsEmailLoading(false);
       setMessages((prevMessages) => ({
         ...prevMessages,
         emailSuccessMessage: '이메일이 발송되었습니다.',
@@ -452,6 +456,7 @@ function Register() {
                 inputwidth="193px"
                 validEmail={validEmail}
                 isEmailVerified={isEmailVerified}
+                isEmailLoading={isEmailLoading}
                 bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
                 onFocus={() => onFocusInputBorder('emailBorder')}
                 onBlur={() => onBlurInputBorder('emailBorder')}
