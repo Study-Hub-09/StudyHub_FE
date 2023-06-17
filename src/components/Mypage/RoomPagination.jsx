@@ -110,42 +110,43 @@ const StContentMainSubStudyRoom = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomTM = styled.div`
-  height: 35%;
+  width: 100%;
+  height: 25%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomTitle = styled.div`
-  width: 40%;
-  height: 45%;
+  width: 50%;
+  height: 70%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 27px;
+  font-size: 1.389vw;
+  line-height: 1.688rem;
   color: #000000;
-  margin: 10px 0px 10px 25px;
+  margin: 14px 0px 10px 15px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomMore = styled.div`
-  width: 11%;
-  height: 35%;
+  width: 20%;
+  height: 70%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 19px;
+  font-size: 0.972vw;
+  line-height: 1.188rem;
   color: #848484;
   text-decoration-line: underline;
-  margin: 19px 26px 12px 0px;
+  margin: 25px -10px 12px 0px;
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomList = styled.div`
   width: 90%;
-  height: 100%;
+  height: 34%;
   background: rgba(144, 181, 76, 0.2);
   border-radius: 12px;
-  margin-left: 25px;
+  margin: 10px 10px 0px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -157,25 +158,25 @@ const StContentMainSubStudyRoomNaCa = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomName = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 19px;
+  font-size: 1.042vw;
+  line-height: 1.188rem;
   color: #000000;
-  margin: 0px 0px 0px 23.57px;
+  margin: 0px 0px 0px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomCa = styled.div`
   width: 100%;
-  height: 16px; // 변경필요
+  height: 100%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 16px;
+  font-size: 0.833vw;
+  line-height: 1rem;
   color: #90b54c;
-  margin: 0px 0px 0px 23.57px;
+  margin: 0px 0px 0px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomBtn = styled.button`
@@ -184,7 +185,7 @@ const StContentMainSubStudyRoomBtn = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 28%;
+  width: 31%;
   height: 80%;
   background: #fefefefe;
   border: 1px solid #bfbfbfbf;
@@ -194,23 +195,22 @@ const StContentMainSubStudyRoomBtn = styled.button`
 `;
 const StContentMainSubStudyRoomBtnF = styled.button`
   width: 60%;
-  height: 100%;
+  height: 40%;
   font-style: normal;
   font-weight: 700;
-  font-size: 0.938rem;
-  line-height: 20px;
+  font-size: 0.972vw;
+  line-height: 1.25rem;
   display: flex;
   align-items: center;
   color: #00573f;
   /* border: 1px solid #8cacff; */
 `;
 const Stallowbox = styled.div`
-  height: 33%;
-  width: 8%;
-  padding: 15px 10px;
-  margin-left: 348px;
+  height: 29.5%;
+  width: 16.2%;
+  margin: 1.5% 0% 0% 75%;
   display: flex;
-  justify-content: end;
+  /* justify-content: end; */
   gap: 21px;
   /* border: 1px solid #8cacff; */
 `;
