@@ -7,14 +7,18 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { joinRoom } from '../api/api';
 import { getCookie } from '../Cookies/Cookies';
-import { createSession } from '../core/api/openvidu/openvidu';
+import { createSession, exitRoom } from '../core/api/openvidu/openvidu';
 import lockimg from '../asset/lock.svg';
+import { disconnectClient } from '../core/sockJs/sockJs';
 
 function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
   const navigate = useNavigate();
   const token = getCookie('AccessToken');
   const [roomPassword, setRoomPassword] = useState('');
+
+  const studyTime = 0;
+  const sessionId = roomData.sessionId;
 
   const joinbuttonHandler = async () => {
     const memberData = {
@@ -30,6 +34,15 @@ function Joinmodal({ onClose, roomData }) {
           }
         })
         .catch((error) => {
+          const {
+            response: { status: statusCode, data: errorMessage },
+          } = error;
+          if (statusCode === 400 && errorMessage === '이미 입장한 멤버입니다.') {
+            exitRoom(studyTime, sessionId).then((response) => {
+              sessionId.disconnect(); // 세션 종료
+              disconnectClient(); // 채팅 종료
+            });
+          }
           console.log('joinModalError>>>> ', error);
         });
       // createSession(roomData.sessionId, memberData);
