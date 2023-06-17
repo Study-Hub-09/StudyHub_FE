@@ -28,7 +28,6 @@ function Joinmodal({ onClose, roomData }) {
     if (token) {
       createSession(roomData.sessionId, memberData)
         .then((response) => {
-          console.log('createSession 함수>>>>>>>>>', response);
           if (response.status === 200) {
             navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
           }
@@ -43,7 +42,7 @@ function Joinmodal({ onClose, roomData }) {
               disconnectClient(); // 채팅 종료
             });
           }
-          console.log('joinModalError>>>> ', error);
+          // console.log('joinModalError>>>> ', error);
         });
       // createSession(roomData.sessionId, memberData);
       // navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });

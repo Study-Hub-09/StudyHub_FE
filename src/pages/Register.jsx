@@ -247,7 +247,7 @@ function Register() {
       }
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
     },
   });
 
