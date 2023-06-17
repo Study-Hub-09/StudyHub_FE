@@ -216,6 +216,10 @@ function Mypage({ onClose }) {
     setDdayList(list);
   };
 
+  const showAlert = () => {
+    window.alert('서비스 준비중입니다.');
+  };
+
   return (
     <>
       <div>
@@ -237,7 +241,8 @@ function Mypage({ onClose }) {
               <StHeaderDdayProfile>
                 <StHeaderDdayCon>
                   <StHeaderDday>{'D-day'}</StHeaderDday>
-                  <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp>
+                  <StHeaderDdayOp onClick={showAlert}>설정</StHeaderDdayOp>
+                  {/* <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp> */}
                   {/* <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
                   {showChild && <DdayList />} */}
                 </StHeaderDdayCon>
@@ -524,7 +529,7 @@ const StContentMainTotalTimeHead = styled.div`
   height: 17.5%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeTitel = styled.div`
@@ -532,7 +537,7 @@ const StContentMainTotalTimeTitel = styled.div`
   align-items: center;
   width: 50%;
   height: 54%;
-  margin: 1.5rem 1.375rem 0rem 0rem;
+  margin: 6% 0% 0% 14%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeText = styled.div`
