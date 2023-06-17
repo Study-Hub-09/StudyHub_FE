@@ -4,9 +4,9 @@ import herobiglogo from '../../assets/Icons/herobiglogo.svg';
 import {
   StHeroContent,
   StHeroLayoutContainer,
-  StHomeLayoutBox,
   StHeroDescription,
   StHeroDescriptionLogo,
+  StHeroLayoutBox,
 } from '../../styles/Layout.styles';
 import Button from '../Buttons/Button';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ function Hero() {
 
   return (
     <StHeroLayoutContainer>
-      <StHomeLayoutBox>
+      <StHeroLayoutBox>
         <StHeroContent>
           <div>
             <img src={herologo} alt="Study Hub Plant Logo" />
@@ -46,7 +46,7 @@ function Hero() {
             </Button>
           </StHeroDescription>
         </StHeroContent>
-      </StHomeLayoutBox>
+      </StHeroLayoutBox>
     </StHeroLayoutContainer>
   );
 }
