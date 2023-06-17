@@ -10,6 +10,7 @@ import {
 } from '../../styles/Inputs.styles';
 import errorIcon from '../../assets/Icons/errorIcon.svg';
 import checkIcon from '../../assets/Icons/checkIcon.svg';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function EmailInput({
   label,
@@ -27,6 +28,7 @@ function EmailInput({
   validEmailCode,
   isEmailCodeVerified,
   isEmailVerified,
+  isEmailLoading,
   successMessage,
   errorMessage,
   ...inputprops
@@ -69,7 +71,11 @@ function EmailInput({
             {(validEmail && isEmailVerified && (
               <img src={checkIcon} alt="Green Check Icon" />
             )) ||
-              (validEmailCode && <img src={checkIcon} alt="Green Check Icon" />) ||
+              (isEmailLoading ? (
+                <CircularProgress size={12} color="inherit" />
+              ) : (
+                validEmailCode && <img src={checkIcon} alt="Green Check Icon" />
+              )) ||
               (!validEmail && !isEmailVerified && (
                 <img src={errorIcon} alt="Red Error Icon" />
               ))}

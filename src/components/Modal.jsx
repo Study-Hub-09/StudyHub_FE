@@ -24,10 +24,6 @@ import dayjs from 'dayjs';
 import BasicDatePicker from './Datepicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
-import roomimageA from '../asset/roomimageA.svg';
-import roomimageB from '../asset/roomimageB.svg';
-import roomimageC from '../asset/roomimageC.svg';
-import roomimageD from '../asset/roomimageD.svg';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
@@ -71,11 +67,11 @@ const Modal = ({ onClose }) => {
     reader.readAsDataURL(file);
   };
   // 랜덤 이미지 설정
-  const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
-  const randomImageHandler = () => {
-    const randomIndex = Math.floor(Math.random() * imageArray.length);
-    setrandomImage(imageArray[randomIndex]);
-  };
+  // const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
+  // const randomImageHandler = () => {
+  //   const randomIndex = Math.floor(Math.random() * imageArray.length);
+  //   setrandomImage(imageArray[randomIndex]);
+  // };
   // 방생성 핸들러
   const addbuttonHandler = async () => {
     const unarrayselectedCategories = selectedCategories.join(',');
