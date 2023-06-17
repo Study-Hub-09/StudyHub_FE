@@ -35,7 +35,7 @@ function JoinStudyRoom() {
 
   return (
     <StContentMainTodoList>
-      <StContentMainTodoListTitle>참여중인 스터디방</StContentMainTodoListTitle>
+      <StContentMainTodoListTitle>내가 만든 스터디</StContentMainTodoListTitle>
       <StContentMainTodoListRoom>
         {myRooms
           .sort((a, b) => b.updatedAt - a.updatedAt)
