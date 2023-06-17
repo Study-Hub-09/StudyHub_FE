@@ -5,6 +5,8 @@ import herobg from '../assets/Images/LandingPage/herobg.png';
 export const StHomeLayoutContainer = styled.div`
   width: 100%;
   height: ${(props) => props.height || '96px'};
+  display: flex;
+  align-items: center;
   background-color: ${(props) => props.backgroundcolor || 'var(--color-white)'};
   position: ${(props) => props.position || 'inherit'};
   top: ${(props) => props.top};
@@ -49,12 +51,20 @@ export const StHeaderRegister = styled.div`
 
 export const StHeroLayoutContainer = styled.div`
   width: 100%;
-  height: 980px;
+  height: 100vh;
   background-image: url(${herobg});
   background-repeat: no-repeat;
   background-size: cover;
   background-position-x: 25%;
   background-position-y: 25%;
+`;
+
+export const StHeroLayoutBox = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 5%;
 `;
 
 export const StHeroContent = styled.div`
