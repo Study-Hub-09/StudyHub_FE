@@ -9,7 +9,6 @@ import logout from '../../assets/Images/logout.svg';
 import profile from '../../assets/Images/Frame 19.svg';
 import Straight from '../../assets/Images/Straight.svg';
 import RevStraight from '../../assets/Images/RevStraight.svg';
-import sprout from '../../assets/Images/sprout.svg';
 import styled from 'styled-components';
 import nSeed from '../../assets/Icons/nSeed.png';
 import nSprout from '../../assets/Icons/nSprout.png';
@@ -43,7 +42,7 @@ function SideBar({ children }) {
 
       return response.data.data;
     } catch (error) {
-      console.error('????error:', error);
+      console.error('error:', error);
     }
   };
 
