@@ -173,7 +173,10 @@ function Room() {
             mainStreamManager: publisher,
             publisher: publisher,
           }));
-          // setIsConnected(true);
+
+          setTimeout(() => {
+            setLoadingState(false);
+          }, 2000);
         })
         .catch((error) => {
           console.log(
@@ -252,9 +255,6 @@ function Room() {
     }
   }, []);
 
-  setTimeout(() => {
-    setLoadingState(false);
-  }, 2000);
   return loadingstate ? (
     <StKakaoRedirectContainer>
       <StKakaoRedirectBox>
