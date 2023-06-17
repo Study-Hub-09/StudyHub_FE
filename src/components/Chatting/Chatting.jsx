@@ -1,12 +1,37 @@
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import cancel from '../../asset/cancel_white.svg';
 import logo from '../../asset/logo.svg';
 import profileimg from '../../asset/user.svg';
 import send from '../../asset/send.svg';
+import {
+  StChatContainer,
+  StChatBox,
+  StChatHeader,
+  StChatHeaderLeft,
+  StChatHeaderRight,
+  StChatArea,
+  StChatTextBox,
+  StChatTextTitle,
+  StChatTextTitleUser,
+  StChatTextTitleTime,
+  StChatTextContent,
+  StChatInput,
+  StSendButton,
+  StchatTime,
+  StTochat,
+  StTochatName,
+  Stchattext,
+  StchattextArea,
+  Stcancelbutton,
+  Stchatbox,
+  Stsendarea,
+  Stchatinput,
+  Stsendbutton,
+} from '../../styles/Chatting.styles';
 
 function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName }) {
   const chatDisplayRef = useRef(null);
+
   const getCurrentDate = () => {
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -21,234 +46,150 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
   }, [chatDatas]);
 
   return (
-    <StChatarea onSubmit={onSubmit}>
-      <Stchatheader>
-        <Stchatheaderleft>
-          <img src={logo} alt="" width={32} />
-          <Stchatheaderfont>대화창</Stchatheaderfont>
-        </Stchatheaderleft>
-        <Stcancelbutton src={cancel} alt="" onClick={onClick} />
-      </Stchatheader>
-      <Stchatbox ref={chatDisplayRef}>
-        {/* 보내는 메시지 */}
-        {chatDatas.map((chatData, id) => {
-          return (
-            <div key={id}>
-              {chatData.nickname === getUserName ? (
-                <StTochat>
-                  <StchattextArea>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '200px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          width: '195px',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <StchatTime>
-                          {getCurrentDate()} {chatData.createdAt}
-                        </StchatTime>
-                        <StTochatName>{chatData.nickname}</StTochatName>
-                      </div>
-                      <div>
-                        <Stchattext>{chatData.message}</Stchattext>
-                      </div>
-                    </div>
+    // <StChatContainer onSubmit={onSubmit}>
+    //   <StChatHeader>
+    //     <StChatHeaderLeft>
+    //       <img src={logo} alt="" width={32} />
+    //       <h3>대화창</h3>
+    //     </StChatHeaderLeft>
+    //     <Stcancelbutton src={cancel} alt="" onClick={onClick} />
+    //   </StChatHeader>
+    //   <Stchatbox ref={chatDisplayRef}>
+    //     {/* 보내는 메시지 */}
+    //     {chatDatas.map((chatData, id) => {
+    //       return (
+    //         <div key={id}>
+    //           {chatData.nickname === getUserName ? (
+    //             <StTochat>
+    //               <StchattextArea>
+    //                 <div
+    //                   style={{
+    //                     display: 'flex',
+    //                     flexDirection: 'column',
+    //                     width: '200px',
+    //                   }}
+    //                 >
+    //                   <div
+    //                     style={{
+    //                       display: 'flex',
+    //                       width: '195px',
+    //                       justifyContent: 'space-between',
+    //                     }}
+    //                   >
+    //                     <StchatTime>
+    //                       {getCurrentDate()} {chatData.createdAt}
+    //                     </StchatTime>
+    //                     <StTochatName>{chatData.nickname}</StTochatName>
+    //                   </div>
+    //                   <div>
+    //                     <Stchattext>{chatData.message}</Stchattext>
+    //                   </div>
+    //                 </div>
 
-                    <div>
-                      <img src={profileimg} alt="" />
-                    </div>
-                  </StchattextArea>
-                </StTochat>
-              ) : (
-                <StTochat>
-                  <StchattextArea>
-                    <div>
-                      <img src={profileimg} alt="" />
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '200px',
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'flex',
-                          width: '195px',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <StTochatName>{chatData.nickname}</StTochatName>
-                        <StchatTime>
-                          {getCurrentDate()} {chatData.createdAt}
-                        </StchatTime>
-                      </div>
-                      <div>
-                        <Stchattext style={{ textAlign: 'left' }}>
-                          {chatData.message}
-                        </Stchattext>
-                      </div>
-                    </div>
-                  </StchattextArea>
-                </StTochat>
-              )}
-            </div>
-          );
-        })}
-      </Stchatbox>
-      <Stsendarea>
-        <Stchatinput type="text" value={message} onChange={onChange} />
-        <button>
-          <Stsendbutton src={send} alt="" />
-        </button>
-      </Stsendarea>
-    </StChatarea>
+    //                 <div>
+    //                   <img src={profileimg} alt="" />
+    //                 </div>
+    //               </StchattextArea>
+    //             </StTochat>
+    //           ) : (
+    //             <StTochat>
+    //               <StchattextArea>
+    //                 <div>
+    //                   <img src={profileimg} alt="" />
+    //                 </div>
+    //                 <div
+    //                   style={{
+    //                     display: 'flex',
+    //                     flexDirection: 'column',
+    //                     width: '200px',
+    //                   }}
+    //                 >
+    //                   <div
+    //                     style={{
+    //                       display: 'flex',
+    //                       width: '195px',
+    //                       justifyContent: 'space-between',
+    //                     }}
+    //                   >
+    //                     <StTochatName>{chatData.nickname}</StTochatName>
+    //                     <StchatTime>
+    //                       {getCurrentDate()} {chatData.createdAt}
+    //                     </StchatTime>
+    //                   </div>
+    //                   <div>
+    //                     <Stchattext style={{ textAlign: 'left' }}>
+    //                       {chatData.message}
+    //                     </Stchattext>
+    //                   </div>
+    //                 </div>
+    //               </StchattextArea>
+    //             </StTochat>
+    //           )}
+    //         </div>
+    //       );
+    //     })}
+    //   </Stchatbox>
+    //   <Stsendarea>
+    //     <Stchatinput type="text" value={message} onChange={onChange} />
+    //     <button>
+    //       <Stsendbutton src={send} alt="" />
+    //     </button>
+    //   </Stsendarea>
+    // </StChatContainer>
+    <StChatContainer onSubmit={onSubmit}>
+      {/* 채팅 헤더 */}
+      <StChatHeader>
+        <StChatHeaderLeft>
+          <img src={logo} alt="" width={32} />
+          <h3>대화창</h3>
+        </StChatHeaderLeft>
+        <StChatHeaderRight>
+          <img src={cancel} alt="" />
+        </StChatHeaderRight>
+      </StChatHeader>
+      {/* 채팅 창 영역 */}
+      <StChatArea ref={chatDisplayRef}>
+        <StChatTextBox>
+          <StChatTextTitle>
+            <StChatTextTitleUser>
+              <img src={profileimg} alt="" />
+              <p>Guest</p>
+            </StChatTextTitleUser>
+            <StChatTextTitleTime>3:26 AM</StChatTextTitleTime>
+          </StChatTextTitle>
+          <StChatTextContent textalign="left" marginleft="30px">
+            <p>Texting..</p>
+            <p>Texting..</p>
+            <p>Texting..</p>
+          </StChatTextContent>
+        </StChatTextBox>
+
+        <StChatTextBox>
+          <StChatTextTitle>
+            <StChatTextTitleTime>3:26 AM</StChatTextTitleTime>
+            <StChatTextTitleUser>
+              <p>Guest</p>
+              <img src={profileimg} alt="" />
+            </StChatTextTitleUser>
+          </StChatTextTitle>
+          <StChatTextContent textalign="right" marginright="30px">
+            <p>Texting..</p>
+            <p>Texting..</p>
+            <p>Texting..</p>
+          </StChatTextContent>
+        </StChatTextBox>
+      </StChatArea>
+      {/* 채팅 입력 영역 */}
+      <StChatInput>
+        <input type="text" value={message} onChange={onChange} />
+        <StSendButton>
+          <button>
+            <img src={send} alt="" />
+          </button>
+        </StSendButton>
+      </StChatInput>
+    </StChatContainer>
   );
 }
 
 export default Chatting;
-
-const StChatarea = styled.form`
-  width: 329px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  border-left: 1px solid #424242;
-  padding: 10px 0px;
-`;
-
-const Stchatbox = styled.div`
-  background-color: white;
-  width: 280px;
-  height: 100%;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 15px; /* 스크롤 바 너비 */
-    height: 100px;
-    background-color: red;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    /* 스크롤바 색상 */
-    background-color: #4f1414;
-  }
-
-  &::-webkit-scrollbar-track {
-    /* 스크롤 바 트랙 색상 */
-    border-left: 2px solid #106511;
-    background-color: blue;
-  }
-`;
-
-const Stchatinput = styled.input`
-  width: 231px;
-  height: 36px;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  padding-left: 10px;
-  background-color: white;
-`;
-
-const Stsendarea = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 13px;
-`;
-
-const Stsendbutton = styled.img`
-  cursor: pointer;
-`;
-
-const Stcancelbutton = styled.img`
-  width: 15px;
-  cursor: pointer;
-`;
-const Stchatheader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 280px;
-`;
-
-const Stchatheaderleft = styled.div`
-  display: flex;
-  align-items: center;
-  width: 280px;
-`;
-
-const Stchatheaderfont = styled.span`
-  font-size: 18px;
-  font-weight: 700;
-  margin-left: 11px;
-  color: #b6b6b6;
-`;
-
-const StTochat = styled.div`
-  height: 74px;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-`;
-
-const StTochatinner = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 79.19px;
-`;
-const StchattextArea = styled.div`
-  width: 240px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StchatTime = styled.div`
-  color: #9d9d9d;
-  font-size: 14px;
-  font-weight: 500;
-`;
-const StTochatName = styled.div`
-  color: #00573f;
-  font-size: 15px;
-  font-weight: 700;
-`;
-const StFromchatName = styled.div`
-  color: black;
-  font-size: 15px;
-  font-weight: 700;
-`;
-const Stchattext = styled.p`
-  font-size: 15px;
-  font-weight: 500;
-  text-align: right;
-  width: 195px;
-`;
-const StFromchattext = styled.p`
-  display: flex;
-  justify-content: start;
-  font-size: 15px;
-  font-weight: 500;
-`;
-const StFromchat = styled.div`
-  height: 74px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  padding: 15px;
-`;
