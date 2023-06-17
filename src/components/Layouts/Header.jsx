@@ -10,6 +10,7 @@ import {
 } from '../../styles/Layout.styles';
 import { useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
+import { logout } from '../../core/api/auth/logout';
 
 function Header() {
   const navigate = useNavigate();
@@ -17,11 +18,22 @@ function Header() {
 
   const tokenHandler = () => {
     if (token) {
-      removeCookie('AccessToken', { path: '/' });
-      removeCookie('RefreshToken', { path: '/' });
-      localStorage.removeItem('member');
-      setToken('');
-      window.location.reload();
+      logout()
+        .then((response) => {
+          const {
+            status: statusCode,
+            data: { message: responseMessage },
+          } = response;
+          if (statusCode === 200 && responseMessage === '로그아웃 성공') {
+            removeCookie('AccessToken', { path: '/' });
+            removeCookie('RefreshToken', { path: '/' });
+            localStorage.removeItem('member');
+            setToken('');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -40,13 +52,17 @@ function Header() {
         </StHeaderLogo>
         <StHeaderAuth>
           <StHeaderRegister>
-            <Button
-              color="var(--color-black)"
-              hover="none"
-              onClick={() => navigate('/members/register')}
-            >
-              회원가입
-            </Button>
+            {token ? (
+              ''
+            ) : (
+              <Button
+                color="var(--color-black)"
+                hover="none"
+                onClick={() => navigate('/members/register')}
+              >
+                회원가입
+              </Button>
+            )}
           </StHeaderRegister>
 
           <Button
