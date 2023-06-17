@@ -109,11 +109,13 @@ function Main() {
     <>
       <div>
         {isModalOpen && (
-          <Modal
-            onClose={() => {
-              setModalOpen(false);
-            }}
-          />
+          <ModalPortal>
+            <Modal
+              onClose={() => {
+                setModalOpen(false);
+              }}
+            />
+          </ModalPortal>
         )}
         {joinModalOpen && (
           <ModalPortal>
