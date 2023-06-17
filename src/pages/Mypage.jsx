@@ -4,8 +4,6 @@ import { getCookie } from '../Cookies/Cookies';
 import profileLogo from '../../src/assets/Images/Frame 19.svg';
 import Graph from '../components/Graph/Graph';
 import { instance } from '../core/api/axios/instance';
-import { useQuery } from 'react-query';
-import { getRoom } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import ModalDday from '../components/Modal/ModalDday';
 import RoomPagination from '../components/Mypage/RoomPagination';
@@ -238,7 +236,7 @@ function Mypage({ onClose }) {
 
               <StHeaderDdayProfile>
                 <StHeaderDdayCon>
-                  <StHeaderDday>{token ? 'D-day' : 'D-00'}</StHeaderDday>
+                  <StHeaderDday>{'D-day'}</StHeaderDday>
                   <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp>
                   {/* <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
                   {showChild && <DdayList />} */}
@@ -292,6 +290,7 @@ function Mypage({ onClose }) {
                       </StContentMainTotalTimer>
                       <StContentMainTotalTimerTitle>
                         {result}
+                        지난주 공부시간보다 <br /> 늘었습니다.
                       </StContentMainTotalTimerTitle>
                     </StContentMainTotalTimerLayout>
                   </StContentMainTotalTimeBody>
@@ -379,22 +378,21 @@ const StMainContainer = styled.div`
 `;
 const StHeaderContainer = styled.div`
   width: 100%;
-  height: 20%;
+  height: 23.5%;
   display: flex;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderLeft = styled.div`
-  width: 10%;
+  width: 20%;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderMain = styled.div`
-  width: 80%;
+  width: 59.2%;
   display: flex;
-  justify-content: center;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderMainContainer = styled.div`
-  width: 80%;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: flex-end;
@@ -405,71 +403,76 @@ const StHeaderUserNameContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 35%;
-  height: 38%;
-  margin-bottom: 4.1%;
+  width: 40%;
+  height: 30%;
+  margin-bottom: 3rem;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderUserName = styled.div`
+  width: 100%;
+  height: 59%;
   font-style: normal;
   font-weight: 700;
-  font-size: 2rem;
-  line-height: 44px;
+  font-size: 2vw;
+  line-height: 2.75rem;
   color: #000000;
-  margin: 0px 0px 9.39px 0px;
+  margin: 0rem 0rem 0.563rem 0rem;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderUserIntro = styled.div`
   font-style: normal;
   font-weight: 400;
-  font-size: 1.125rem;
+  font-size: 1.12vw;
   line-height: 120%;
   color: #9d9d9d;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderDdayProfile = styled.div`
   width: 30%;
-  height: 38%;
+  height: 22%;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-bottom: 48.39px;
-  margin-right: 20px;
+  margin-bottom: 4.063rem;
+  margin-right: 1.25rem;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderDdayCon = styled.div`
-  width: 100%;
-  height: 70%;
+  width: 65%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderDday = styled.div`
-  width: 100%;
+  width: 80%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 2rem;
-  line-height: 44px;
+  font-size: 2vw;
+  line-height: 2.75rem;
   color: #00573f;
   /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderDdayOp = styled.div`
-  width: 50%;
-  height: 50%;
+  width: 35%;
+  height: 28%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 19px;
+  font-size: 0.972vw;
+  line-height: 1.188rem;
   text-decoration-line: underline;
   color: #848484;
-  margin: 0px 0px 10px 13px;
+  margin: 0vw 0vw 0.903vw 0.035vw;
   cursor: pointer;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderProfile = styled.div`
-  width: 30%;
-  height: 60%;
-  margin-left: 50px;
+  width: 22.3%;
+  height: 100%;
+  margin-left: 1.944vw;
+  /* border: 1px solid #ff8d8d; */
 `;
 const StHeaderProfileImg = styled.img`
   width: 100%;
@@ -478,28 +481,27 @@ const StHeaderProfileImg = styled.img`
 `;
 const StContentContainer = styled.div`
   width: 100%;
-  height: 80%;
+  height: 76.5%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentLeft = styled.div`
-  width: 10%;
+  width: 20%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMain = styled.div`
-  width: 80%;
-  margin-left: 8%;
+  width: 59.2%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainContainerT = styled.div`
-  width: 80%;
-  height: 45%;
+  width: 100%;
+  height: 42.5%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTime = styled.div`
   box-sizing: border-box;
-  width: 60%;
+  width: 59%;
   background: #ffffff;
   border: 1px solid #bfbfbf;
   border-radius: 12px;
@@ -510,16 +512,16 @@ const StContentMainTotalTime = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeLayout = styled.div`
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeHead = styled.div`
-  width: 90%;
-  height: 15%;
+  width: 100%;
+  height: 17.5%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -528,28 +530,30 @@ const StContentMainTotalTimeHead = styled.div`
 const StContentMainTotalTimeTitel = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 45%;
-  height: 70%;
+  width: 50%;
+  height: 54%;
+  margin: 1.5rem 1.375rem 0rem 0rem;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeText = styled.div`
-  width: 50%;
+  width: 53%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 27px;
+  font-size: 1.389vw;
+  line-height: 1.688rem;
   color: #000000;
-  margin-right: 7%;
+  margin-right: 5%;
+  display: flex;
+  justify-content: center;
 `;
 const StContentMainTotalTimeText2 = styled.div`
-  width: 40%;
-  height: 80%;
+  width: 38%;
+  height: 70%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 19px;
+  font-size: 0.972vw;
+  line-height: 1.188rem;
   color: #848484;
 `;
 const StContentMainTotalTimeBody = styled.div`
@@ -561,65 +565,69 @@ const StContentMainTotalTimeBody = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeView = styled.div`
-  width: 100%;
-  height: 80%;
+  width: 55%;
+  height: 72%;
   background: #d9efe9;
   border-radius: 14.266px;
-  margin-right: 24px;
+  margin: 0vw 1.042vw 0vw 0.694vw;
   display: flex;
   align-items: center;
   justify-content: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimeViewT = styled.div`
-  width: 42%;
-  height: 23%;
+  width: 38.3%;
+  height: 20.5%;
   font-style: normal;
   font-weight: 700;
-  font-size: 2rem;
-  line-height: 44px;
+  font-size: 2.222vw;
+  line-height: 2.75rem;
   color: #303031;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimerLayout = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 40%;
-  height: 82%;
+  /* align-items: flex-start; */
+  /* justify-content: flex-end; */
+  margin: 0rem 0rem 1.563rem 0rem;
+  width: 33%;
+  height: 60%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimerTitle = styled.div`
   width: 100%;
-  height: 9%;
+  height: 12%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.938rem;
-  line-height: 20px;
+  font-size: 1.042vw;
+  line-height: 1.25rem;
   color: #747475;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTotalTimer = styled.div`
   width: 100%;
-  height: 18%;
+  height: 23%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.625rem;
-  line-height: 35px;
+  font-size: 1.806vw;
+  line-height: 2.188rem;
   color: #303031;
-  margin: 7px 0px 17px 0px;
+  margin: 0.313rem 0rem 0.5rem 0rem;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainContainerB = styled.div`
-  width: 80%;
-  height: 45%;
+  width: 100%;
+  height: 37.8%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatistics = styled.div`
   box-sizing: border-box;
-  width: 55%;
-  height: 90%;
+  width: 53%;
   background: #ffffff;
   border: 1px solid #bfbfbfbf;
   border-radius: 12px;
@@ -634,19 +642,19 @@ const StContentMainStatisticsTitleH = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 100%;
+  width: 90%;
   height: 10%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitl = styled.div`
-  width: 9%;
+  width: 20%;
   height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25rem;
-  line-height: 27px;
+  font-size: 1.389vw;
+  line-height: 1.688rem;
   color: #303031;
-  margin-right: 45px;
+  margin-right: 2.813rem;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainStatisticsTitlBox = styled.div`
@@ -662,71 +670,71 @@ const StContentMainStatisticsTitlBox = styled.div`
 `;
 const StContentMainStatisticsTitlBoxList = styled.div`
   width: 6%;
-  height: 50%;
+  height: 70%;
   font-style: normal;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.833vw;
+  line-height: 1rem;
   color: #848484;
   cursor: pointer;
   &:hover {
     width: 20%;
-    height: 50%;
-    padding: 0px 0px 0px 18px;
-    margin: 0px -15px 0px -18px;
+    height: 70%;
+    padding: 0px 0px 0px 12px;
+    margin: 0px -15px 0px -12px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsTitlBoxList2 = styled.div`
   width: 6%;
-  height: 50%;
+  height: 70%;
   font-style: normal;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.833vw;
+  line-height: 1rem;
   color: #848484;
   cursor: pointer;
   &:hover {
     width: 20%;
-    height: 50%;
-    padding: 0px 0px 0px 16px;
-    margin: 0px -20px 0px -18px;
+    height: 70%;
+    padding: 0px 0px 0px 12px;
+    margin: 0px -12px 0px -12px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsTitlBoxList3 = styled.div`
   width: 6%;
-  height: 50%;
+  height: 70%;
   font-style: normal;
   font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.833vw;
+  line-height: 1rem;
   color: #848484;
   cursor: pointer;
   &:hover {
     width: 20%;
-    height: 50%;
-    padding: 0px 0px 0px 16px;
-    margin: 0px -18px 0px -15px;
+    height: 70%;
+    padding: 0px 0px 0px 12px;
+    margin: 0px -15px 0px -12px;
     background: #ffffff;
   }
 `;
 const StContentMainStatisticsGraph = styled.div`
   width: 100%;
   height: 63%;
-  margin: 20px 0px 14px 0px;
+  margin: 1.25rem 0rem 0rem 0rem;
   display: flex;
   justify-content: center;
   /* background: #eaeaea; */
   /* border: 1px solid #8cacff; */
 `;
-const StContentMainStatisticsSub = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 164.55px;
-  height: 16px;
-  /* border: 1px solid #8cacff; */
-`;
+// const StContentMainStatisticsSub = styled.div`
+//   display: flex;
+//   align-items: flex-start;
+//   width: 164.55px;
+//   height: 16px;
+//   border: 1px solid #8cacff;
+// `;
 // const StContentMainStatisticsSubT = styled.div`
 //   display: flex;
 //   align-items: flex-start;
@@ -735,8 +743,7 @@ const StContentMainStatisticsSub = styled.div`
 //   background: #f8f8f8;
 // `;
 const StContentMainSubContainer = styled.div`
-  width: 45%;
-  height: 90%;
+  width: 46%;
   display: flex;
   flex-direction: column;
   margin-top: 1%;
@@ -744,7 +751,7 @@ const StContentMainSubContainer = styled.div`
 `;
 const StContentMainTitelRank = styled.div`
   width: 100%;
-  height: 50%;
+  height: 46%;
   display: flex;
   /* border: 1px solid #8cacff; */
 `;

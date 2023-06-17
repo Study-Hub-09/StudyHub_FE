@@ -86,18 +86,18 @@ const StContentMainTodoList = styled.div`
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  /* border: 1px solid #8cacff; */
+  border: 1px solid #8cacff;
 `;
 const StContentMainTodoListTitle = styled.div`
-  width: 45%;
+  width: 80%;
   height: 9%;
   font-style: normal;
   font-weight: 700;
   font-size: 1.25rem;
-  line-height: 27px;
+  line-height: 1.688rem;
   color: #000000;
   margin: 28px 0px 34px 28px;
-  /* border: 1px solid #8cacff; */
+  border: 1px solid #8cacff;
 `;
 const StContentMainTodoListRoom = styled.div`
   width: 100%;

@@ -3,7 +3,6 @@ import LogoW from '../../assets/Images/LogoW.svg';
 import Logoic from '../../assets/Images/Logoic.svg';
 import Analitycs from '../../assets/Images/Analitycs.svg';
 import Dashboard from '../../assets/Images/Dashboard Icon.svg';
-import Search from '../../assets/Images/Search.svg';
 import materialsymbols from '../../assets/Images/material-symbols_help-outline.svg';
 import setting from '../../assets/Images/setting2.svg';
 import logout from '../../assets/Images/logout.svg';
@@ -12,6 +11,13 @@ import Straight from '../../assets/Images/Straight.svg';
 import RevStraight from '../../assets/Images/RevStraight.svg';
 import sprout from '../../assets/Images/sprout.svg';
 import styled from 'styled-components';
+import nSeed from '../../assets/Icons/nSeed.png';
+import nSprout from '../../assets/Icons/nSprout.png';
+import nSapling from '../../assets/Icons/nSapling.png';
+import nTree from '../../assets/Icons/nTree.png';
+import nBigTree from '../../assets/Icons/nBigTree.png';
+import nCenturyTree from '../../assets/Icons/nCenturyTree.png';
+import nWorldTree from '../../assets/Icons/nWorldTree.png';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
@@ -24,6 +30,7 @@ function SideBar({ children }) {
 
   const [token, setToken] = useState('');
   const [totalStudyTime, setTotalStudyTime] = useState(0);
+  const [title, setTitle] = useState('');
 
   const userInfo = async () => {
     try {
@@ -45,6 +52,28 @@ function SideBar({ children }) {
     setToken(accessToken);
     userInfo();
   }, []);
+
+  const getRankingImage = () => {
+    // 랭킹 이미지를 랭킹에 따라 매핑합니다.
+    if (token) {
+      if (title === '씨앗') {
+        return nSeed;
+      } else if (title === '새싹') {
+        return nSprout;
+      } else if (title === '잎줄기') {
+        return nSapling;
+      } else if (title === '묘목') {
+        return nTree;
+      } else if (title === '나무') {
+        return nBigTree;
+      } else if (title === '거목') {
+        return nCenturyTree;
+      } else if (title === '세계수') {
+        return nWorldTree;
+      }
+    }
+    return nSeed;
+  };
 
   const tokenHandler = () => {
     if (token) {
@@ -70,7 +99,7 @@ function SideBar({ children }) {
   const menuItem = [
     {
       navigate: '/main',
-      name: '진행중인 스터디',
+      name: '공개 스터디',
       icon: <img src={Analitycs} alt="오류" />,
     },
     {
@@ -149,7 +178,7 @@ function SideBar({ children }) {
 
             <StPofileTextFreame>
               <StPofileImgText isOpen={isOpen}>
-                <StPofileImg src={sprout} />
+                <StPofileImg src={getRankingImage()} />
                 <StPofileName>{token ? localStorage.member : '게스트'}</StPofileName>
               </StPofileImgText>
 
@@ -173,11 +202,13 @@ export default SideBar;
 const StContainer = styled.div`
   display: flex;
   height: 100vh;
+  width: 260px;
+  /* border: 1px solid #ffffff; */
 `;
 const StSidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 260px;
+  width: 100%;
   height: 100vh;
   background: #00573f;
   filter: drop-shadow(6px 6px 10px #d9e7dd);
