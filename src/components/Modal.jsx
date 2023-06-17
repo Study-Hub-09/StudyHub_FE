@@ -57,7 +57,6 @@ const Modal = ({ onClose }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    console.log(file);
     setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
       alert('이미지 파일만 업로드 가능합니다.');
@@ -70,16 +69,13 @@ const Modal = ({ onClose }) => {
       setReaderImage(event.target.result);
     };
     reader.readAsDataURL(file);
-    console.log('reader', reader);
   };
   // 랜덤 이미지 설정
   const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
   const randomImageHandler = () => {
     const randomIndex = Math.floor(Math.random() * imageArray.length);
     setrandomImage(imageArray[randomIndex]);
-    console.log(randomImage);
   };
-  console.log(selectDate);
   // 방생성 핸들러
   const addbuttonHandler = async () => {
     const unarrayselectedCategories = selectedCategories.join(',');
@@ -94,7 +90,6 @@ const Modal = ({ onClose }) => {
       };
       // FormData에 데이터 추가
       const formData = new FormData();
-      console.log(formData);
       const contentrString = JSON.stringify(content);
       await formData.append(
         'content',

@@ -21,7 +21,7 @@ export const openviduapi = axios.create({
 instance.interceptors.request.use(
   // Access Token과 Refresh Token을 headers에 담아서 요청
   (config) => {
-    console.log('INSTANCE REQUEST SUCCESS===> ', config);
+    // console.log('INSTANCE REQUEST SUCCESS===> ', config);
     const accessToken = getCookie('AccessToken');
     const refreshToken = getCookie('RefreshToken');
 
@@ -34,7 +34,7 @@ instance.interceptors.request.use(
 
   // 오류 요청을 보내기 전 수행되는 함수
   (error) => {
-    console.log('INSTANCE REQUEST ERROR=======> ', error);
+    // console.log('INSTANCE REQUEST ERROR=======> ', error);
     return Promise.reject(error);
   }
 );
@@ -43,7 +43,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // Access Token과 Refresh 토큰 처리
   (response) => {
-    console.log('INSTANCE RESPONSE SUCCESS======> ', response);
+    // console.log('INSTANCE RESPONSE SUCCESS======> ', response);
     const {
       status: statusCode,
       data: { message: responseMessage, data: nickname },
@@ -65,7 +65,7 @@ instance.interceptors.response.use(
 
   // 오류 응답을 보내기 전 수행되는 함수
   async (error) => {
-    console.log('INSTANCE RESPONSE ERROR=======> ', error);
+    // console.log('INSTANCE RESPONSE ERROR=======> ', error);
 
     const {
       config,
@@ -90,7 +90,7 @@ instance.interceptors.response.use(
         originalRequest.headers['Access_Token'] = `Bearer ${newAccessToken}`;
         return await axios(originalRequest);
       } catch (error) {
-        console.log('response error:', error);
+        // console.log('response error:', error);
 
         const {
           response: {
@@ -117,7 +117,7 @@ instance.interceptors.response.use(
 openviduapi.interceptors.request.use(
   // Access Token과 Openvidu Token headers에 담아서 요청
   (config) => {
-    console.log('OPENVIDU REQUEST SUCCESS===> ', config);
+    // console.log('OPENVIDU REQUEST SUCCESS===> ', config);
     const accessToken = getCookie('AccessToken');
     const refreshToken = getCookie('RefreshToken');
 
@@ -131,7 +131,7 @@ openviduapi.interceptors.request.use(
 
   // 오류 요청을 보내기 전 수행되는 함수
   (error) => {
-    console.log('OPENVIDU REQUEST ERROR=======> ', error);
+    // console.log('OPENVIDU REQUEST ERROR=======> ', error);
     return Promise.reject(error);
   }
 );
@@ -140,13 +140,13 @@ openviduapi.interceptors.request.use(
 openviduapi.interceptors.response.use(
   // 응답을 보내기 전 수행되는 함수
   (response) => {
-    console.log('OPENVIDU RESPONSE SUCCESS======> ', response);
+    // console.log('OPENVIDU RESPONSE SUCCESS======> ', response);
     return response;
   },
 
   // 오류 응답을 보내기 전 수행되는 함수
   async (error) => {
-    console.log('OPENVIDU RESPONSE ERROR=======> ', error);
+    // console.log('OPENVIDU RESPONSE ERROR=======> ', error);
 
     const {
       config,
@@ -171,8 +171,6 @@ openviduapi.interceptors.response.use(
         originalRequest.headers['Access_Token'] = `Bearer ${newAccessToken}`;
         return await axios(originalRequest);
       } catch (error) {
-        console.log('response error:', error);
-
         const {
           response: {
             status,

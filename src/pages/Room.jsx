@@ -179,11 +179,7 @@ function Room() {
           }, 2000);
         })
         .catch((error) => {
-          console.log(
-            '세션에 연결하는 중 오류가 발생했습니다:',
-            error.code,
-            error.message
-          );
+          console.log(error);
         });
     });
   };
@@ -232,7 +228,7 @@ function Room() {
           navigate('/main');
         }
       } catch (error) {
-        console.log('퇴장 실패:', error);
+        console.log(error);
       }
     }
     OV.current = null;
@@ -288,7 +284,6 @@ function Room() {
               <div
                 className="stream-container col-md-6 col-xs-6"
                 onClick={() => {
-                  console.log('handlemain====>');
                   handleMainVideoStream(publisher);
                 }}
               >
