@@ -128,7 +128,7 @@ const Stcamboxname = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 500;
   position: absolute;
   bottom: 13.11px;

@@ -37,7 +37,6 @@ function Mypage({ onClose }) {
   const userInfo = async () => {
     try {
       const response = await instance.get(`/api/members/mypage`);
-      console.log('#######response', response.data.data);
 
       const {
         dailyStudyChart,

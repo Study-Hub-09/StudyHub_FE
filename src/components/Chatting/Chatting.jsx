@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import cancel from '../../asset/cancel.svg';
+import cancel from '../../asset/cancel_white.svg';
 import logo from '../../asset/logo.svg';
 import profileimg from '../../asset/user.svg';
 import send from '../../asset/send.svg';
@@ -23,10 +23,10 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
   return (
     <StChatarea onSubmit={onSubmit}>
       <Stchatheader>
-        <div>
-          <img src={logo} alt="" />
+        <Stchatheaderleft>
+          <img src={logo} alt="" width={32} />
           <Stchatheaderfont>대화창</Stchatheaderfont>
-        </div>
+        </Stchatheaderleft>
         <Stcancelbutton src={cancel} alt="" onClick={onClick} />
       </Stchatheader>
       <Stchatbox ref={chatDisplayRef}>
@@ -124,7 +124,7 @@ const StChatarea = styled.form`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  border-left: 1px solid #b6b6b6;
+  border-left: 1px solid #424242;
   padding: 10px 0px;
 `;
 
@@ -177,11 +177,19 @@ const Stsendbutton = styled.img`
 `;
 
 const Stcancelbutton = styled.img`
+  width: 15px;
   cursor: pointer;
 `;
 const Stchatheader = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 280px;
+`;
+
+const Stchatheaderleft = styled.div`
+  display: flex;
+  align-items: center;
   width: 280px;
 `;
 
