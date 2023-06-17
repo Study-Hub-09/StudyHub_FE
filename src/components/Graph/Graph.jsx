@@ -201,6 +201,8 @@ const Graph = ({
               bottom: -10, // 그래프와 레이블 간의 간격을 조절
             },
           },
+          maintainAspectRatio: false,
+          responsive: true,
         },
       };
 
@@ -242,8 +244,8 @@ const Graph = ({
 export default Graph;
 
 const StGraphContainer = styled.div`
-  height: 110%;
-  width: 110%;
+  height: 100%;
+  width: 90%;
   display: flex;
   justify-content: center;
 `;
