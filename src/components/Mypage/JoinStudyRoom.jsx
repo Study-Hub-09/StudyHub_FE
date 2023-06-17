@@ -43,7 +43,7 @@ function JoinStudyRoom() {
             if (index < 3) {
               return (
                 <StContentMainTodoListRoomList key={item.roomId}>
-                  <StContentMainTodoListRoomNaCa>
+                  <StContentMainTodoListRoomNaCa onClick={() => openJoinModal(index)}>
                     <StContentMainTodoListRoomNa>
                       {item.roomName}
                     </StContentMainTodoListRoomNa>
@@ -56,11 +56,11 @@ function JoinStudyRoom() {
                     </StContentMainTodoListRoomCa>
                   </StContentMainTodoListRoomNaCa>
 
-                  <StContentMainTodoListRoomBtn onClick={() => openJoinModal(index)}>
+                  {/* <StContentMainTodoListRoomBtn onClick={() => openJoinModal(index)}>
                     <StContentMainTodoListRoomBtnF>
                       입장하기
                     </StContentMainTodoListRoomBtnF>
-                  </StContentMainTodoListRoomBtn>
+                  </StContentMainTodoListRoomBtn> */}
                   {openModalIndex === index && (
                     <ModalPortal>
                       <Joinmodal roomData={item} onClose={closeJoinModal} />
@@ -89,32 +89,32 @@ const StContentMainTodoList = styled.div`
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListTitle = styled.div`
-  width: 80%;
-  height: 9%;
+  width: 87%;
+  height: 10%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.389vw;
   line-height: 1.688rem;
   color: #000000;
-  margin: 28px 0px 34px 28px;
+  margin: 19px 20px 22px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListRoom = styled.div`
   width: 100%;
-  height: 71%;
+  height: 75%;
   display: flex;
   flex-direction: column;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListRoomList = styled.div`
-  width: 85%;
-  height: 31%;
+  width: 87%;
+  height: 30%;
   background: rgba(144, 181, 76, 0.2);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0px 0px 20px 28px;
+  margin: 0px 20px 20px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListRoomNaCa = styled.div`
@@ -131,6 +131,7 @@ const StContentMainTodoListRoomNa = styled.div`
   color: #000000;
   display: flex;
   margin: 0px 0px 0px 20px;
+  cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListRoomCa = styled.div`
@@ -143,29 +144,30 @@ const StContentMainTodoListRoomCa = styled.div`
   color: #90b54c;
   display: flex;
   margin: 0px 0px 0px 20px;
+  cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
-const StContentMainTodoListRoomBtn = styled.button`
-  box-sizing: border-box;
-  width: 36%;
-  height: 75%;
-  display: flex;
-  align-items: center;
-  padding: 12px 24px;
-  background: #fefefefe;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 30px;
-  margin: 0px 20px 0px 0px;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTodoListRoomBtnF = styled.div`
-  width: 100%;
-  height: 100%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 0.938rem;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-  color: #00573f;
-`;
+// const StContentMainTodoListRoomBtn = styled.button`
+//   box-sizing: border-box;
+//   width: 36%;
+//   height: 75%;
+//   display: flex;
+//   align-items: center;
+//   padding: 12px 24px;
+//   background: #fefefefe;
+//   border: 1px solid #bfbfbfbf;
+//   border-radius: 30px;
+//   margin: 0px 20px 0px 0px;
+//   /* border: 1px solid #8cacff; */
+// `;
+// const StContentMainTodoListRoomBtnF = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   font-style: normal;
+//   font-weight: 700;
+//   font-size: 0.938rem;
+//   line-height: 20px;
+//   display: flex;
+//   align-items: center;
+//   color: #00573f;
+// `;

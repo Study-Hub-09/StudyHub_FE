@@ -45,8 +45,7 @@ function Rank({
       <StContentMainRankName>
         <StContentMainRankImg src={getRankingImage()} alt="오류" />
         <StContentMainRankNic>
-          {/* {token ? topRankedNickname : '공부왕'} */}
-          공부왕
+          {token ? topRankedNickname : '공부왕'}
         </StContentMainRankNic>
       </StContentMainRankName>
 
