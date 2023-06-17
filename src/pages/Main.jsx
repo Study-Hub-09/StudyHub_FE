@@ -16,6 +16,7 @@ import Joinmodal from '../components/Joinmodal';
 import lockimg from '../asset/lock.svg';
 import Selectbox from '../components/Selectbox';
 import { useRoomData, useSearchData } from '../components/Customhook';
+import ModalPortal from '../components/Modal/ModalPortal';
 
 function Main() {
   const [checked, setChecked] = useState(false);
@@ -115,12 +116,14 @@ function Main() {
           />
         )}
         {joinModalOpen && (
-          <Joinmodal
-            roomData={pageData.find((item) => item.sessionId === selectedRoomId)}
-            onClose={() => {
-              setJoinModalOpen(false);
-            }}
-          />
+          <ModalPortal>
+            <Joinmodal
+              roomData={pageData.find((item) => item.sessionId === selectedRoomId)}
+              onClose={() => {
+                setJoinModalOpen(false);
+              }}
+            />
+          </ModalPortal>
         )}
       </div>
       <Stcontainer>

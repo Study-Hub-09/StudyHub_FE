@@ -206,8 +206,8 @@ const StContentMainSubStudyRoomBtnF = styled.button`
   /* border: 1px solid #8cacff; */
 `;
 const Stallowbox = styled.div`
-  height: 29.5%;
-  width: 16.2%;
+  height: 25%;
+  width: 15%;
   margin: 1.5% 0% 0% 75%;
   display: flex;
   /* justify-content: end; */
