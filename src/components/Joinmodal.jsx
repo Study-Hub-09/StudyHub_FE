@@ -85,8 +85,8 @@ function Joinmodal({ onClose, roomData }) {
               <>
                 <img src={lockimg} alt="" width={10} height={14} />
                 <StpasswordInput
-                  type="text"
-                  placeholder="1234"
+                  type="password"
+                  placeholder=""
                   maxLength="5"
                   value={roomPassword}
                   onChange={(e) => {
