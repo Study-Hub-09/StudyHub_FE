@@ -56,7 +56,12 @@ function Joinmodal({ onClose, roomData }) {
         <StLayout>
           <Stheaderbox>
             {/* <Stthumnail /> */}
-            <img src={studyhub} alt="" width={120} />
+            <img
+              src={roomData.imageUrl === '대표 이미지 URL' ? studyhub : roomData.imageUrl}
+              alt=""
+              width={120}
+              height={120}
+            />
             <Stheadericon>
               <Stcancelimg
                 src={cancel}
