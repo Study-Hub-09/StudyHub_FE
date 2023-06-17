@@ -295,7 +295,6 @@ function Mypage({ onClose }) {
                       </StContentMainTotalTimer>
                       <StContentMainTotalTimerTitle>
                         {result}
-                        지난주 공부시간보다 <br /> 늘었습니다.
                       </StContentMainTotalTimerTitle>
                     </StContentMainTotalTimerLayout>
                   </StContentMainTotalTimeBody>
@@ -608,7 +607,7 @@ const StContentMainTotalTimerTitle = styled.div`
   height: 12%;
   font-style: normal;
   font-weight: 500;
-  font-size: 1.042vw;
+  font-size: 0.972vw;
   line-height: 1.25rem;
   color: #747475;
   /* border: 1px solid #8cacff; */
