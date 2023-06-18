@@ -231,7 +231,7 @@ function Room() {
                 insertMode: 'APPEND',
                 mirror: true,
               });
-              console.log('퍼블리셔야 십>>>>>> ', publisher);
+              console.log('publisher>>>>>> ', publisher);
 
               mySession.publish(publisher);
 
@@ -342,47 +342,7 @@ function Room() {
   useEffect(() => {
     const fetchData = async () => {
       if (token) {
-        try {
-          const response = await createSession(mySessionId, memberData);
-          const {
-            status: statusCode,
-            data: { message: responseMessage },
-          } = response;
-          if (statusCode === 200 && responseMessage === '스터디 룸 입장 성공') {
-            try {
-              joinSession();
-            } catch (error) {
-              console.log('joinSessionError>>> ', error);
-            }
-          }
-          return response;
-        } catch (error) {
-          console.log('createSessionError>>> ', error);
-          const {
-            response: {
-              data: { message: errorMessage, statusCode },
-            },
-          } = error;
-          if (statusCode === 409 && errorMessage === '하나의 방에만 입장할 수 있습니다') {
-            alert(errorMessage);
-            navigate('/main');
-          }
-          if (statusCode === 409 && errorMessage === '이미 입장한 멤버입니다.') {
-            try {
-              const response = await exitRoom(studyTime, mySessionId);
-              const {
-                status: statusCode,
-                data: { message: responseMessage },
-              } = response;
-              if (statusCode === 200 && responseMessage === '스터디 룸 퇴장 성공') {
-                navigate('/main');
-              }
-              return response;
-            } catch (error) {
-              console.log('exitRoom Error>>> ', error);
-            }
-          }
-        }
+        joinSession();
       } else {
         alert('로그인 후 이용 가능한 페이지입니다');
         navigate('/members/login');
