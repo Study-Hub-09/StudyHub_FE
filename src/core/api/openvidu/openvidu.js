@@ -18,8 +18,6 @@ const createToken = async (sessionId) => {
 
 // 룸 퇴장 함수
 const exitRoom = async (studyTime, sessionId) => {
-  console.log('studyTime>>>> ', studyTime);
-  console.log('sessionId>>>> ', sessionId);
   const response = await instance.delete(`/api/rooms/${sessionId}/out`, {
     params: {
       studytime: studyTime,

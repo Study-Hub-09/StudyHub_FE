@@ -196,6 +196,7 @@ function Room() {
           ...prevState,
           subscribers: [...prevState.subscribers, subscriber],
         }));
+        console.log('???????? ', event);
       });
 
       mySession.on('streamDestroyed', (event) => {
@@ -230,20 +231,28 @@ function Room() {
                 insertMode: 'APPEND',
                 mirror: true,
               });
+              console.log('퍼블리셔야 십>>>>>> ', publisher);
 
               mySession.publish(publisher);
 
               const devices = await OV.current.getDevices();
+              console.log('devices>>>> ', devices);
+
               const videoDevices = devices.filter(
                 (device) => device.kind === 'videoinput'
               );
+              console.log('videoDevices>>>> ', videoDevices);
+
               const currentVideoDeviceId = publisher.stream
                 .getMediaStream()
                 .getVideoTracks()[0]
                 .getSettings().deviceId;
+              console.log('currentVidoDeviceId>>>> ', currentVideoDeviceId);
+
               const currentVideoDevice = videoDevices.find(
                 (device) => device.deviceId === currentVideoDeviceId
               );
+              console.log('currentVidoDevice>>>> ', currentVideoDevice);
 
               setState((prevState) => ({
                 ...prevState,
@@ -259,13 +268,8 @@ function Room() {
             .catch((error) => {
               const { message: errorMessage, name: errorName } = error;
               if (errorMessage && errorName) {
-                alert(`${errorName}`);
-                try {
-                  leaveSession(studyTime, mySessionId);
-                } catch (error) {
-                  console.log('leaveSession error', error);
-                }
-                navigate('/main');
+                // alert(`${(errorMessage, errorName)}`);
+                console.log(`${(errorMessage, errorName)}`);
               }
             });
         })
