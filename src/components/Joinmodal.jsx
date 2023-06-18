@@ -17,35 +17,14 @@ function Joinmodal({ onClose, roomData }) {
   const token = getCookie('AccessToken');
   const [roomPassword, setRoomPassword] = useState('');
 
-  const studyTime = 0;
-  const sessionId = roomData.sessionId;
-
   const joinbuttonHandler = async () => {
     const memberData = {
       roomPassword,
     };
-    // await joinRoom(roomData.sessionId, memberData);
     if (token) {
-      createSession(roomData.sessionId, memberData)
-        .then((response) => {
-          if (response.status === 200) {
-            navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
-          }
-        })
-        .catch((error) => {
-          const {
-            response: { status: statusCode, data: errorMessage },
-          } = error;
-          if (statusCode === 400 && errorMessage === '이미 입장한 멤버입니다.') {
-            exitRoom(studyTime, sessionId).then((response) => {
-              sessionId.disconnect(); // 세션 종료
-              disconnectClient(); // 채팅 종료
-            });
-          }
-          // console.log('joinModalError>>>> ', error);
-        });
-      // createSession(roomData.sessionId, memberData);
-      // navigate(`/rooms/${roomData.sessionId}/detail`, { state: { roomData } });
+      navigate(`/rooms/${roomData.sessionId}/detail`, {
+        state: { roomData, memberData },
+      });
     } else {
       alert('로그인이 필요한 페이지입니다.');
       navigate('/members/login');
