@@ -13,7 +13,7 @@ import view from '../asset/view.svg';
 import Vector from '../asset/Vector.svg';
 import { getCookie } from '../Cookies/Cookies';
 import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
-import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
+import { createSession, createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
@@ -31,6 +31,7 @@ function Room() {
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
 
+  const { memberData } = location.state;
   const { roomData } = location.state || {};
 
   const [state, setState] = useState({
@@ -48,7 +49,7 @@ function Room() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
 
-  const [studyTime, setStudyTime] = useState(null);
+  const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
   const { mySessionId, mainStreamManager, publisher, subscribers, session } = state;
 
@@ -57,7 +58,7 @@ function Room() {
   };
 
   const handleSaveTime = (time) => {
-    setStudyTime(time || 0);
+    setStudyTime(time);
   };
 
   const toggleAudioState = () => {
@@ -110,78 +111,174 @@ function Room() {
   };
 
   // 룸 입장 함수
-  const joinSession = () => {
-    OV.current = new OpenVidu();
-    const session = OV.current.initSession();
-    const mySession = session;
+  // const joinSession = () => {
+  //   OV.current = new OpenVidu();
+  //   const session = OV.current.initSession();
+  //   const mySession = session;
 
-    mySession.on('streamCreated', (event) => {
-      const subscriber = mySession.subscribe(event.stream, undefined);
+  //   mySession.on('streamCreated', (event) => {
+  //     const subscriber = mySession.subscribe(event.stream, undefined);
+  //     setState((prevState) => ({
+  //       ...prevState,
+  //       subscribers: [...prevState.subscribers, subscriber],
+  //     }));
+  //   });
+
+  //   mySession.on('streamDestroyed', (event) => {
+  //     deleteSubscriber(event.stream.streamManager);
+  //   });
+
+  //   mySession.on('exception', (exception) => {
+  //     console.warn(exception);
+  //   });
+
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     session: mySession,
+  //   }));
+
+  //   // 룸 채팅 연결
+  //   connectClient(mySessionId, getChattingData);
+
+  //   // 룸 세션 연결
+  //   getToken().then((token) => {
+  //     mySession
+  //       .connect(token, { clientData: getUserName })
+  //       .then(async () => {
+  //         const publisher = await OV.current.initPublisherAsync(undefined, {
+  //           audioSource: undefined,
+  //           videoSource: undefined,
+  //           publishAudio: audioEnabled,
+  //           publishVideo: videoEnabled,
+  //           resolution: '1920x1080',
+  //           frameRate: 60,
+  //           insertMode: 'APPEND',
+  //           mirror: true,
+  //         });
+
+  //         mySession.publish(publisher);
+
+  //         const devices = await OV.current.getDevices();
+  //         const videoDevices = devices.filter((device) => device.kind === 'videoinput');
+  //         const currentVideoDeviceId = publisher.stream
+  //           .getMediaStream()
+  //           .getVideoTracks()[0]
+  //           .getSettings().deviceId;
+  //         const currentVideoDevice = videoDevices.find(
+  //           (device) => device.deviceId === currentVideoDeviceId
+  //         );
+
+  //         setState((prevState) => ({
+  //           ...prevState,
+  //           currentVideoDevice: currentVideoDevice,
+  //           mainStreamManager: publisher,
+  //           publisher: publisher,
+  //         }));
+
+  //         setTimeout(() => {
+  //           setLoadingState(false);
+  //         }, 2000);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   });
+  // };
+  const joinSession = () => {
+    try {
+      OV.current = new OpenVidu();
+      const session = OV.current.initSession();
+      const mySession = session;
+
+      mySession.on('streamCreated', (event) => {
+        const subscriber = mySession.subscribe(event.stream, undefined);
+        setState((prevState) => ({
+          ...prevState,
+          subscribers: [...prevState.subscribers, subscriber],
+        }));
+        console.log('???????? ', event);
+      });
+
+      mySession.on('streamDestroyed', (event) => {
+        deleteSubscriber(event.stream.streamManager);
+      });
+
+      mySession.on('exception', (exception) => {
+        console.warn(exception);
+      });
+
       setState((prevState) => ({
         ...prevState,
-        subscribers: [...prevState.subscribers, subscriber],
+        session: mySession,
       }));
-    });
 
-    mySession.on('streamDestroyed', (event) => {
-      deleteSubscriber(event.stream.streamManager);
-    });
+      // 룸 채팅 연결
+      connectClient(mySessionId, getChattingData);
 
-    mySession.on('exception', (exception) => {
-      console.warn(exception);
-    });
+      // 룸 세션 연결
+      getToken()
+        .then((token) => {
+          mySession
+            .connect(token, { clientData: getUserName })
+            .then(async () => {
+              const publisher = await OV.current.initPublisherAsync(undefined, {
+                audioSource: undefined,
+                videoSource: undefined,
+                publishAudio: audioEnabled,
+                publishVideo: videoEnabled,
+                resolution: '1920x1080',
+                frameRate: 60,
+                insertMode: 'APPEND',
+                mirror: true,
+              });
+              console.log('publisher>>>>>> ', publisher);
 
-    setState((prevState) => ({
-      ...prevState,
-      session: mySession,
-    }));
+              mySession.publish(publisher);
 
-    // 룸 채팅 연결
-    connectClient(mySessionId, getChattingData);
+              const devices = await OV.current.getDevices();
+              console.log('devices>>>> ', devices);
 
-    // 룸 세션 연결
-    getToken().then((token) => {
-      mySession
-        .connect(token, { clientData: getUserName })
-        .then(async () => {
-          const publisher = await OV.current.initPublisherAsync(undefined, {
-            audioSource: undefined,
-            videoSource: undefined,
-            publishAudio: audioEnabled,
-            publishVideo: videoEnabled,
-            resolution: '1920x1080',
-            frameRate: 60,
-            insertMode: 'APPEND',
-            mirror: true,
-          });
+              const videoDevices = devices.filter(
+                (device) => device.kind === 'videoinput'
+              );
+              console.log('videoDevices>>>> ', videoDevices);
 
-          mySession.publish(publisher);
+              const currentVideoDeviceId = publisher.stream
+                .getMediaStream()
+                .getVideoTracks()[0]
+                .getSettings().deviceId;
+              console.log('currentVidoDeviceId>>>> ', currentVideoDeviceId);
 
-          const devices = await OV.current.getDevices();
-          const videoDevices = devices.filter((device) => device.kind === 'videoinput');
-          const currentVideoDeviceId = publisher.stream
-            .getMediaStream()
-            .getVideoTracks()[0]
-            .getSettings().deviceId;
-          const currentVideoDevice = videoDevices.find(
-            (device) => device.deviceId === currentVideoDeviceId
-          );
+              const currentVideoDevice = videoDevices.find(
+                (device) => device.deviceId === currentVideoDeviceId
+              );
+              console.log('currentVidoDevice>>>> ', currentVideoDevice);
 
-          setState((prevState) => ({
-            ...prevState,
-            currentVideoDevice: currentVideoDevice,
-            mainStreamManager: publisher,
-            publisher: publisher,
-          }));
+              setState((prevState) => ({
+                ...prevState,
+                currentVideoDevice: currentVideoDevice,
+                mainStreamManager: publisher,
+                publisher: publisher,
+              }));
 
-          setTimeout(() => {
-            setLoadingState(false);
-          }, 2000);
+              setTimeout(() => {
+                setLoadingState(false);
+              }, 2000);
+            })
+            .catch((error) => {
+              const { message: errorMessage, name: errorName } = error;
+              if (errorMessage && errorName) {
+                // alert(`${(errorMessage, errorName)}`);
+                console.log(`${(errorMessage, errorName)}`);
+              }
+            });
         })
         .catch((error) => {
           console.log(error);
         });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 메시지 보내는 함수
@@ -243,12 +340,16 @@ function Room() {
   };
 
   useEffect(() => {
-    if (token) {
-      joinSession();
-    } else {
-      alert('로그인 후 이용 가능한 페이지입니다');
-      navigate('/members/login');
-    }
+    const fetchData = async () => {
+      if (token) {
+        joinSession();
+      } else {
+        alert('로그인 후 이용 가능한 페이지입니다');
+        navigate('/members/login');
+      }
+    };
+
+    fetchData();
   }, []);
 
   return loadingstate ? (

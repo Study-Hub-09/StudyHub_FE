@@ -14,10 +14,10 @@ import { logout } from '../../core/api/auth/logout';
 
 function Header() {
   const navigate = useNavigate();
-  const [token, setToken] = useState('');
+  const [isLogged, setIsLogged] = useState(false);
 
   const tokenHandler = () => {
-    if (token) {
+    if (isLogged) {
       logout()
         .then((response) => {
           const {
@@ -28,9 +28,8 @@ function Header() {
             removeCookie('AccessToken', { path: '/' });
             removeCookie('RefreshToken', { path: '/' });
             localStorage.removeItem('member');
-            setToken('');
-            alert(responseMessage);
             window.location.reload();
+            alert(responseMessage);
           }
         })
         .catch((error) => {
@@ -42,7 +41,7 @@ function Header() {
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     if (accessToken) {
-      setToken(accessToken);
+      setIsLogged(!isLogged);
     }
   }, []);
 
@@ -54,7 +53,7 @@ function Header() {
         </StHeaderLogo>
         <StHeaderAuth>
           <StHeaderRegister>
-            {token ? (
+            {isLogged ? (
               ''
             ) : (
               <Button
@@ -75,10 +74,10 @@ function Header() {
             hover="none"
             borderradius="5px"
             onClick={() => {
-              token ? tokenHandler() : navigate('/members/login');
+              isLogged ? tokenHandler() : navigate('/members/login');
             }}
           >
-            {token ? '로그아웃' : '로그인'}
+            {isLogged ? '로그아웃' : '로그인'}
           </Button>
         </StHeaderAuth>
       </StHomeLayoutBox>
