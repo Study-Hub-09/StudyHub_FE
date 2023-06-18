@@ -10,6 +10,7 @@ export const StChatContainer = styled.form`
   gap: 16px;
   border-left: 1px solid #424242;
   padding-block: 10px;
+  overflow: auto;
 `;
 
 export const StChatBox = styled.div`
@@ -46,12 +47,27 @@ export const StChatArea = styled.div`
   padding: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: end;
-  overflow: auto;
+  justify-content: flex-end;
+  overflow: auto; /* 수정된 부분 */
+
+  &::-webkit-scrollbar {
+    width: 10px; /* 스크롤 바 너비 */
+    background-color: red;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    /* 스크롤바 색상 */
+    background-color: #4f1414;
+  }
+
+  &::-webkit-scrollbar-track {
+    /* 스크롤 바 트랙 색상 */
+    border-left: 2px solid #106511;
+    background-color: blue;
+  }
 `;
 
 export const StChatTextBox = styled.div`
-  border: 1px solid blue;
   padding: 5px;
 `;
 
@@ -81,6 +97,8 @@ export const StChatTextTitleTime = styled.div`
 
 export const StChatTextContent = styled.div`
   p {
+    border: 1px solid blue;
+    word-break: break-word;
     margin-left: ${(props) => props.marginleft};
     text-align: ${(props) => props.textalign};
     margin-right: ${(props) => props.marginright};
@@ -112,115 +130,32 @@ export const StSendButton = styled.div`
   }
 `;
 
-export const Stchatbox = styled.div`
-  background-color: white;
-  width: 280px;
-  height: 100%;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  overflow: auto;
+// export const Stchatbox = styled.div`
+//   background-color: white;
+//   width: 280px;
+//   height: 100%;
+//   border: 1px solid #bfbfbf;
+//   border-radius: 7px;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: flex-end;
+//   /* overflow-y: auto;
+//   scrollbar-width: thin;
+//   scrollbar-color: #4f1414 #bfbfbf; */
+// `;
 
-  &::-webkit-scrollbar {
-    width: 15px; /* 스크롤 바 너비 */
-    height: 100px;
-    background-color: red;
-  }
+// // &::-webkit-scrollbar {
+// //     width: 15px; /* 스크롤 바 너비 */
+// //     background-color: red;
+// //   }
 
-  &::-webkit-scrollbar-thumb {
-    /* 스크롤바 색상 */
-    background-color: #4f1414;
-  }
+// //   &::-webkit-scrollbar-thumb {
+// //     /* 스크롤바 색상 */
+// //     background-color: #4f1414;
+// //   }
 
-  &::-webkit-scrollbar-track {
-    /* 스크롤 바 트랙 색상 */
-    border-left: 2px solid #106511;
-    background-color: blue;
-  }
-`;
-
-export const Stchatinput = styled.input`
-  width: 231px;
-  height: 36px;
-  border: 1px solid #bfbfbf;
-  border-radius: 7px;
-  padding-left: 10px;
-  background-color: white;
-`;
-
-export const Stsendarea = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 13px;
-`;
-
-export const Stsendbutton = styled.img`
-  cursor: pointer;
-`;
-
-export const Stcancelbutton = styled.img`
-  width: 15px;
-  cursor: pointer;
-`;
-
-export const Stchatheaderfont = styled.span`
-  font-size: 18px;
-  font-weight: 700;
-  margin-left: 11px;
-  color: #b6b6b6;
-`;
-
-export const StTochat = styled.div`
-  height: 74px;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-`;
-
-export const StTochatinner = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 79.19px;
-`;
-export const StchattextArea = styled.div`
-  width: 240px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const StchatTime = styled.div`
-  color: #9d9d9d;
-  font-size: 14px;
-  font-weight: 500;
-`;
-export const StTochatName = styled.div`
-  color: #00573f;
-  font-size: 15px;
-  font-weight: 700;
-`;
-export const StFromchatName = styled.div`
-  color: black;
-  font-size: 15px;
-  font-weight: 700;
-`;
-export const Stchattext = styled.p`
-  font-size: 15px;
-  font-weight: 500;
-  text-align: right;
-  width: 195px;
-`;
-export const StFromchattext = styled.p`
-  display: flex;
-  justify-content: start;
-  font-size: 15px;
-  font-weight: 500;
-`;
-export const StFromchat = styled.div`
-  height: 74px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  padding: 15px;
-`;
+// //   &::-webkit-scrollbar-track {
+// //     /* 스크롤 바 트랙 색상 */
+// //     border-left: 2px solid #106511;
+// //     background-color: blue;
+// //   }
