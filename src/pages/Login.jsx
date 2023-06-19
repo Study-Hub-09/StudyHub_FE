@@ -148,7 +148,7 @@ function Login() {
     const accessToken = getCookie('AccessToken');
     if (accessToken) {
       Swal.fire({
-        icon: 'success',
+        icon: 'info',
         iconColor: '#00573f',
         text: '이미 로그인되어 있습니다',
         width: 400,
