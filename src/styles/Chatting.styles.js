@@ -74,11 +74,14 @@ export const StChatTextBox = styled.div`
 export const StChatTextTitle = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const StChatTextTitleUser = styled.div`
   display: flex;
   gap: 5px;
+  justify-content: space-between;
+  color: ${(props) => props.color};
 
   img {
     width: 25px;
@@ -91,13 +94,12 @@ export const StChatTextTitleUser = styled.div`
 `;
 
 export const StChatTextTitleTime = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   color: var(--color-gray);
 `;
 
 export const StChatTextContent = styled.div`
   p {
-    border: 1px solid blue;
     word-break: break-word;
     margin-left: ${(props) => props.marginleft};
     text-align: ${(props) => props.textalign};
@@ -109,7 +111,6 @@ export const StChatInput = styled.div`
   width: 280px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 
   input {
     width: 231px;

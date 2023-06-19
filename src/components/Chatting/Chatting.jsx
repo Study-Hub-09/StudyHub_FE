@@ -20,6 +20,7 @@ import {
 
 function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName }) {
   const chatDisplayRef = useRef(null);
+  console.log('chatDatas>>>> ', chatDatas);
 
   // 메시지가 추가될 때마다 자동 스크롤
   useEffect(() => {
@@ -45,25 +46,49 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
       <StChatArea ref={chatDisplayRef}>
         {chatDatas.map((chatData, id) => {
           return (
+            // <div key={id}>
+            //   {chatData.nickname === getUserName ? (
+            //     <StChatTextBox>
+            //       <StChatTextTitle>
+            //         <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
+            //         <StChatTextTitleUser color="var(--color-dark-green)">
+            //           <p>{chatData.nickname}</p>
+            //         </StChatTextTitleUser>
+            //       </StChatTextTitle>
+            //       <StChatTextContent textalign="right">
+            //         <p>{chatData.message}</p>
+            //       </StChatTextContent>
+            //     </StChatTextBox>
+            //   ) : (
+            //     <StChatTextBox>
+            //       <StChatTextTitle>
+            //         <StChatTextTitleUser>
+            //           <img src={profileimg} alt="Guest Profile" />
+            //           <p>{chatData.nickname}</p>
+            //         </StChatTextTitleUser>
+            //         <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
+            //       </StChatTextTitle>
+            //       <StChatTextContent textalign="left" marginleft="30px">
+            //         <p>{chatData.message}</p>
+            //       </StChatTextContent>
+            //     </StChatTextBox>
+            //   )}
+            // </div>
             <div key={id}>
               {chatData.nickname === getUserName ? (
                 <StChatTextBox>
                   <StChatTextTitle>
                     <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
-                    <StChatTextTitleUser>
-                      <p>{chatData.nickname}</p>
-                      <img src={profileimg} alt="" />
-                    </StChatTextTitleUser>
+                    <StChatTextContent textalign="right">
+                      <p>{chatData.message}</p>
+                    </StChatTextContent>
                   </StChatTextTitle>
-                  <StChatTextContent textalign="right" marginright="30px">
-                    <p>{chatData.message}</p>
-                  </StChatTextContent>
                 </StChatTextBox>
               ) : (
                 <StChatTextBox>
                   <StChatTextTitle>
-                    <StChatTextTitleUser>
-                      <img src={profileimg} alt="" />
+                    <StChatTextTitleUser color="var(--color-dark-green)">
+                      <img src={profileimg} alt="Guest Profile" />
                       <p>{chatData.nickname}</p>
                     </StChatTextTitleUser>
                     <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
@@ -73,7 +98,6 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                   </StChatTextContent>
                 </StChatTextBox>
               )}
-              <div ref={chatDisplayRef}></div>
             </div>
           );
         })}
