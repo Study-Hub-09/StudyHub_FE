@@ -25,11 +25,6 @@ function NicknameInput({
   ...inputprops
 }) {
   const nicknameRef = useRef();
-  // const isButtonDisabled = isNicknameVerified;
-  // const isInputDisabled = isNicknameVerified;
-
-  console.log('validNickname>> ', validNickname);
-  console.log('isNicknameVerified>> ', isNicknameVerified);
 
   const getBordercolor = () => {
     if (value) {
@@ -53,7 +48,6 @@ function NicknameInput({
             maxLength="10"
             value={value}
             {...inputprops}
-            // disabled={isInputDisabled}
           />
           <Button
             width="82px"
@@ -61,7 +55,6 @@ function NicknameInput({
             border="var(--color-gray)"
             borderradius="47px"
             onClick={onClick}
-            // disabled={isButtonDisabled}
           >
             {button}
           </Button>
