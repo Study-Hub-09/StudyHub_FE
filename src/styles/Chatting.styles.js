@@ -44,7 +44,7 @@ export const StChatArea = styled.div`
   width: 280px;
   height: 100%;
   border-radius: 7px;
-  padding: 5px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -68,7 +68,7 @@ export const StChatArea = styled.div`
 `;
 
 export const StChatTextBox = styled.div`
-  padding: 5px;
+  /* padding: 5px; */
 `;
 
 export const StChatTextTitle = styled.div`
@@ -79,6 +79,9 @@ export const StChatTextTitle = styled.div`
 export const StChatTextTitleUser = styled.div`
   display: flex;
   gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+  color: ${(props) => props.color};
 
   img {
     width: 25px;
@@ -90,14 +93,16 @@ export const StChatTextTitleUser = styled.div`
   }
 `;
 
-export const StChatTextTitleTime = styled.div`
-  font-size: 14px;
+export const StChatTextTitleTime = styled.span`
+  font-size: 12px;
   color: var(--color-gray);
 `;
 
 export const StChatTextContent = styled.div`
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
   p {
-    border: 1px solid blue;
     word-break: break-word;
     margin-left: ${(props) => props.marginleft};
     text-align: ${(props) => props.textalign};
@@ -109,7 +114,6 @@ export const StChatInput = styled.div`
   width: 280px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 
   input {
     width: 231px;
