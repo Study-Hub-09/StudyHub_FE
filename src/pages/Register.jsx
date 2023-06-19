@@ -179,7 +179,7 @@ function Register() {
   const verificateEmailCodeHandler = (e) => {
     e.preventDefault();
     if (!checkCode || checkCode.trim() === '') alert('인증번호를 입력해주세요');
-    if (checkCode === verificationCode) {
+    else if (checkCode === verificationCode) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: true,
