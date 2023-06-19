@@ -33,7 +33,6 @@ function PasswordInput({
   ...inputprops
 }) {
   const [showPwd, setshowPwd] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
 
   const toggleShowPwd = () => {
     setshowPwd(!showPwd);
