@@ -25,8 +25,11 @@ function NicknameInput({
   ...inputprops
 }) {
   const nicknameRef = useRef();
-  const isButtonDisabled = isNicknameVerified;
-  const isInputDisabled = isNicknameVerified;
+  // const isButtonDisabled = isNicknameVerified;
+  // const isInputDisabled = isNicknameVerified;
+
+  console.log('validNickname>> ', validNickname);
+  console.log('isNicknameVerified>> ', isNicknameVerified);
 
   const getBordercolor = () => {
     if (value) {
@@ -47,9 +50,10 @@ function NicknameInput({
           <StInput
             ref={nicknameRef}
             type="text"
+            maxLength="10"
             value={value}
             {...inputprops}
-            disabled={isInputDisabled}
+            // disabled={isInputDisabled}
           />
           <Button
             width="82px"
@@ -57,7 +61,7 @@ function NicknameInput({
             border="var(--color-gray)"
             borderradius="47px"
             onClick={onClick}
-            disabled={isButtonDisabled}
+            // disabled={isButtonDisabled}
           >
             {button}
           </Button>
@@ -65,7 +69,10 @@ function NicknameInput({
         {value && (
           <StIcon>
             {(isNicknameVerified && <img src={checkIcon} alt="Green Check Icon" />) ||
-              (!validNickname && <img src={errorIcon} alt="Red Error Icon" />)}
+              (!validNickname && <img src={errorIcon} alt="Red Error Icon" />) ||
+              (isNicknameVerified && !validNickname && (
+                <img src={errorIcon} alt="Red Error Icon" />
+              ))}
           </StIcon>
         )}
       </StInputFrame>

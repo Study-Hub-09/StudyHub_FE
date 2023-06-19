@@ -160,9 +160,14 @@ function Register() {
 
   // 중복 닉네임 확인 버튼 핸들러
   const validateNicknameHandler = (e) => {
+    const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
+    const isValidNickname = NICKNAME_REGEX.test(nickname);
+
     e.preventDefault();
-    if (!nickname || nickname.trim() === '') {
+    if (!nickname) {
       alert('닉네임을 입력해주세요.');
+    } else if (!isValidNickname || nickname.trim() === '') {
+      alert('잘못된 닉네임 형식입니다. 공백을 제거해주세요.');
     } else {
       validateNickNameMutation.mutate({
         nickname,
@@ -248,6 +253,10 @@ function Register() {
           ...prevMessages,
           nicknameErrorMessage: '중복된 닉네임입니다.',
         }));
+        setVerificationStatus((prevVerifications) => ({
+          ...prevVerifications,
+          isNicknameVerified: false,
+        }));
         setValidations((prevValidations) => ({
           ...prevValidations,
           validNickname: false,
@@ -297,6 +306,11 @@ function Register() {
 
   // 닉네임 유효성 검사
   useEffect(() => {
+    setVerificationStatus((prevVerifications) => ({
+      ...prevVerifications,
+      isNicknameVerified: false,
+    }));
+
     if (nickname) {
       const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
       const isValidNickname = NICKNAME_REGEX.test(nickname);
@@ -311,6 +325,12 @@ function Register() {
           ...prevMessages,
           nicknameSuccessMessage: '',
           nicknameErrorMessage: '',
+        }));
+      } else if (nickname.trim() === '') {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameSuccessMessage: '',
+          nicknameErrorMessage: '공백은 사용 불가합니다.',
         }));
       } else {
         setMessages((prevMessages) => ({
