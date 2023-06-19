@@ -102,6 +102,12 @@ function Register() {
     checkPasswordBorder,
   } = inputFocusBorder;
 
+  const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const isValidEmail = EMAIL_REGEX.test(email);
+
+  const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
+  const isValidNickname = NICKNAME_REGEX.test(nickname);
+
   // Input onChange 핸들러
   const onChangeInputHandler = (e) => {
     const { name, value } = e.target;
@@ -148,8 +154,6 @@ function Register() {
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
-    const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    const isValidEmail = EMAIL_REGEX.test(email);
 
     if (!email || email.trim() === '') alert('이메일을 입력해주세요');
     else if (!isValidEmail) {
@@ -165,8 +169,6 @@ function Register() {
   // 중복 닉네임 확인 버튼 핸들러
   const validateNicknameHandler = (e) => {
     e.preventDefault();
-    const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
-    const isValidNickname = NICKNAME_REGEX.test(nickname);
 
     if (!nickname) {
       alert('닉네임을 입력해주세요.');
@@ -316,9 +318,6 @@ function Register() {
     }));
 
     if (nickname) {
-      const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
-      const isValidNickname = NICKNAME_REGEX.test(nickname);
-
       setValidations((prevValidations) => ({
         ...prevValidations,
         validNickname: isValidNickname,
@@ -355,8 +354,6 @@ function Register() {
   // 이메일 유효성 검사
   useEffect(() => {
     if (email) {
-      const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-      const isValidEmail = EMAIL_REGEX.test(email);
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmail: isValidEmail,
