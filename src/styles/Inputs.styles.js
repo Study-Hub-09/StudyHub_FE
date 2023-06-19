@@ -35,7 +35,7 @@ export const StInputDiv = styled.div`
 `;
 
 export const StLabel = styled.div`
-  width: 80px;
+  width: 82px;
   display: flex;
   gap: 8px;
 `;
