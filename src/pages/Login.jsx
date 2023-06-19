@@ -76,6 +76,9 @@ function Login() {
       if (statusCode === 404 && errorMessage === '해당 유저 정보를 찾을 수 없습니다') {
         alert(errorMessage);
       }
+      if (statusCode === 400 && errorMessage === '카카오 아이디가 존재합니다.') {
+        alert(`${errorMessage} 카카오로 로그인해 주세요.`);
+      }
     },
   });
 

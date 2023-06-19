@@ -76,7 +76,7 @@ function EmailInput({
               ) : (
                 validEmailCode && <img src={checkIcon} alt="Green Check Icon" />
               )) ||
-              (!validEmail && !isEmailVerified && (
+              (!validEmail && !isEmailVerified && !isEmailLoading && (
                 <img src={errorIcon} alt="Red Error Icon" />
               ))}
           </StIcon>

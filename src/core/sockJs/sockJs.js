@@ -15,8 +15,11 @@ const connectClient = (sessionId, getChattingData) => {
       Refresh_Token: `Bearer ${refreshToken}`,
     },
     (frame) => {
-      // console.log('frame====> 연결 성공!', frame);
+      console.log('frame====> 연결 성공!', frame);
       stompClient.subscribe(`/sub/chat/room/${sessionId}`, getChattingData);
+    },
+    (error) => {
+      console.log('frame error===> 연결 오류 ', error);
     }
   );
 };
@@ -34,7 +37,7 @@ const sendMessage = async (payload) => {
 const disconnectClient = () => {
   if (stompClient !== null) {
     stompClient.disconnect();
-    // console.log('frame====> 연결 해제 완료');
+    console.log('frame====> 연결 해제 완료');
   }
 };
 

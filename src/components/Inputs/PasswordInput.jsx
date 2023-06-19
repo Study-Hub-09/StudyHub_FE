@@ -33,7 +33,6 @@ function PasswordInput({
   ...inputprops
 }) {
   const [showPwd, setshowPwd] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
 
   const toggleShowPwd = () => {
     setshowPwd(!showPwd);
@@ -61,6 +60,7 @@ function PasswordInput({
           <StInput
             type={showPwd ? 'text' : 'password'}
             value={value}
+            maxLength="15"
             onChange={onChange}
             {...inputprops}
           />

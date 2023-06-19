@@ -102,9 +102,20 @@ function Register() {
     checkPasswordBorder,
   } = inputFocusBorder;
 
+  const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const isValidEmail = EMAIL_REGEX.test(email);
+
+  const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
+  const isValidNickname = NICKNAME_REGEX.test(nickname);
+
   // Input onChange 핸들러
   const onChangeInputHandler = (e) => {
     const { name, value } = e.target;
+
+    // 닉네임 input 숫자 및 특수 문자 입력 막기
+    if (name === 'nickname' && /[\d~`!@#$%^&*()+=\-[\]\\';,/{}|\\":<>?_]/g.test(value)) {
+      return;
+    }
     setValues({ ...values, [name]: value });
   };
 
@@ -118,11 +129,11 @@ function Register() {
   const onSubmitFormHandler = (e) => {
     e.preventDefault();
     if (
-      nickname === '' ||
-      email === '' ||
-      checkCode === '' ||
-      password === '' ||
-      checkPassword === ''
+      (nickname === '' && nickname.trim() === ' ') ||
+      (email === '' && email.trim() === ' ') ||
+      (checkCode === '' && checkCode.trim() === ' ') ||
+      (password === '' && password.trim() === ' ') ||
+      (checkPassword === '' && checkPassword === ' ')
     )
       return alert('모든 칸을 입력해주세요.');
 
@@ -130,7 +141,7 @@ function Register() {
     if (!isEmailVerified) return alert('이메일 발송 확인해 주세요.');
     if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해 주세요.');
     if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
-      return alert('모든 약관에 동의해야 합니다.');
+      return alert('모든 약관에 동의해 주세요.');
 
     registerMutation.mutate({
       nickname,
@@ -143,8 +154,10 @@ function Register() {
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
-    if (!email || email.trim() === '') {
-      alert('이메일을 입력해주세요');
+
+    if (!email || email.trim() === '') alert('이메일을 입력해주세요');
+    else if (!isValidEmail) {
+      alert('잘못된 이메일 형식입니다.');
     } else {
       setIsEmailLoading(true);
       validateEmailMutation.mutate({
@@ -156,8 +169,11 @@ function Register() {
   // 중복 닉네임 확인 버튼 핸들러
   const validateNicknameHandler = (e) => {
     e.preventDefault();
-    if (!nickname || nickname.trim() === '') {
+
+    if (!nickname) {
       alert('닉네임을 입력해주세요.');
+    } else if (!isValidNickname || nickname.trim() === ' ') {
+      alert('잘못된 닉네임 형식입니다');
     } else {
       validateNickNameMutation.mutate({
         nickname,
@@ -169,7 +185,7 @@ function Register() {
   const verificateEmailCodeHandler = (e) => {
     e.preventDefault();
     if (!checkCode || checkCode.trim() === '') alert('인증번호를 입력해주세요');
-    if (checkCode === verificationCode) {
+    else if (checkCode === verificationCode) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: true,
@@ -232,7 +248,7 @@ function Register() {
       if (duplicateNickname) {
         setMessages((prevMessages) => ({
           ...prevMessages,
-          nicknameSuccessMessage: '닉네임 중복 확인되었습니다.',
+          nicknameSuccessMessage: '사용 가능한 닉네임입니다.',
         }));
         setVerificationStatus((prevVerifications) => ({
           ...prevVerifications,
@@ -242,6 +258,10 @@ function Register() {
         setMessages((prevMessages) => ({
           ...prevMessages,
           nicknameErrorMessage: '중복된 닉네임입니다.',
+        }));
+        setVerificationStatus((prevVerifications) => ({
+          ...prevVerifications,
+          isNicknameVerified: false,
         }));
         setValidations((prevValidations) => ({
           ...prevValidations,
@@ -285,16 +305,19 @@ function Register() {
           ...prevValidations,
           validEmail: false,
         }));
+        setIsEmailLoading(false);
       }
     },
   });
 
   // 닉네임 유효성 검사
   useEffect(() => {
-    if (nickname) {
-      const NICKNAME_REGEX = /^[a-zA-Z가-힣]{2,10}$/;
-      const isValidNickname = NICKNAME_REGEX.test(nickname);
+    setVerificationStatus((prevVerifications) => ({
+      ...prevVerifications,
+      isNicknameVerified: false,
+    }));
 
+    if (nickname) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validNickname: isValidNickname,
@@ -305,6 +328,12 @@ function Register() {
           ...prevMessages,
           nicknameSuccessMessage: '',
           nicknameErrorMessage: '',
+        }));
+      } else if (nickname.trim() === '') {
+        setMessages((prevMessages) => ({
+          ...prevMessages,
+          nicknameSuccessMessage: '',
+          nicknameErrorMessage: '공백은 사용 불가합니다.',
         }));
       } else {
         setMessages((prevMessages) => ({
@@ -325,8 +354,6 @@ function Register() {
   // 이메일 유효성 검사
   useEffect(() => {
     if (email) {
-      const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-      const isValidEmail = EMAIL_REGEX.test(email);
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmail: isValidEmail,
