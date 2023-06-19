@@ -232,7 +232,7 @@ function Register() {
       if (duplicateNickname) {
         setMessages((prevMessages) => ({
           ...prevMessages,
-          nicknameSuccessMessage: '닉네임 중복 확인되었습니다.',
+          nicknameSuccessMessage: '사용 가능한 닉네임입니다.',
         }));
         setVerificationStatus((prevVerifications) => ({
           ...prevVerifications,
