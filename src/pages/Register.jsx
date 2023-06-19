@@ -143,8 +143,13 @@ function Register() {
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
+    const EMAIL_REGEX = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const isValidEmail = EMAIL_REGEX.test(email);
+
     if (!email || email.trim() === '') {
       alert('이메일을 입력해주세요');
+    } else if (!isValidEmail) {
+      alert('잘못된 이메일 형식입니다.');
     } else {
       setIsEmailLoading(true);
       validateEmailMutation.mutate({
@@ -285,6 +290,7 @@ function Register() {
           ...prevValidations,
           validEmail: false,
         }));
+        setIsEmailLoading(false);
       }
     },
   });
