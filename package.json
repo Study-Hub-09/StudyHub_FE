@@ -31,6 +31,7 @@
     "redux": "^4.2.1",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.0.0-rc.2",
+    "sweetalert2": "^11.7.12",
     "web-vitals": "^2.1.0",
     "ws": "^8.13.0"
   },

@@ -24,6 +24,41 @@ import dayjs from 'dayjs';
 import BasicDatePicker from './Datepicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
+import {
+  StCircle,
+  Stcontainer,
+  Stmodalbox,
+  StmadalLayout,
+  StmodalLeft,
+  StmodalRight,
+  Stline,
+  Stcategory,
+  StinputA,
+  StinputB,
+  Stroomnamebox,
+  Stcontentbox,
+  Stcatebox,
+  Stfont,
+  Sttitle,
+  Stthumbnail,
+  StthumbnailbuttonA,
+  StthumbnailbuttonB,
+  StpasswordInput,
+  Stcreatebutton,
+  Stlockbutton,
+  Stlockbuttonbg,
+  moveForward,
+  moveBackward,
+  StlockbuttonBall,
+  Stdatepickerbox,
+  Stthumnailarea,
+  Stthumnailbox,
+  Stlockbox,
+  Stlockboxinner,
+  Stlayoutbox,
+  Stfontcolor,
+} from '../styles/mainpage/Modal.styles';
+import Swal from 'sweetalert2';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
@@ -32,7 +67,8 @@ const Modal = ({ onClose }) => {
   const [animate, setAnimate] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedCategoriesB, setSelectedCategoriesB] = useState([]);
-  const [selectDate, setSelectDate] = useState('');
+  const today = dayjs().format('YYYY-MM-DD');
+  const [selectDate, setSelectDate] = useState(today);
   const [roomPassword, setRoomPassword] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [readerImage, setReaderImage] = useState(null);
@@ -40,6 +76,7 @@ const Modal = ({ onClose }) => {
   const outside = useRef();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   const mutation = useMutation(addRoom, {
     onSuccess: (data) => {
       queryClient.invalidateQueries('rooms');
@@ -55,7 +92,15 @@ const Modal = ({ onClose }) => {
     if (!file) return;
     setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+      // alert('이미지 파일만 업로드 가능합니다.');
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#00573f',
+        width: 400,
+        text: '이미지 파일만 업로드 가능합니다.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
       return;
     }
 
@@ -108,12 +153,33 @@ const Modal = ({ onClose }) => {
       }
     } else {
       if (roomName === '') {
-        alert('제목을 입력해 주세요');
+        Swal.fire({
+          icon: 'error',
+          iconColor: '#00573f',
+          width: 400,
+          text: '제목을 입력해주세요.',
+          confirmButtonColor: '#00573f',
+          confirmButtonText: '확인',
+        });
       } else if (roomContent === '') {
-        alert('내용을 입력해 주세요');
+        Swal.fire({
+          icon: 'error',
+          iconColor: '#00573f',
+          width: 400,
+          text: '내용을 입력해주세요.',
+          confirmButtonColor: '#00573f',
+          confirmButtonText: '확인',
+        });
       }
       if (selectDate === '') {
-        alert('만료일을 입력해 주세요');
+        Swal.fire({
+          icon: 'error',
+          iconColor: '#00573f',
+          width: 400,
+          text: '만료일을 입력해주세요.',
+          confirmButtonColor: '#00573f',
+          confirmButtonText: '확인',
+        });
       }
     }
   };
@@ -193,7 +259,15 @@ const Modal = ({ onClose }) => {
         setSelectedCategories([...selectedCategories, categoryName]);
         setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
       } else {
-        alert('최대 4개의 카테고리만 선택할 수 있습니다');
+        // alert('최대 4개의 카테고리만 선택할 수 있습니다');
+        Swal.fire({
+          icon: 'error',
+          iconColor: '#00573f',
+          width: 400,
+          text: '최대 4개의 카테고리만 선택할 수 있습니다.',
+          confirmButtonColor: '#00573f',
+          confirmButtonText: '확인',
+        });
       }
     }
   };
@@ -213,8 +287,9 @@ const Modal = ({ onClose }) => {
             <Stroomnamebox>
               <Stfont>방 이름</Stfont>
               <StinputA
-                placeholder="방 이름"
+                placeholder="방 이름을 입력 해주세요"
                 value={roomName}
+                maxLength={20}
                 onChange={(e) => {
                   setRoomName(e.target.value);
                 }}
@@ -225,6 +300,7 @@ const Modal = ({ onClose }) => {
               <StinputB
                 placeholder="방을 설명할 수 있는 문장을 써주세요."
                 value={roomContent}
+                maxLength={35}
                 onChange={(e) => {
                   setRoomContent(e.target.value);
                 }}
@@ -264,7 +340,7 @@ const Modal = ({ onClose }) => {
                 <BasicDatePicker
                   selectedDate={selectDate}
                   onDateChange={handleDateChange}
-                  inputFormat={'yyyy-MM-dd'}
+                  inputFormat={'YYYY-MM-dd'}
                 />
               </Stdatepickerbox>
               <Stthumnailarea>
@@ -275,7 +351,9 @@ const Modal = ({ onClose }) => {
                       <img src={readerImage} alt="" width={136} height={100} />
                     ) : randomImage ? (
                       <img src={randomImage} alt="" width={136} height={100} />
-                    ) : null}
+                    ) : (
+                      '이미지를 등록해 주세요'
+                    )}
                   </Stthumbnail>
                   <div>
                     {/* <StthumbnailbuttonA onClick={randomImageHandler}>
@@ -342,262 +420,3 @@ const Modal = ({ onClose }) => {
 };
 
 export default Modal;
-
-const Stcontainer = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
-
-const Stmodalbox = styled.div`
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 987px;
-  height: 503px;
-  border-radius: 20px;
-  border: 1px solid #bfbfbf;
-  padding: 36px, 56px, 60px;
-  gap: 10px;
-`;
-
-const StmadalLayout = styled.div`
-  width: 875px;
-  height: 332px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StmodalLeft = styled.div`
-  width: 417.19px;
-  height: 316px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const StmodalRight = styled.div`
-  width: 417.19px;
-  height: 316px;
-`;
-
-const Stline = styled.div`
-  height: 316px;
-  border-left: 1.5px solid #bfbfbf;
-`;
-
-const StCircle = styled.button`
-  width: 70px;
-  height: 70px;
-  border-radius: 50px;
-  color: ${(props) => (props.isSelected ? 'white' : 'black')};
-  background-color: ${(props) => (props.isSelected ? '#00573f' : '#e8e8e8')};
-  gap: 3px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  font-weight: 700;
-`;
-
-const Stcategory = styled.div`
-  width: 316px;
-  height: 152px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
-  grid-gap: 12px 12px;
-`;
-
-const StinputA = styled.input`
-  background-color: #e8e8e8;
-  width: 184px;
-  height: 32px;
-  border-radius: 12px;
-  padding-left: 14px;
-  font-size: 15px;
-`;
-
-const StinputB = styled.input`
-  background-color: #e8e8e8;
-  width: 261px;
-  height: 57px;
-  border-radius: 12px;
-  padding-left: 13.81px;
-  padding-bottom: 24px;
-  font-size: 15px;
-`;
-
-const Stroomnamebox = styled.div`
-  height: 63px;
-  display: flex;
-  align-items: center;
-  gap: 32px;
-`;
-
-const Stcontentbox = styled.div`
-  height: 71px;
-  display: flex;
-  gap: 53px;
-`;
-
-const Stcatebox = styled.div`
-  height: 166px;
-  display: flex;
-  gap: 20.19px;
-`;
-
-const Stfont = styled.div`
-  font-size: 18px;
-  font-weight: 700;
-`;
-
-const Sttitle = styled.div`
-  width: 875px;
-  font-size: 20px;
-  font-weight: 700;
-`;
-
-const Stthumbnail = styled.div`
-  width: 136px;
-  height: 100px;
-  background-color: #e8e8e8;
-  border-radius: 12px;
-`;
-
-const StthumbnailbuttonA = styled.button`
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  &:hover {
-    background-color: #e8e8e8;
-  }
-`;
-const StthumbnailbuttonB = styled.label`
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  &:hover {
-    background-color: #e8e8e8;
-  }
-`;
-
-const StpasswordInput = styled.input`
-  width: 68px;
-  height: 32px;
-  background-color: #ffffff;
-  border-radius: 7px;
-  padding-left: 14px;
-  border: 1px solid #9d9d9d;
-  margin-left: 14px;
-`;
-
-const Stcreatebutton = styled.button`
-  /* position: absolute; */
-  transform: translateY(-50px);
-  width: 90px;
-  height: 44px;
-  border: 1px solid #bfbfbf;
-  border-radius: 30px;
-  color: #9d9d9d;
-  font-size: 15px;
-  font-weight: 700;
-  &:hover {
-    background-color: #00573f;
-    color: #ffffff;
-  }
-`;
-
-const Stlockbutton = styled.button`
-  display: flex;
-  align-items: center;
-  width: 36px;
-`;
-
-const Stlockbuttonbg = styled.div`
-  position: relative;
-  width: 36px;
-  height: 18px;
-  background-color: ${(props) => (props.lock ? '#00573f' : '#bfbfbf')};
-  border-radius: 30px;
-`;
-
-const moveForward = keyframes`
-  0% {
-    transform: translateX(1.53px);
-  }
-  100% {
-    transform: translateX(19.15px);
-  }
-`;
-
-const moveBackward = keyframes`
-  0% {
-    transform: translateX(19.15px);
-  }
-  100% {
-    transform: translateX(1.53px);
-  }
-`;
-
-const StlockbuttonBall = styled.div`
-  position: absolute;
-  width: 14.5px;
-  height: 14.5px;
-  border-radius: 30px;
-  background-color: #ffffff;
-  z-index: 1;
-  transform: ${(props) => (props.lock ? 'translateX(19.15px)' : 'translateX(1.53px)')};
-  ${(props) =>
-    props.animate &&
-    css`
-      animation: ${props.lock ? moveForward : moveBackward} 0.2s linear;
-    `}
-`;
-const Stdatepickerbox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 53.19px;
-  margin-bottom: 31px;
-`;
-const Stthumnailarea = styled.div`
-  height: 100px;
-  display: flex;
-  gap: 20.19px;
-`;
-const Stthumnailbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  height: 140px;
-`;
-const Stlockbox = styled.div`
-  height: 166px;
-  display: flex;
-  gap: 20.19px;
-  padding-top: 38px;
-  margin-top: 11px;
-`;
-
-const Stlockboxinner = styled.div`
-  gap: 7px;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Stlayoutbox = styled.div`
-  display: flex;
-  justify-content: end;
-`;
-
-const Stfontcolor = styled.div`
-  color: #9d9d9d;
-`;

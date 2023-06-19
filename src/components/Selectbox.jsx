@@ -1,17 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState, useRef } from 'react';
 import checkmark from '../asset/checkmark.svg';
-const Selectbox = ({ handleCategory }) => {
+import {
+  StSelectbox,
+  Stbtn,
+  Stfont,
+  StCheckmark,
+} from '../styles/mainpage/Selectbox.styles';
+const Selectbox = ({ handleCategory, isSelectOpen, setSelectOpen }) => {
   const [selectedOptions, setSelectedOptions] = useState('');
-  // keyword: search,
+  const [oldSelectedOptions, setOldSelectedOptions] = useState('');
+  const outside = useRef();
 
-  const handleOptionClick = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((opt) => opt !== option));
-    } else {
-      setSelectedOptions([...selectedOptions, option]);
-    }
-  };
+  // const handleClickOutside = (event) => {
+  //   if (outside.current && !outside.current.contains(event.target)) {
+  //     setSelectOpen(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (isSelectOpen) {
+  //     document.addEventListener('mousedown', handleClickOutside);
+  //   }
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [isSelectOpen]);
 
   const category = [
     {
@@ -39,15 +52,30 @@ const Selectbox = ({ handleCategory }) => {
       name: '기타',
     },
   ];
+  useEffect(() => {
+    if (isSelectOpen) {
+      setOldSelectedOptions(selectedOptions);
+    } else {
+      setSelectedOptions(oldSelectedOptions);
+    }
+  }, [isSelectOpen]);
+
+  const handleOptionClick = (option) => {
+    if (!isSelectOpen) {
+      setOldSelectedOptions(selectedOptions);
+    } else {
+      setSelectedOptions(option); // 다른 항목을 선택합니다.
+    }
+  };
 
   useEffect(() => {
     handleCategory(selectedOptions);
   }, [selectedOptions]);
 
   return (
-    <StSelectbox>
+    <StSelectbox ref={outside}>
       {category.map((item, index) => {
-        const isSelected = selectedOptions.includes(item.name);
+        const isSelected = selectedOptions === item.name;
         return (
           <Stbtn
             key={index}
@@ -64,38 +92,3 @@ const Selectbox = ({ handleCategory }) => {
 };
 
 export default Selectbox;
-
-const StSelectbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  padding: 10px 0px;
-  border-radius: 12px;
-  border: 1px solid #bfbfbf;
-  margin-top: 26px;
-  background-color: white;
-  z-index: 1;
-`;
-const Stbtn = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 152px;
-  height: 32px;
-  font-size: 14px;
-  font-weight: 500;
-
-  &:hover {
-    background-color: lightgray;
-  }
-`;
-
-const Stfont = styled.span`
-  width: 40px;
-  display: flex;
-`;
-
-const StCheckmark = styled.img`
-  position: absolute;
-  left: 17.29px;
-`;

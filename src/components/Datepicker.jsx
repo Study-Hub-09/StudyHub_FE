@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+
 const useStyles = makeStyles({
   datePicker: {
     '& .MuiOutlinedInput-notchedOutline': {
@@ -28,6 +29,7 @@ const theme = createTheme({
 
 export default function BasicDatePicker({ selectedDate, onDateChange }) {
   const custom = useStyles();
+  const today = dayjs().format('YYYY-MM-DD');
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -35,7 +37,9 @@ export default function BasicDatePicker({ selectedDate, onDateChange }) {
           className={custom.datePicker}
           selected={selectedDate}
           onChange={(date) => onDateChange(dayjs(date).format('YYYY-MM-DD'))}
-          inputFormat="yyyy-MM-dd"
+          inputFormat="YYYY-MM-dd"
+          disablePast="true"
+          defaultValue={dayjs(today)}
         />
       </LocalizationProvider>
     </ThemeProvider>
