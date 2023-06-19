@@ -60,6 +60,7 @@ function PasswordInput({
           <StInput
             type={showPwd ? 'text' : 'password'}
             value={value}
+            maxLength="15"
             onChange={onChange}
             {...inputprops}
           />
