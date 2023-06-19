@@ -22,6 +22,7 @@ import {
 } from '../styles/Register.styles';
 import { register, validateEmail, validateNickname } from '../core/api/auth/register';
 import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
+import Swal from 'sweetalert2';
 
 function Register() {
   const navigate = useNavigate();
@@ -135,13 +136,52 @@ function Register() {
       (password === '' && password.trim() === ' ') ||
       (checkPassword === '' && checkPassword === ' ')
     )
-      return alert('모든 칸을 입력해주세요.');
+      return Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '모든 칸을 입력해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
 
-    if (!isNicknameVerified) return alert('닉네임 중복 확인해 주세요.');
-    if (!isEmailVerified) return alert('이메일 발송 확인해 주세요.');
-    if (!isEmailCodeVerified) return alert('이메일 인증코드를 확인해 주세요.');
+    if (!isNicknameVerified)
+      return Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '닉네임 중복 확인을 해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
+    if (!isEmailVerified)
+      return Swal.fire({
+        icon: 'success',
+        iconColor: '#00573f',
+        width: 400,
+        title: '이메일 발송!',
+        text: '메일함을 확인 해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
+    if (!isEmailCodeVerified)
+      return Swal.fire({
+        icon: 'error',
+        iconColor: '#00573f',
+        width: 400,
+        text: '이메일 인증코드를 확인해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
     if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
-      return alert('모든 약관에 동의해 주세요.');
+      return Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '모든 약관에 동의해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
 
     registerMutation.mutate({
       nickname,
@@ -155,9 +195,24 @@ function Register() {
   const validateEmailHandler = (e) => {
     e.preventDefault();
 
-    if (!email || email.trim() === '') alert('이메일을 입력해주세요');
-    else if (!isValidEmail) {
-      alert('잘못된 이메일 형식입니다.');
+    if (!email || email.trim() === '') {
+      Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '이메일을 입력해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
+    } else if (!isValidEmail) {
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#00573f',
+        width: 400,
+        text: '잘못된 이메일 형식입니다.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
     } else {
       setIsEmailLoading(true);
       validateEmailMutation.mutate({
@@ -171,9 +226,23 @@ function Register() {
     e.preventDefault();
 
     if (!nickname) {
-      alert('닉네임을 입력해주세요.');
+      Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '닉네임을 입력해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
     } else if (!isValidNickname || nickname.trim() === ' ') {
-      alert('잘못된 닉네임 형식입니다');
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#00573f',
+        width: 400,
+        text: '잘못된 닉네임 형식입니다.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
     } else {
       validateNickNameMutation.mutate({
         nickname,
@@ -184,8 +253,16 @@ function Register() {
   // 이메일 인증번호 확인 버튼 핸들러
   const verificateEmailCodeHandler = (e) => {
     e.preventDefault();
-    if (!checkCode || checkCode.trim() === '') alert('인증번호를 입력해주세요');
-    else if (checkCode === verificationCode) {
+    if (!checkCode || checkCode.trim() === '') {
+      Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        width: 400,
+        text: '인증번호를 입력해주세요.',
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
+    } else if (checkCode === verificationCode) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: true,
@@ -230,12 +307,29 @@ function Register() {
         data: { message: responseMessage },
       } = response;
       if (statusCode === 200 && responseMessage === '회원가입 성공') {
-        alert('회원가입 성공');
-        navigate('/members/login');
+        Swal.fire({
+          icon: 'success',
+          iconColor: '#00573f',
+          text: '회원가입 성공!',
+          width: 400,
+          confirmButtonColor: '#00573f',
+          confirmButtonText: '확인',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/members/login');
+          }
+        });
       }
     },
     onError: (error) => {
-      alert('회원가입 실패');
+      Swal.fire({
+        icon: 'error',
+        iconColor: '#00573f',
+        text: '회원가입 실패',
+        width: 400,
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      });
     },
   });
 

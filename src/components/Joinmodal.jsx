@@ -63,16 +63,39 @@ function Joinmodal({ onClose, roomData }) {
 
         // 룸 비밀번호가 일치하지 않을 때
         if (statusCode === 400 && errorMessage === '비밀번호가 일치하지 않습니다.') {
-          if (!roomPassword) alert('비밀번호를 입력해 주세요');
+          if (!roomPassword) {
+            Swal.fire({
+              icon: 'info',
+              iconColor: '#00573f',
+              width: 400,
+              text: '비밀번호를 입력해 주세요.',
+              confirmButtonColor: '#00573f',
+              confirmButtonText: '확인',
+            });
+          }
           if (roomPassword) {
-            alert(errorMessage);
+            Swal.fire({
+              icon: 'info',
+              iconColor: '#00573f',
+              width: 400,
+              text: errorMessage,
+              confirmButtonColor: '#00573f',
+              confirmButtonText: '확인',
+            });
             setRoomPassword('');
           }
         }
 
         // 이미 참여하는 스터티 룸이 있는데 다른 방에 참여할 경우 오류
         if (statusCode === 409 && errorMessage === '하나의 방에만 입장할 수 있습니다') {
-          alert(errorMessage);
+          Swal.fire({
+            icon: 'info',
+            iconColor: '#00573f',
+            width: 400,
+            text: errorMessage,
+            confirmButtonColor: '#00573f',
+            confirmButtonText: '확인',
+          });
           // navigate('/main');
         }
 
