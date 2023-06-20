@@ -4,7 +4,7 @@ import ModalPortal from '../Modal/ModalPortal';
 import Joinmodal from '../Joinmodal';
 import { instance } from '../../core/api/axios/instance';
 
-function JoinStudyRoom() {
+function JoinStudyRoom({ token }) {
   const [myRooms, setMyRooms] = useState([]);
   const [openModalIndex, setOpenModalIndex] = useState(-1);
 
@@ -17,12 +17,14 @@ function JoinStudyRoom() {
       setMyRooms(myRooms);
       return response.data.data;
     } catch (error) {
-      console.error('????error:', error);
+      // console.log('????error:', error);
     }
   };
 
   useEffect(() => {
-    userInfo();
+    if (token) {
+      userInfo();
+    }
   }, []);
 
   const openJoinModal = (index) => {
