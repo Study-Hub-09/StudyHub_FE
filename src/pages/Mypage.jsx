@@ -10,6 +10,8 @@ import RoomPagination from '../components/Mypage/RoomPagination';
 import JoinStudyRoom from '../components/Mypage/JoinStudyRoom';
 import Rank from '../components/Mypage/Rank';
 import StudyTitle from '../components/Mypage/StudyTitle';
+import { useQuery } from 'react-query';
+import { getMypage } from '../core/api/auth/mypage';
 
 function Mypage({ onClose }) {
   const nickname = localStorage.member;
@@ -34,46 +36,74 @@ function Mypage({ onClose }) {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
-  const userInfo = async () => {
-    try {
-      const response = await instance.get(`/api/members/mypage`);
+  const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
+    onSuccess: (response) => {
+      console.log(response);
+      setDailyStudyChart(response.data.dailyStudyChart);
+      setDailyStudyTime(response.data.dailyStudyTime);
+      setMonthlyStudyChart(response.data.monthlyStudyChart);
+      setTotalStudyTime(response.data.totalStudyTime);
+      setWeeklyStudyChart(response.data.weeklyStudyChart);
+      setMyRooms(response.data.myRooms);
+      setTopRankedNickname(response.data.topRankedNickname);
+      setTopRankedTotalStudyTime(response.data.topRankedTotalStudyTime);
+      setNextGradeRemainingTime(response.data.nextGradeRemainingTime);
+      setTitle(response.data.title);
+      setTopRankedTitle(response.data.topRankedTitle);
+    },
+    onError: (error) => {
+      // console.log('error', error.msg);
+    },
+    enabled: !!token,
+  });
 
-      const {
-        dailyStudyChart,
-        dailyStudyTime,
-        monthlyStudyChart,
-        totalStudyTime,
-        weeklyStudyChart,
-        myRooms,
-        topRankedNickname,
-        topRankedTotalStudyTime,
-        nextGradeRemainingTime,
-        title,
-        topRankedTitle,
-      } = response.data.data;
+  // const userInfo = async () => {
+  //   try {
+  //     const response = await instance.get(`/api/members/mypage`);
+  //     console.log(response);
+  //     const {
+  //       dailyStudyChart,
+  //       dailyStudyTime,
+  //       monthlyStudyChart,
+  //       totalStudyTime,
+  //       weeklyStudyChart,
+  //       myRooms,
+  //       topRankedNickname,
+  //       topRankedTotalStudyTime,
+  //       nextGradeRemainingTime,
+  //       title,
+  //       topRankedTitle,
+  //     } = response.data.data;
 
-      setDailyStudyChart(dailyStudyChart);
-      setDailyStudyTime(dailyStudyTime);
-      setMonthlyStudyChart(monthlyStudyChart);
-      setTotalStudyTime(totalStudyTime);
-      setWeeklyStudyChart(weeklyStudyChart);
-      setMyRooms(myRooms);
-      setTopRankedNickname(topRankedNickname);
-      setTopRankedTotalStudyTime(topRankedTotalStudyTime);
-      setNextGradeRemainingTime(nextGradeRemainingTime);
-      setTitle(title);
-      setTopRankedTitle(topRankedTitle);
-      return response.data.data;
-    } catch (error) {
-      console.error('????error:', error);
-    }
-  };
+  //     setDailyStudyChart(dailyStudyChart);
+  //     setDailyStudyTime(dailyStudyTime);
+  //     setMonthlyStudyChart(monthlyStudyChart);
+  //     setTotalStudyTime(totalStudyTime);
+  //     setWeeklyStudyChart(weeklyStudyChart);
+  //     setMyRooms(myRooms);
+  //     setTopRankedNickname(topRankedNickname);
+  //     setTopRankedTotalStudyTime(topRankedTotalStudyTime);
+  //     setNextGradeRemainingTime(nextGradeRemainingTime);
+  //     setTitle(title);
+  //     setTopRankedTitle(topRankedTitle);
+  //     return response.data.data;
+  //   } catch (error) {
+  //     // console.log('????error:', error);
+  //   }
+  // };
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     setToken(accessToken);
-    userInfo();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {isError.message}</div>;
+  }
 
   // 오늘날짜 00.00.(요일) 형식
   const currentDate = today();
@@ -300,7 +330,7 @@ function Mypage({ onClose }) {
                 </StContentMainTotalTimeLayout>
               </StContentMainTotalTime>
 
-              <JoinStudyRoom />
+              <JoinStudyRoom token={token} />
             </StContentMainContainerT>
 
             <StContentMainContainerB>

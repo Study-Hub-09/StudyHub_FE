@@ -56,23 +56,25 @@ function StudyTitle({ nextRankTime, nextGradeRemainingTime, title, token }) {
 
   return (
     <StContentMainTitel>
-      <StContentMainMyTitel>내 칭호</StContentMainMyTitel>
+      <StContentMainLayout>
+        <StContentMainMyTitel>내 칭호</StContentMainMyTitel>
 
-      <StContentMainTitelName>
-        <StContentMainTitelImg src={getRankingImage()} alt="오류" />
-        <StContentMainTitelN>{getRankingTitle()}</StContentMainTitelN>
-      </StContentMainTitelName>
+        <StContentMainTitelName>
+          <StContentMainTitelImg src={getRankingImage()} alt="오류" />
+          <StContentMainTitelN>{getRankingTitle()}</StContentMainTitelN>
+        </StContentMainTitelName>
 
-      <StContentMainTitelEx>
-        <StContentMainTitelNextEx>다음 등급까지</StContentMainTitelNextEx>
+        <StContentMainTitelEx>
+          <StContentMainTitelNextEx>다음 등급까지</StContentMainTitelNextEx>
 
-        <StContentMainTitelNextAro>
-          <img src={Arrow} alt="오류" />
-        </StContentMainTitelNextAro>
-        <StContentMainTitelNextTime>
-          {nextRankTime(nextGradeRemainingTime)}
-        </StContentMainTitelNextTime>
-      </StContentMainTitelEx>
+          <StContentMainTitelNextAro>
+            <img src={Arrow} alt="오류" />
+          </StContentMainTitelNextAro>
+          <StContentMainTitelNextTime>
+            {nextRankTime(nextGradeRemainingTime)}
+          </StContentMainTitelNextTime>
+        </StContentMainTitelEx>
+      </StContentMainLayout>
     </StContentMainTitel>
   );
 }
@@ -92,6 +94,13 @@ const StContentMainTitel = styled.div`
   justify-content: center;
   /* border: 1px solid #8cacff; */
 `;
+const StContentMainLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 0px 0px 10px;
+  /* border: 1px solid #8cacff; */
+`;
 const StContentMainMyTitel = styled.div`
   width: 30%;
   height: 17%;
@@ -100,7 +109,8 @@ const StContentMainMyTitel = styled.div`
   font-size: 0.833vw;
   line-height: 1rem;
   color: #848484;
-  margin-left: 1.125rem;
+  padding: 0px 0px 15px 0px;
+  /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelName = styled.div`
@@ -111,7 +121,7 @@ const StContentMainTitelName = styled.div`
   font-size: 1.25vw;
   line-height: 1.563rem;
   color: #303031;
-  margin: 0.313rem 0rem 0rem 1.125rem;
+  /* margin: 0.313rem 0rem 0rem 1.125rem; */
   display: flex;
   align-items: center;
   /* border: 1px solid #8cacff; */
@@ -129,7 +139,7 @@ const StContentMainTitelN = styled.div`
   font-size: 1.25vw;
   line-height: 1.563rem;
   color: #303031;
-  margin: 0rem 0rem 0rem 0.313rem;
+  /* margin: 0rem 0rem 0rem 0.313rem; */
   display: flex;
   align-items: center;
   /* border: 1px solid #8cacff; */
@@ -137,24 +147,26 @@ const StContentMainTitelN = styled.div`
 const StContentMainTitelEx = styled.div`
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
   width: 100%;
   height: 18%;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelNextEx = styled.div`
-  width: 45%;
+  width: 48%;
   height: 90%;
   font-style: normal;
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1.188rem;
   color: #848484;
-  margin-left: 1.125rem;
+  /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelNextAro = styled.div`
   box-sizing: border-box;
-  margin: 0rem 0.188rem 0rem 0.188rem;
+  padding: 0px 6px 0px 2px;
+  /* margin: 0rem 0.188rem 0rem 0.188rem; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTitelNextTime = styled.div`

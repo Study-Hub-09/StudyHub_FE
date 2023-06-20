@@ -20,14 +20,12 @@ import {
 
 function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName }) {
   const chatDisplayRef = useRef(null);
+  console.log('chatDatas>>>> ', chatDatas);
 
   // 메시지가 추가될 때마다 자동 스크롤
-  useEffect(() => {
-    // const chatDisplayElement = chatDisplayRef.current;
-    // chatDisplayElement.scrollTop = chatDisplayElement.scrollHeight;
-    // console.log(chatDisplayElement.scrollTop);
-    chatDisplayRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatDatas]);
+  // useEffect(() => {
+  //   chatDisplayRef.current.scrollIntoView({ behavior: 'smooth' });
+  // }, [chatDatas]);
 
   return (
     <StChatContainer onSubmit={onSubmit}>
@@ -44,40 +42,46 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
       {/* 채팅 창 영역 */}
       <StChatArea ref={chatDisplayRef}>
         {chatDatas.map((chatData, id) => {
+          const previousChatData = chatDatas[id - 1]; // 이전 채팅 데이터
+          const isSameUser = previousChatData?.nickname === chatData.nickname; // 이전 채팅과 같은 사용자인지 확인
+          const isSameTime = previousChatData?.createdAt === chatData.createdAt; // 이전 채팅과 같은 시간인지 확인
+
           return (
             <div key={id}>
-              {chatData.nickname === getUserName ? (
-                <StChatTextBox>
-                  <StChatTextTitle>
-                    <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
-                    <StChatTextTitleUser>
-                      <p>{chatData.nickname}</p>
-                      <img src={profileimg} alt="" />
-                    </StChatTextTitleUser>
-                  </StChatTextTitle>
-                  <StChatTextContent textalign="right" marginright="30px">
-                    <p>{chatData.message}</p>
+              <StChatTextBox>
+                {!isSameUser && (
+                  <StChatTextContent>
+                    <StChatTextTitle>
+                      {chatData.nickname !== getUserName && (
+                        <StChatTextTitleUser color="var(--color-dark-green)">
+                          <img src={profileimg} alt="Guest Profile" />
+                          <p>{chatData.nickname} </p>
+                          {!isSameUser && isSameTime && (
+                            <StChatTextTitleTime>
+                              {chatData.createdAt}
+                            </StChatTextTitleTime>
+                          )}
+                        </StChatTextTitleUser>
+                      )}
+                    </StChatTextTitle>
                   </StChatTextContent>
-                </StChatTextBox>
-              ) : (
-                <StChatTextBox>
-                  <StChatTextTitle>
-                    <StChatTextTitleUser>
-                      <img src={profileimg} alt="" />
-                      <p>{chatData.nickname}</p>
-                    </StChatTextTitleUser>
+                )}
+                <StChatTextContent
+                  textalign={chatData.nickname === getUserName ? 'right' : 'left'}
+                  marginleft={chatData.nickname !== getUserName && '30px'}
+                >
+                  {isSameUser && !isSameTime && (
                     <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
-                  </StChatTextTitle>
-                  <StChatTextContent textalign="left" marginleft="30px">
-                    <p>{chatData.message}</p>
-                  </StChatTextContent>
-                </StChatTextBox>
-              )}
-              <div ref={chatDisplayRef}></div>
+                  )}
+                  <p>{chatData.message}</p>
+                </StChatTextContent>
+              </StChatTextBox>
             </div>
           );
         })}
+        <div ref={chatDisplayRef}></div>
       </StChatArea>
+
       {/* 채팅 입력 영역 */}
       <StChatInput>
         <input type="text" value={message} onChange={onChange} />

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import LogoW from '../../assets/Images/LogoW.svg';
 import Logoic from '../../assets/Images/Logoic.svg';
-import Analitycs from '../../assets/Images/Analitycs.svg';
 import Dashboard from '../../assets/Images/Dashboard Icon.svg';
-import materialsymbols from '../../assets/Images/material-symbols_help-outline.svg';
 import setting from '../../assets/Images/setting2.svg';
 import logout from '../../assets/Images/logout.svg';
 import profile from '../../assets/Images/Frame 19.svg';
+import profileout from '../../assets/Images/Frame 20.svg';
 import Straight from '../../assets/Images/Straight.svg';
 import RevStraight from '../../assets/Images/RevStraight.svg';
+import main from '../../assets/Icons/main.svg';
 import styled from 'styled-components';
 import nSeed from '../../assets/Icons/nSeed.png';
 import nSprout from '../../assets/Icons/nSprout.png';
@@ -20,7 +20,8 @@ import nWorldTree from '../../assets/Icons/nWorldTree.png';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
-import { instance } from '../../core/api/axios/instance';
+import { useQuery } from 'react-query';
+import { getMypage } from '../../core/api/auth/mypage';
 
 function SideBar({ children }) {
   const navigate = useNavigate();
@@ -31,26 +32,48 @@ function SideBar({ children }) {
   const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [title, setTitle] = useState('');
 
-  const userInfo = async () => {
-    try {
-      const response = await instance.get(`/api/members/mypage`);
-      // console.log('#######response', response.data.data);
+  // const { data, isLoading, isError } = useQuery('userInfo', getMypage, {
+  //   enabled: !!token,
+  // });
+  // const data = userData?.data?.data;
+  // const userInfo = async () => {
+  //   try {
+  //     const response = await instance.get(`/api/members/mypage`);
+  //     // console.log('#######response', response.data.data);
 
-      const { totalStudyTime } = response.data.data;
+  //     const { totalStudyTime } = response.data.data;
 
-      setTotalStudyTime(totalStudyTime);
+  //     setTotalStudyTime(totalStudyTime);
 
-      return response.data.data;
-    } catch (error) {
-      console.error('error:', error);
-    }
-  };
+  //     return response.data.data;
+  //   } catch (error) {
+  //     // console.log('error:', error);
+  //   }
+  // };
+  const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
+    onSuccess: (response) => {
+      // console.log(response);
+      setTotalStudyTime(response.data.totalStudyTime);
+      setTitle(response.data.title);
+    },
+    onError: (error) => {
+      // console.log('error', error.msg);
+    },
+    enabled: !!token,
+  });
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     setToken(accessToken);
-    userInfo();
   }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {isError.message}</div>;
+  }
 
   const getRankingImage = () => {
     // 랭킹 이미지를 랭킹에 따라 매핑합니다.
@@ -99,7 +122,7 @@ function SideBar({ children }) {
     {
       navigate: '/main',
       name: '공개 스터디',
-      icon: <img src={Analitycs} alt="오류" />,
+      icon: <img src={main} alt="오류" />,
     },
     {
       navigate: '/mypage',
@@ -109,11 +132,7 @@ function SideBar({ children }) {
   ];
   const menuItem1 = [
     {
-      name: 'Help',
-      icon: <img src={materialsymbols} alt="오류" />,
-    },
-    {
-      name: '설정',
+      name: '개인설정 및 보안',
       icon: <img src={setting} alt="오류" />,
     },
   ];
@@ -143,22 +162,47 @@ function SideBar({ children }) {
 
         <StNavLinkContainer>
           {menuItem.map((item, index) => (
-            <StNavLink to={item.navigate} key={index}>
-              <StMenuItems isOpen={isOpen}>
+            <StNavLink
+              to={item.navigate}
+              key={index}
+              active={window.location.pathname === item.navigate}
+            >
+              <StMenuItems
+                isOpen={isOpen}
+                active={window.location.pathname === item.navigate}
+              >
                 <StIcon>{item.icon}</StIcon>
-                <StName isOpen={isOpen}>{item.name}</StName>
+                <StName
+                  isOpen={isOpen}
+                  active={window.location.pathname === item.navigate}
+                >
+                  {item.name}
+                </StName>
               </StMenuItems>
             </StNavLink>
           ))}
-          <StLine isOpen={isOpen} />
-          {menuItem1.map((item, index) => (
-            <StNavLink to={item.navigate} key={index}>
-              <StMenuItems isOpen={isOpen}>
-                <StIcon>{item.icon}</StIcon>
-                <StName isOpen={isOpen}>{item.name}</StName>
-              </StMenuItems>
-            </StNavLink>
-          ))}
+          {/* <StLine isOpen={isOpen} /> */}
+          {token &&
+            menuItem1.map((item, index) => (
+              <StNavLink
+                to={item.navigate}
+                key={index}
+                active={window.location.pathname === item.navigate}
+              >
+                <StMenuItems
+                  isOpen={isOpen}
+                  active={window.location.pathname === item.navigate}
+                >
+                  <StIcon>{item.icon}</StIcon>
+                  <StName
+                    isOpen={isOpen}
+                    active={window.location.pathname === item.navigate}
+                  >
+                    {item.name}
+                  </StName>
+                </StMenuItems>
+              </StNavLink>
+            ))}
           {menuItem2.map((item, index) => (
             <StNavLink2 key={index} onClick={item.onClick}>
               <StMenuItems isOpen={isOpen}>
@@ -172,7 +216,7 @@ function SideBar({ children }) {
         <StProfileContainer>
           <StProfileLaout>
             <StProfileFreame isOpen={isOpen}>
-              <StProfile src={profile} alt="오류" />
+              <StProfile src={token ? profile : profileout} alt="오류" />
             </StProfileFreame>
 
             <StPofileTextFreame>
@@ -235,10 +279,11 @@ const StNavLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
+  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
   &:hover {
-    height: 29.5px;
-    margin: 15px 0px 15px 0px;
-    border-left: 3px solid #ffffff;
+    /* height: 29.5px;
+    margin: 15px 0px 15px 0px; */
+    border-right: 3px solid #ffffff;
   }
 `;
 const StNavLink2 = styled.div`
@@ -248,10 +293,11 @@ const StNavLink2 = styled.div`
   text-decoration: none;
   cursor: pointer;
   &:hover {
-    height: 29.5px;
-    margin: 15px 0px 15px 0px;
-    border-left: 3px solid #ffffff;
+    /* height: 29.5px;
+    margin: 15px 0px 15px 0px; */
+    border-right: 3px solid #ffffff;
   }
+  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
 `;
 const StMenuItems = styled.div`
   display: flex;
@@ -262,6 +308,7 @@ const StMenuItems = styled.div`
     `
     margin: 0px 28px 0px 28px; /* isOpen이 false일 때의 너비 */
   `}
+  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
 `;
 const StIcon = styled.div`
   width: 24px;
@@ -269,10 +316,10 @@ const StIcon = styled.div`
   margin-right: 12px;
 `;
 const StName = styled.div`
-  width: 101px;
+  width: 108px;
   height: 20px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 15px;
   line-height: 20px;
   color: #ffffff;
@@ -281,6 +328,7 @@ const StName = styled.div`
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
+  font-weight: ${({ active }) => (active ? '700' : '500')};
 `;
 const StLine = styled.div`
   width: 212px;

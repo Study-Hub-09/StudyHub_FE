@@ -13,7 +13,7 @@ import view from '../asset/view.svg';
 import Vector from '../asset/Vector.svg';
 import { getCookie } from '../Cookies/Cookies';
 import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
-import { createSession, createToken, exitRoom } from '../core/api/openvidu/openvidu';
+import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
@@ -31,7 +31,6 @@ function Room() {
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
 
-  const { memberData } = location.state;
   const { roomData } = location.state || {};
 
   const [state, setState] = useState({
@@ -284,6 +283,9 @@ function Room() {
   // 메시지 보내는 함수
   const sendMessageHandler = (e) => {
     e.preventDefault();
+    if (message.trim() === '') {
+      return;
+    }
     sendMessage({
       sessionId: mySessionId,
       profile: 'profileimg',

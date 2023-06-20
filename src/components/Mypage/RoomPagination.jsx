@@ -52,45 +52,49 @@ function RoomPagination({ token }) {
 
   return (
     <StContentMainSubStudyRoom>
-      <StContentMainSubStudyRoomTM>
-        <StContentMainSubStudyRoomTitle>모집 중인 스터디</StContentMainSubStudyRoomTitle>
-        <StContentMainSubStudyRoomMore
-          onClick={() => {
-            navigate('/main');
-          }}
-        >
-          더보기
-        </StContentMainSubStudyRoomMore>
-      </StContentMainSubStudyRoomTM>
-      {currentRoom && token && (
-        <StContentMainSubStudyRoomList>
-          <StContentMainSubStudyRoomNaCa>
-            <StContentMainSubStudyRoomName>
-              {currentRoom.roomName}
-            </StContentMainSubStudyRoomName>
-            <StContentMainSubStudyRoomCa>
-              {currentRoom.category &&
-                currentRoom.category
-                  .split(',')
-                  .map((tag) => `#${tag}`)
-                  .join(' ')}
-            </StContentMainSubStudyRoomCa>
-          </StContentMainSubStudyRoomNaCa>
+      <StContentMainSubStudyLayout>
+        <StContentMainSubStudyRoomTM>
+          <StContentMainSubStudyRoomTitle>
+            모집 중인 스터디
+          </StContentMainSubStudyRoomTitle>
+          <StContentMainSubStudyRoomMore
+            onClick={() => {
+              navigate('/main');
+            }}
+          >
+            더보기
+          </StContentMainSubStudyRoomMore>
+        </StContentMainSubStudyRoomTM>
+        {currentRoom && token && (
+          <StContentMainSubStudyRoomList>
+            <StContentMainSubStudyRoomNaCa>
+              <StContentMainSubStudyRoomName>
+                {currentRoom.roomName}
+              </StContentMainSubStudyRoomName>
+              <StContentMainSubStudyRoomCa>
+                {currentRoom.category &&
+                  currentRoom.category
+                    .split(',')
+                    .map((tag) => `#${tag}`)
+                    .join(' ')}
+              </StContentMainSubStudyRoomCa>
+            </StContentMainSubStudyRoomNaCa>
 
-          <StContentMainSubStudyRoomBtn onClick={openJoinModal}>
-            <StContentMainSubStudyRoomBtnF>입장하기</StContentMainSubStudyRoomBtnF>
-          </StContentMainSubStudyRoomBtn>
-          {isJoinModalsOpen && (
-            <ModalPortal>
-              <Joinmodal roomData={currentRoom} onClose={closeJoinModal} />
-            </ModalPortal>
-          )}
-        </StContentMainSubStudyRoomList>
-      )}
-      <Stallowbox>
-        <Stallowicon src={leftallow} alt="" onClick={prevpageHandler} />
-        <Stallowicon src={rightallow} alt="" onClick={nextpageHandler} />
-      </Stallowbox>
+            <StContentMainSubStudyRoomBtn onClick={openJoinModal}>
+              <StContentMainSubStudyRoomBtnF>입장하기</StContentMainSubStudyRoomBtnF>
+            </StContentMainSubStudyRoomBtn>
+            {isJoinModalsOpen && (
+              <ModalPortal>
+                <Joinmodal roomData={currentRoom} onClose={closeJoinModal} />
+              </ModalPortal>
+            )}
+          </StContentMainSubStudyRoomList>
+        )}
+        <Stallowbox>
+          <Stallowicon src={leftallow} alt="" onClick={prevpageHandler} />
+          <Stallowicon src={rightallow} alt="" onClick={nextpageHandler} />
+        </Stallowbox>
+      </StContentMainSubStudyLayout>
     </StContentMainSubStudyRoom>
   );
 }
@@ -106,7 +110,13 @@ const StContentMainSubStudyRoom = styled.div`
   border-radius: 12px;
   margin-top: 1.6%;
   display: flex;
+  /* border: 1px solid #8cacff; */
+`;
+const StContentMainSubStudyLayout = styled.div`
+  width: 100%;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomTM = styled.div`
@@ -115,6 +125,7 @@ const StContentMainSubStudyRoomTM = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0px 0px 0px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomTitle = styled.div`
@@ -125,7 +136,7 @@ const StContentMainSubStudyRoomTitle = styled.div`
   font-size: 1.389vw;
   line-height: 1.688rem;
   color: #000000;
-  margin: 14px 0px 10px 15px;
+  /* margin: 14px 0px 10px 15px; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainSubStudyRoomMore = styled.div`
@@ -202,13 +213,15 @@ const StContentMainSubStudyRoomBtnF = styled.button`
   line-height: 1.25rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #00573f;
   /* border: 1px solid #8cacff; */
 `;
 const Stallowbox = styled.div`
-  height: 25%;
-  width: 15%;
-  margin: 1.5% 0% 0% 75%;
+  height: 15%;
+  width: 10%;
+  /* margin: 1.5% 0% 0% 75%; */
+  padding: 2% 0% 0% 78%;
   display: flex;
   /* justify-content: end; */
   gap: 21px;

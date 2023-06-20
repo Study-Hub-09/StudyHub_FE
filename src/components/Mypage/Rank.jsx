@@ -8,6 +8,8 @@ import nTree from '../../assets/Icons/nTree.png';
 import nBigTree from '../../assets/Icons/nBigTree.png';
 import nCenturyTree from '../../assets/Icons/nCenturyTree.png';
 import nWorldTree from '../../assets/Icons/nWorldTree.png';
+import RankingChanges from './RankingChanges';
+import RankingChangesTime from './RankingChangesTime';
 
 function Rank({
   totalRankTime,
@@ -40,23 +42,32 @@ function Rank({
 
   return (
     <StContentMainRank>
-      <StContentMainRankTitle>전체 등급</StContentMainRankTitle>
+      <StContentMainLayout>
+        <StContentMainRankTitle>현재 공부왕</StContentMainRankTitle>
 
-      <StContentMainRankName>
-        <StContentMainRankImg src={getRankingImage()} alt="오류" />
-        <StContentMainRankNic>
-          {token ? topRankedNickname : '공부왕'}
-        </StContentMainRankNic>
-      </StContentMainRankName>
+        <StContentMainRankName>
+          <StContentMainRankImg src={getRankingImage()} alt="오류" />
+          <StContentMainRankNic>
+            {/* {token ? topRankedNickname : '공부왕'} */}
+            <RankingChanges topRankedNickname={topRankedNickname} />
+          </StContentMainRankNic>
+        </StContentMainRankName>
 
-      <StContentMainRankEx>
-        <StContentMainRankNextAro>
-          <img src={Arrow} alt="오류" />
-        </StContentMainRankNextAro>
-        <StContentMainRankTime>
-          {totalRankTime(topRankedTotalStudyTime)}
-        </StContentMainRankTime>
-      </StContentMainRankEx>
+        <StContentMainRankEx>
+          <StContentMainTitelNextEx>총 공부시간</StContentMainTitelNextEx>
+
+          <StContentMainRankNextAro>
+            <img src={Arrow} alt="오류" />
+          </StContentMainRankNextAro>
+          <StContentMainRankTime>
+            {/* {totalRankTime(topRankedTotalStudyTime)} */}
+            <RankingChangesTime
+              totalRankTime={totalRankTime}
+              topRankedTotalStudyTime={topRankedTotalStudyTime}
+            />
+          </StContentMainRankTime>
+        </StContentMainRankEx>
+      </StContentMainLayout>
     </StContentMainRank>
   );
 }
@@ -75,15 +86,23 @@ const StContentMainRank = styled.div`
   justify-content: center;
   /* border: 1px solid #8cacff; */
 `;
+const StContentMainLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 0px 0px 0px 10px;
+  /* border: 1px solid #8cacff; */
+`;
 const StContentMainRankTitle = styled.div`
-  width: 40%;
+  width: 49%;
   height: 17%;
   font-style: normal;
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1rem;
   color: #848484;
-  margin-left: 1.125rem;
+  padding: 0px 0px 15px 0px;
+  /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainRankName = styled.div`
@@ -94,7 +113,7 @@ const StContentMainRankName = styled.div`
   font-size: 1.25vw;
   line-height: 1.563rem;
   color: #303031;
-  margin: 0.313rem 0rem 0rem 1.125rem;
+  /* margin: 0.313rem 0rem 0rem 1.125rem; */
   display: flex;
   align-items: center;
   /* border: 1px solid #8cacff; */
@@ -111,21 +130,33 @@ const StContentMainRankNic = styled.div`
   font-size: 1.25vw;
   line-height: 1.563rem;
   color: #303031;
-  margin: 0rem 0rem 0rem 0.313rem;
+  /* margin: 0rem 0rem 0rem 0.313rem; */
   display: flex;
   align-items: center;
 `;
 const StContentMainRankEx = styled.div`
-  width: 80%;
+  width: 100%;
   height: 22%;
-  margin-left: 1.125rem;
+  /* margin-left: 1.125rem; */
   display: flex;
   align-items: baseline;
   /* border: 1px solid #8cacff; */
 `;
+const StContentMainTitelNextEx = styled.div`
+  width: 48%;
+  height: 90%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.833vw;
+  line-height: 1.188rem;
+  color: #848484;
+  /* margin-left: 1.125rem; */
+  /* border: 1px solid #8cacff; */
+`;
 const StContentMainRankNextAro = styled.div`
   box-sizing: border-box;
-  margin: 0rem 0.188rem 0rem 0rem;
+  padding: 0px 8px 0px 1px;
+  /* margin: 0rem 0.188rem 0rem 0rem; */
 `;
 const StContentMainRankTime = styled.div`
   width: 40%;

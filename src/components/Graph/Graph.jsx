@@ -90,7 +90,7 @@ const Graph = ({
           ticks: {
             stepSize: 2,
             callback: function (value) {
-              return value + 'm';
+              return value + 'h';
             },
           },
         },
@@ -116,13 +116,13 @@ const Graph = ({
       });
       studyTimes = Object.values(dailyStudyChart).map((value) => {
         // const hours = Math.floor(value / 60); // 분을 시간으로 변환
-        // const hours = Math.floor(value / 3600); // 초를 시간으로 변환
-        // return `${hours}`;
+        const hours = Math.floor(value / 3600); // 초를 시간으로 변환
+        return `${hours}`;
         //가능
-        const minutes = Math.floor(value / 60); // 분으로 변환
-        return `${minutes}`;
+        // const minutes = Math.floor(value / 60); // 분으로 변환
+        // return `${minutes}`;
       });
-      options.scales.y.max = 30;
+      options.scales.y.max = 20;
     } else if (selectedGraph === '1W') {
       labels = Object.keys(weeklyStudyChart).map((key) => `${key}`);
       studyTimes = Object.values(weeklyStudyChart).map((value) => {
@@ -187,7 +187,7 @@ const Graph = ({
               min: 0, // y축 최소값을 0으로 설정
               max: 20, // y축 최대값을 24로 설정
               ticks: {
-                stepSize: 4,
+                stepSize: 2,
                 callback: function (value) {
                   return value + 'h';
                 },
