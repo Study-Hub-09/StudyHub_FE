@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 
-const OpenViduVideoComponent = ({ streamManager }) => {
+const OpenViduVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
+  console.log('audioEnabled OVC >> ', audioEnabled);
+  console.log('videoEnabled OVC >> ', videoEnabled);
   const videoRef = useRef();
 
   useEffect(() => {
@@ -16,6 +18,7 @@ const OpenViduVideoComponent = ({ streamManager }) => {
 export default OpenViduVideoComponent;
 
 const Stvideo = styled.video`
+  /* border: 1px solid blue; */
   width: 100%;
   height: 100%;
   border-radius: 12px;
