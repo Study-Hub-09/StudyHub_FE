@@ -1,104 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
-// import '../components/UserVideo.css';
 import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
-// const UserVideoComponent = ({ streamManager, userName, audioEnabled, videoEnabled }) => {
-const UserVideoComponent = ({
-  streamManager,
-  userName,
-  toggleAudioState,
-  toggleVideoState,
-  // audioEnabled,
-  // videoEnabled,
-}) => {
+const UserVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
+  console.log('마이크 시파>>> ', audioEnabled);
+
+  const member = localStorage.getItem('member');
+  console.log('member>>> ', member);
+  // 유저 닉네임 태그 함수
   const getNicknameTag = () => {
-    // 사용자의 닉네임을 가져옵니다.
     return JSON.parse(streamManager.stream.connection.data).clientData;
   };
 
-  const [audioEnabled, setAudioEnabled] = useState(true);
-  const [videoEnabled, setVideoEnabled] = useState(true);
-
-  // 추가(사용필요)
-  // const aControlHandler = () => {
-  //   setA((prevValue) => !prevValue);
-  //   streamManager.publishAudio(!a);
-  //   toggleAudioState();
-  // };
-
-  // const vControlHandler = () => {
-  //   setV((prevValue) => !prevValue);
-  //   streamManager.publishVideo(!v);
-  //   toggleVideoState();
-  // };
-
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (streamManager && videoElement) {
-      streamManager.addVideoElement(videoElement);
-    }
-    return () => {
-      if (streamManager && videoElement) {
-        streamManager?.removeVideoElement(videoElement);
-      }
-    };
-  }, [streamManager]);
+  console.log('getNicknameTage>>> ', getNicknameTag());
 
   return (
-    // <div>
-    //   {streamManager !== undefined ? (
-    //     <Stcambox>
-    //       <Stcamboxname>{getNicknameTag()}</Stcamboxname>
-    //       {videoEnabled ? (
-    //         <OpenViduVideoComponent streamManager={streamManager} />
-    //       ) : (
-    //         <StCamboximage>
-    //           <img src={camuser} alt="" />
-    //         </StCamboximage>
-    //       )}
-    //       {audioEnabled ? (
-    //         ''
-    //       ) : (
-    //         <StmicMuteIcon src={viewmic} alt="" width={36} height={36} />
-    //       )}
-    //     </Stcambox>
-    //   ) : null}
-    // </div>
-    // {audioEnabled ? (
-    //   <Sticon src={micOn} alt="" onClick={audiocontrolhandler} />
-    // ) : (
-    //   <Sticon src={micoff} alt="" onClick={audiocontrolhandler} />
-    // )}
-
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
           <Stcamboxname>{getNicknameTag()}</Stcamboxname>
-          {videoEnabled ? (
-            <OpenViduVideoComponent
-              streamManager={streamManager}
-              // onClick={vControlHandler}
-            />
-          ) : (
-            <StCamboximage>
-              <img src={camuser} alt="ㅇ" />
-            </StCamboximage>
+
+          <OpenViduVideoComponent
+            streamManager={streamManager}
+            audioEnabled={audioEnabled}
+            videoEnabled={videoEnabled}
+          />
+          {!audioEnabled && getNicknameTag() === member && (
+            <StmicMuteIcon src={viewmic} alt="audio icon" />
           )}
-          {audioEnabled ? (
-            ''
-          ) : (
-            <StmicMuteIcon
-              src={viewmic}
-              alt=""
-              width={36}
-              height={36}
-              // onClick={aControlHandler}
-            />
+          {!videoEnabled && getNicknameTag() === member && (
+            <StUserCam>
+              <img src={camuser} alt="unabled video user icon" />
+            </StUserCam>
           )}
         </Stcambox>
       ) : null}
@@ -109,6 +44,7 @@ const UserVideoComponent = ({
 export default UserVideoComponent;
 
 const Stcambox = styled.div`
+  /* border: 1px solid red; */
   width: 100%;
   height: 100%;
   background-color: black;
@@ -141,10 +77,23 @@ const StmicMuteIcon = styled.img`
   right: 7.99px;
   bottom: 8.11px;
 `;
-const StCamboximage = styled.div`
+// const StCamboximage = styled.img`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+//   padding: 14% 0%;
+//   z-index: 1;
+// `;
+
+const StUserCam = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  padding: 14% 0%;
+  background-color: #d8deca;
+  position: absolute;
 `;
