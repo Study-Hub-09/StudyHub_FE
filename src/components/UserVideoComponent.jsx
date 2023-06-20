@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import OpenViduVideoComponent from './OvVideo';
 import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
@@ -77,14 +77,6 @@ const StmicMuteIcon = styled.img`
   right: 7.99px;
   bottom: 8.11px;
 `;
-// const StCamboximage = styled.img`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   padding: 14% 0%;
-//   z-index: 1;
-// `;
 
 const StUserCam = styled.div`
   width: 100%;
