@@ -109,7 +109,7 @@ const StContentMainMyTitel = styled.div`
   font-size: 0.833vw;
   line-height: 1rem;
   color: #848484;
-  padding: 0px 0px 15px 0px;
+  padding: 0px 0px 20px 0px;
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
@@ -136,7 +136,7 @@ const StContentMainTitelN = styled.div`
   height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25vw;
+  font-size: 1.1111vw;
   line-height: 1.563rem;
   color: #303031;
   /* margin: 0rem 0rem 0rem 0.313rem; */

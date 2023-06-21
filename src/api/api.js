@@ -43,4 +43,16 @@ const getSearchRoom = async (page, queryString) => {
   const response = await instance.get(`/api/main?page=${page}&${queryString}`);
   return response.data.data;
 };
-export { getRoom, addRoom, joinRoom, getSearchRoom };
+
+// 내 스터디룸 삭제
+const deleteRoom = async (sessionId) => {
+  try {
+    const response = await instance.delete(`/api/rooms/${sessionId}`, sessionId);
+    return response.data;
+  } catch (error) {
+    // 오류 처리
+    // console.log('Error deleting room:', error);
+  }
+};
+
+export { getRoom, addRoom, joinRoom, getSearchRoom, deleteRoom };

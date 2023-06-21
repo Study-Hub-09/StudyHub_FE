@@ -1,37 +1,24 @@
 import React, { useState, useEffect } from 'react';
 
-const RankingChanges = ({ topRankedNickname }) => {
-  const [currentRank, setCurrentRank] = useState(3);
+const RankingChanges = ({ topRankedList }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentRank((prevRank) => {
-        if (prevRank === 3) return 1;
-        return prevRank + 1;
-      });
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % topRankedList.length);
     }, 2000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [topRankedList]);
 
-  const getRankingString = (rank) => {
-    switch (rank) {
-      case 1:
-        // return `1. ${topRankedNickname || '공부왕'}`;
-        return `${topRankedNickname || '공부왕'}`;
-      case 2:
-        return `${topRankedNickname || '공부왕'}`;
-      case 3:
-        return `${topRankedNickname || '공부왕'}`;
-      default:
-        return '';
-    }
+  const getRankingString = (index) => {
+    return topRankedList[index]?.nickname || '공부왕';
   };
 
   return (
     <div>
       <ul>
-        <li>{getRankingString(currentRank)}</li>
+        <li>{getRankingString(currentIndex)}</li>
       </ul>
     </div>
   );
