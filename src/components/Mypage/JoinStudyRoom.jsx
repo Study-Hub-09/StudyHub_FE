@@ -1,31 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import ModalPortal from '../Modal/ModalPortal';
 import Joinmodal from '../Joinmodal';
-import { instance } from '../../core/api/axios/instance';
+import { useQuery } from 'react-query';
+import { getMypage } from '../../core/api/auth/mypage';
+import more from '../../assets/Icons/more.svg';
+import { deleteRoom } from '../../api/api';
+import Swal from 'sweetalert2';
 
 function JoinStudyRoom({ token }) {
   const [myRooms, setMyRooms] = useState([]);
   const [openModalIndex, setOpenModalIndex] = useState(-1);
 
-  const userInfo = async () => {
-    try {
-      const response = await instance.get(`/api/members/mypage`);
-      // console.log('#######response', response.data.data);
+  const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
+    onSuccess: (response) => {
+      console.log(response);
+      setMyRooms(response.data.myRooms);
+    },
+    onError: (error) => {
+      // console.log('error', error.msg);
+    },
+    enabled: !!token,
+  });
+  // console.log(myRooms);
 
-      const { myRooms } = response.data.data;
-      setMyRooms(myRooms);
-      return response.data.data;
-    } catch (error) {
-      // console.log('????error:', error);
-    }
-  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    if (token) {
-      userInfo();
-    }
-  }, []);
+  if (isError) {
+    return <div>Error: {isError.message}</div>;
+  }
 
   const openJoinModal = (index) => {
     setOpenModalIndex(index);
@@ -33,6 +38,30 @@ function JoinStudyRoom({ token }) {
 
   const closeJoinModal = () => {
     setOpenModalIndex(-1);
+  };
+
+  const deleteRoomHandler = async (sessionId) => {
+    try {
+      const result = await deleteRoom(sessionId);
+      Swal.fire({
+        icon: 'question',
+        iconColor: '#00573f',
+        text: '삭제하시겠습니까?',
+        width: 400,
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+        cancelButtonColor: '#570000',
+        cancelButtonText: '취소',
+        showCancelButton: true, // 취소 버튼 표시 설정
+      }).then((response) => {
+        if (response.isConfirmed) {
+          setMyRooms([]);
+          // console.log('Room deleted successfully:', result);
+        }
+      });
+    } catch (error) {
+      // console.log('Error deleting room:', error);
+    }
   };
 
   return (
@@ -58,11 +87,13 @@ function JoinStudyRoom({ token }) {
                     </StContentMainTodoListRoomCa>
                   </StContentMainTodoListRoomNaCa>
 
-                  {/* <StContentMainTodoListRoomBtn onClick={() => openJoinModal(index)}>
-                    <StContentMainTodoListRoomBtnF>
-                      입장하기
-                    </StContentMainTodoListRoomBtnF>
-                  </StContentMainTodoListRoomBtn> */}
+                  <div
+                    onClick={() => {
+                      deleteRoomHandler(item.sessionId);
+                    }}
+                  >
+                    <img src={more} alt="more button" />
+                  </div>
                   {openModalIndex === index && (
                     <ModalPortal>
                       <Joinmodal roomData={item} onClose={closeJoinModal} />
@@ -98,7 +129,7 @@ const StContentMainTodoListTitle = styled.div`
   font-size: 1.389vw;
   line-height: 1.688rem;
   color: #000000;
-  margin: 19px 20px 22px 20px;
+  margin: 19px 20px 20px 20px;
   /* border: 1px solid #8cacff; */
 `;
 const StContentMainTodoListRoom = styled.div`
@@ -117,11 +148,13 @@ const StContentMainTodoListRoomList = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0px 20px 20px 20px;
-  /* border: 1px solid #8cacff; */
+  border: 1px solid #8cacff;
 `;
 const StContentMainTodoListRoomNaCa = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
+  border: 1px solid #8cacff;
 `;
 const StContentMainTodoListRoomNa = styled.div`
   width: 100%;

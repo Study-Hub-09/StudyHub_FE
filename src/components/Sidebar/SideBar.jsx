@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 import { useQuery } from 'react-query';
 import { getMypage } from '../../core/api/auth/mypage';
+import { instance } from '../../core/api/axios/instance';
 
 function SideBar({ children }) {
   const navigate = useNavigate();
@@ -35,7 +36,9 @@ function SideBar({ children }) {
   // const { data, isLoading, isError } = useQuery('userInfo', getMypage, {
   //   enabled: !!token,
   // });
+
   // const data = userData?.data?.data;
+
   // const userInfo = async () => {
   //   try {
   //     const response = await instance.get(`/api/members/mypage`);
@@ -50,6 +53,7 @@ function SideBar({ children }) {
   //     // console.log('error:', error);
   //   }
   // };
+
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
       // console.log(response);
@@ -65,6 +69,10 @@ function SideBar({ children }) {
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     setToken(accessToken);
+
+    // if (token) {
+    //   userInfo();
+    // }
   }, []);
 
   if (isLoading) {

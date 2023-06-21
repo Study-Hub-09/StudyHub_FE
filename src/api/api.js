@@ -44,6 +44,7 @@ const getSearchRoom = async (page, queryString) => {
   return response.data.data;
 };
 
+
 // 유저 프로필 조회
 const getProfile = async () => {
   const response = await instance.get(`/api/members/profile`);
@@ -59,4 +60,18 @@ const updateProfile = async (updateProfile) => {
   });
   return response.data;
 };
-export { getRoom, addRoom, joinRoom, getSearchRoom, getProfile, updateProfile };
+
+
+// 내 스터디룸 삭제
+const deleteRoom = async (sessionId) => {
+  try {
+    const response = await instance.delete(`/api/rooms/${sessionId}`, sessionId);
+    return response.data;
+  } catch (error) {
+    // 오류 처리
+    // console.log('Error deleting room:', error);
+  }
+};
+
+export { getRoom, addRoom, joinRoom, getSearchRoom, getProfile, updateProfile, deleteRoom };
+
