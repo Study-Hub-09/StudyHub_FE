@@ -228,7 +228,8 @@ function SideBar({ children }) {
               <StProfile
                 src={
                   token
-                    ? data?.data?.imageUrl === '대표 프로필 이미지 URL'
+                    ? data?.data?.imageUrl === '대표 프로필 이미지 URL' ||
+                      data?.data?.imageUrl === null
                       ? profile
                       : data?.data?.imageUrl
                     : profileout
