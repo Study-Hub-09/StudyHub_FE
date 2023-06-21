@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
+import { Subscriber } from 'openvidu-browser';
 import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
 const UserVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
-  console.log('마이크 시파>>> ', audioEnabled);
-
+  console.log('streammadgasdfadfasdf>> ', streamManager);
+  // console.log('audioEnabled 제발 >> ', audioEnabled);
+  // console.log('videoEnabled 좀!!! >> ', videoEnabled);
   const member = localStorage.getItem('member');
-  console.log('member>>> ', member);
+
   // 유저 닉네임 태그 함수
   const getNicknameTag = () => {
     return JSON.parse(streamManager.stream.connection.data).clientData;
   };
 
-  console.log('getNicknameTage>>> ', getNicknameTag());
+  const user = getNicknameTag() === member;
+  const subscriber = JSON.parse(streamManager.stream.connection.data).clientData;
+  console.log('ldjkfoasdjfoaisdj ', subscriber);
 
   return (
     <div>
@@ -27,14 +31,22 @@ const UserVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
             audioEnabled={audioEnabled}
             videoEnabled={videoEnabled}
           />
-          {!audioEnabled && getNicknameTag() === member && (
-            <StmicMuteIcon src={viewmic} alt="audio icon" />
-          )}
-          {!videoEnabled && getNicknameTag() === member && (
+          {!audioEnabled && user && <StmicMuteIcon src={viewmic} alt="audio icon" />}
+          {!videoEnabled && user && (
             <StUserCam>
               <img src={camuser} alt="unabled video user icon" />
             </StUserCam>
           )}
+          {/* {(!videoEnabled && getNicknameTag() === !member && (
+            <StUserCam>
+              <img src={camuser} alt="unabled video user icon" />
+            </StUserCam>
+          )) ||
+            (videoEnabled && getNicknameTag() === !member && (
+              <StUserCam>
+                <img src={camuser} alt="unabled video user icon" />
+              </StUserCam>
+            ))} */}
         </Stcambox>
       ) : null}
     </div>
@@ -56,7 +68,6 @@ const Stcambox = styled.div`
   position: relative;
 `;
 const Stcamboxname = styled.div`
-  /* width: 68px; */
   height: 14%;
   background-color: #424242;
   border-radius: 7px;
@@ -70,12 +81,13 @@ const Stcamboxname = styled.div`
   bottom: 13.11px;
   left: 14.5px;
   padding: 0px 13px;
-  z-index: 1;
+  z-index: 2;
 `;
 const StmicMuteIcon = styled.img`
   position: absolute;
   right: 7.99px;
   bottom: 8.11px;
+  z-index: 1;
 `;
 
 const StUserCam = styled.div`
