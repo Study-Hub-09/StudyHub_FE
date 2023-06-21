@@ -140,6 +140,7 @@ function SideBar({ children }) {
   ];
   const menuItem1 = [
     {
+      navigate: '/setting',
       name: '개인설정 및 보안',
       icon: <img src={setting} alt="오류" />,
     },
@@ -151,7 +152,7 @@ function SideBar({ children }) {
       icon: <img src={logout} alt="오류" />,
     },
   ];
-
+  console.log(data?.data?.imageUrl);
   return (
     <StContainer>
       <StSidebarContainer isOpen={isOpen}>
@@ -224,7 +225,16 @@ function SideBar({ children }) {
         <StProfileContainer>
           <StProfileLaout>
             <StProfileFreame isOpen={isOpen}>
-              <StProfile src={token ? profile : profileout} alt="오류" />
+              <StProfile
+                src={
+                  token
+                    ? data?.data?.imageUrl === '대표 프로필 이미지 URL'
+                      ? profile
+                      : data?.data?.imageUrl
+                    : profileout
+                }
+                alt="오류"
+              />
             </StProfileFreame>
 
             <StPofileTextFreame>
@@ -427,6 +437,7 @@ const StProfileFreame = styled.div`
 const StProfile = styled.img`
   width: 48px;
   height: 48px;
+  border-radius: 24px;
 `;
 const StPofileTextFreame = styled.div`
   width: 124px;

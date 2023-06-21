@@ -44,6 +44,24 @@ const getSearchRoom = async (page, queryString) => {
   return response.data.data;
 };
 
+
+// 유저 프로필 조회
+const getProfile = async () => {
+  const response = await instance.get(`/api/members/profile`);
+  return response.data;
+};
+
+// 유저 프로필 수정
+const updateProfile = async (updateProfile) => {
+  const response = await instance.patch(`/api/members/profile`, updateProfile, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
+
+
 // 내 스터디룸 삭제
 const deleteRoom = async (sessionId) => {
   try {
@@ -55,4 +73,5 @@ const deleteRoom = async (sessionId) => {
   }
 };
 
-export { getRoom, addRoom, joinRoom, getSearchRoom, deleteRoom };
+export { getRoom, addRoom, joinRoom, getSearchRoom, getProfile, updateProfile, deleteRoom };
+
