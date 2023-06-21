@@ -1,55 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Arrow from '../../assets/Images/Arrow 1.svg';
-import nSeed from '../../assets/Icons/nSeed.png';
-import nSprout from '../../assets/Icons/nSprout.png';
-import nSapling from '../../assets/Icons/nSapling.png';
-import nTree from '../../assets/Icons/nTree.png';
-import nBigTree from '../../assets/Icons/nBigTree.png';
-import nCenturyTree from '../../assets/Icons/nCenturyTree.png';
-import nWorldTree from '../../assets/Icons/nWorldTree.png';
 import RankingChanges from './RankingChanges';
 import RankingChangesTime from './RankingChangesTime';
+import gold from '../../assets/Icons/gold.svg';
+import silver from '../../assets/Icons/silver.svg';
+import bronze from '../../assets/Icons/bronze.svg';
 
-function Rank({
-  totalRankTime,
-  topRankedNickname,
-  topRankedTotalStudyTime,
-  token,
-  topRankedTitle,
-}) {
-  const getRankingImage = () => {
-    // 랭킹 이미지를 랭킹에 따라 매핑합니다.
+function Rank({ token, topRankedList }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % topRankedList.length);
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [topRankedList]);
+
+  const getRankingImage = (rank) => {
     if (token) {
-      if (topRankedTitle === '씨앗') {
-        return nSeed;
-      } else if (topRankedTitle === '새싹') {
-        return nSprout;
-      } else if (topRankedTitle === '잎줄기') {
-        return nSapling;
-      } else if (topRankedTitle === '묘목') {
-        return nTree;
-      } else if (topRankedTitle === '나무') {
-        return nBigTree;
-      } else if (topRankedTitle === '거목') {
-        return nCenturyTree;
-      } else if (topRankedTitle === '세계수') {
-        return nWorldTree;
+      if (rank === 3) {
+        return gold;
+      } else if (rank === 1) {
+        return silver;
+      } else if (rank === 2) {
+        return bronze;
       }
     }
-    return nSeed;
+    return gold;
   };
 
   return (
     <StContentMainRank>
       <StContentMainLayout>
         <StContentMainRankTitle>현재 공부왕</StContentMainRankTitle>
-
         <StContentMainRankName>
-          <StContentMainRankImg src={getRankingImage()} alt="오류" />
+          <StContentMainRankImg src={getRankingImage(currentIndex)} alt="오류" />
           <StContentMainRankNic>
             {/* {token ? topRankedNickname : '공부왕'} */}
-            <RankingChanges topRankedNickname={topRankedNickname} />
+            <RankingChanges topRankedList={topRankedList} />
           </StContentMainRankNic>
         </StContentMainRankName>
 
@@ -59,12 +49,10 @@ function Rank({
           <StContentMainRankNextAro>
             <img src={Arrow} alt="오류" />
           </StContentMainRankNextAro>
+
           <StContentMainRankTime>
-            {/* {totalRankTime(topRankedTotalStudyTime)} */}
-            <RankingChangesTime
-              totalRankTime={totalRankTime}
-              topRankedTotalStudyTime={topRankedTotalStudyTime}
-            />
+            {/* {totalRankTime(rankedItem?.topRankedTotalStudyTime)} */}
+            <RankingChangesTime topRankedList={topRankedList} />
           </StContentMainRankTime>
         </StContentMainRankEx>
       </StContentMainLayout>
@@ -101,7 +89,7 @@ const StContentMainRankTitle = styled.div`
   font-size: 0.833vw;
   line-height: 1rem;
   color: #848484;
-  padding: 0px 0px 15px 0px;
+  padding: 0px 0px 20px 0px;
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
@@ -127,7 +115,7 @@ const StContentMainRankNic = styled.div`
   height: 100%;
   font-style: normal;
   font-weight: 700;
-  font-size: 1.25vw;
+  font-size: 1.1111vw;
   line-height: 1.563rem;
   color: #303031;
   /* margin: 0rem 0rem 0rem 0.313rem; */

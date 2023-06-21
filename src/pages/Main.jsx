@@ -59,6 +59,7 @@ function Main() {
   const [url, setUrl] = useState('');
   const [filterData, setfilterData] = useState('');
   const [oldSelectedOptions, setOldSelectedOptions] = useState('');
+  const [prevSelectedOption, setPrevSelectedOption] = useState('');
   const token = getCookie('AccessToken');
   const navigate = useNavigate();
   useEffect(() => {
@@ -125,10 +126,12 @@ function Main() {
       });
     }
   };
-  const selectToggleHandler = () => {
-    setSelectOpen((prevIsSelectOpen) => !prevIsSelectOpen);
+  const selectToggleHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setSelectOpen(!isSelectOpen);
   };
-
+  console.log(isSelectOpen);
   const joinmodalToggleHandler = (id) => {
     setJoinModalOpen(true);
     setSelectedRoomId(id);
@@ -212,9 +215,12 @@ function Main() {
             </Stfont>
             {isSelectOpen && (
               <Selectbox
+                selectToggleHandler={selectToggleHandler}
                 handleCategory={handleCategory}
                 isSelectOpen={isSelectOpen}
                 setSelectOpen={setSelectOpen}
+                prevSelectedOption={prevSelectedOption}
+                setPrevSelectedOption={setPrevSelectedOption}
               />
             )}
           </Stfilterbox>

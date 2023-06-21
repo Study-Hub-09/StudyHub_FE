@@ -9,7 +9,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Room from '../pages/Room';
 import KakaoRedirectPage from '../pages/KakaoRedirectPage';
-import OpenviduComponent from '../components/Openvidu';
+import Setting from '../pages/Setting';
 
 function Router() {
   return (
@@ -24,6 +24,7 @@ function Router() {
         <Route element={<MainLayout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/setting" element={<Setting />} />
         </Route>
 
         <Route path="/rooms/:id/detail" element={<Room />} />

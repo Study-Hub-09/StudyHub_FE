@@ -89,6 +89,9 @@ export const Stroombox = styled.div`
   padding: 19px 24px;
   cursor: pointer;
   background-color: white;
+  &:hover {
+    border: 1px solid #00573f;
+  }
 `;
 
 export const Stfilterbox = styled.div`

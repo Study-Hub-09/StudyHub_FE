@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getCookie } from '../Cookies/Cookies';
-import profileLogo from '../../src/assets/Images/Frame 19.svg';
 import Graph from '../components/Graph/Graph';
-import { instance } from '../core/api/axios/instance';
 import { useNavigate } from 'react-router-dom';
-import ModalDday from '../components/Modal/ModalDday';
 import RoomPagination from '../components/Mypage/RoomPagination';
 import JoinStudyRoom from '../components/Mypage/JoinStudyRoom';
 import Rank from '../components/Mypage/Rank';
 import StudyTitle from '../components/Mypage/StudyTitle';
-import { useQuery } from 'react-query';
 import { getMypage } from '../core/api/auth/mypage';
+import { useQuery } from 'react-query';
 
 function Mypage({ onClose }) {
   const nickname = localStorage.member;
   const [token, setToken] = useState('');
-  const [ddayList, setDdayList] = useState([]);
-  const [showChild, setShowChild] = useState(false);
 
   const [dailyStudyTime, setDailyStudyTime] = useState(0);
   const [totalStudyTime, setTotalStudyTime] = useState(0);
@@ -27,70 +22,29 @@ function Mypage({ onClose }) {
   const [myRooms, setMyRooms] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState('1D');
 
-  const [topRankedNickname, setTopRankedNickname] = useState('');
-  const [topRankedTotalStudyTime, setTopRankedTotalStudyTime] = useState(0);
+  const [topRankedList, setTopRankedList] = useState('');
   const [nextGradeRemainingTime, setNextGradeRemainingTime] = useState(0);
   const [title, setTitle] = useState('');
-  const [topRankedTitle, setTopRankedTitle] = useState('');
-  const [isModalDdayOpen, setIsModalDdayOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
       setDailyStudyChart(response.data.dailyStudyChart);
       setDailyStudyTime(response.data.dailyStudyTime);
       setMonthlyStudyChart(response.data.monthlyStudyChart);
       setTotalStudyTime(response.data.totalStudyTime);
       setWeeklyStudyChart(response.data.weeklyStudyChart);
       setMyRooms(response.data.myRooms);
-      setTopRankedNickname(response.data.topRankedNickname);
-      setTopRankedTotalStudyTime(response.data.topRankedTotalStudyTime);
+      setTopRankedList(response.data.topRankedList);
       setNextGradeRemainingTime(response.data.nextGradeRemainingTime);
       setTitle(response.data.title);
-      setTopRankedTitle(response.data.topRankedTitle);
     },
     onError: (error) => {
       // console.log('error', error.msg);
     },
     enabled: !!token,
   });
-
-  // const userInfo = async () => {
-  //   try {
-  //     const response = await instance.get(`/api/members/mypage`);
-  //     console.log(response);
-  //     const {
-  //       dailyStudyChart,
-  //       dailyStudyTime,
-  //       monthlyStudyChart,
-  //       totalStudyTime,
-  //       weeklyStudyChart,
-  //       myRooms,
-  //       topRankedNickname,
-  //       topRankedTotalStudyTime,
-  //       nextGradeRemainingTime,
-  //       title,
-  //       topRankedTitle,
-  //     } = response.data.data;
-
-  //     setDailyStudyChart(dailyStudyChart);
-  //     setDailyStudyTime(dailyStudyTime);
-  //     setMonthlyStudyChart(monthlyStudyChart);
-  //     setTotalStudyTime(totalStudyTime);
-  //     setWeeklyStudyChart(weeklyStudyChart);
-  //     setMyRooms(myRooms);
-  //     setTopRankedNickname(topRankedNickname);
-  //     setTopRankedTotalStudyTime(topRankedTotalStudyTime);
-  //     setNextGradeRemainingTime(nextGradeRemainingTime);
-  //     setTitle(title);
-  //     setTopRankedTitle(topRankedTitle);
-  //     return response.data.data;
-  //   } catch (error) {
-  //     // console.log('????error:', error);
-  //   }
-  // };
 
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
@@ -161,18 +115,6 @@ function Mypage({ onClose }) {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  // 총 공부한시간(1등)
-  const totalRankTime = (topRankedTotalStudyTime) => {
-    const hours = Math.floor(topRankedTotalStudyTime / 3600)
-      .toString()
-      .padStart(2, '0');
-    const minutes = Math.floor((topRankedTotalStudyTime % 3600) / 60)
-      .toString()
-      .padStart(2, '0');
-    const seconds = (topRankedTotalStudyTime % 60).toString().padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
-  };
-
   // 다음 등급까지 남은 공부시간
   const nextRankTime = (nextGradeRemainingTime) => {
     const hours = Math.floor(nextGradeRemainingTime / 3600)
@@ -224,38 +166,8 @@ function Mypage({ onClose }) {
     setSelectedGraph(period);
   };
 
-  // modal을 이용한 방입장 및 취소
-  const openModalDday = () => {
-    setIsModalDdayOpen(true);
-  };
-
-  const closeModalDday = () => {
-    setIsModalDdayOpen(false);
-  };
-
-  // const handleDdayChange = (ddayValue) => {
-  //   setDday(ddayValue);
-  // };
-
-  const handleClick = () => {
-    setShowChild(true);
-  };
-
-  const handleDdayListChange = (list) => {
-    setDdayList(list);
-  };
-
-  const showAlert = () => {
-    window.alert('서비스 준비중입니다.');
-  };
-
   return (
     <>
-      <div>
-        {isModalDdayOpen && (
-          <ModalDday onClose={closeModalDday} onDdayChange={handleDdayListChange} />
-        )}
-      </div>
       <StMainContainer>
         <StHeaderContainer>
           <StHeaderLeft></StHeaderLeft>
@@ -267,19 +179,19 @@ function Mypage({ onClose }) {
                 <StHeaderUserIntro>나의 모든 공부 데이터 모아보기</StHeaderUserIntro>
               </StHeaderUserNameContainer>
 
-              <StHeaderDdayProfile>
+              {/* <StHeaderDdayProfile>
                 <StHeaderDdayCon>
                   <StHeaderDday>{'D-day'}</StHeaderDday>
                   <StHeaderDdayOp onClick={showAlert}>설정</StHeaderDdayOp>
-                  {/* <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp> */}
-                  {/* <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
-                  {showChild && <DdayList />} */}
+                  <StHeaderDdayOp onClick={openModalDday}>설정</StHeaderDdayOp>
+                  <StHeaderDdayOp onClick={handleClick}>설정</StHeaderDdayOp>
+                  {showChild && <DdayList />}
                 </StHeaderDdayCon>
 
                 <StHeaderProfile>
                   <StHeaderProfileImg src={profileLogo} alt="오류" />
                 </StHeaderProfile>
-              </StHeaderDdayProfile>
+              </StHeaderDdayProfile> */}
             </StHeaderMainContainer>
           </StHeaderMain>
         </StHeaderContainer>
@@ -381,13 +293,7 @@ function Mypage({ onClose }) {
                     title={title}
                   />
 
-                  <Rank
-                    token={token}
-                    totalRankTime={totalRankTime}
-                    topRankedNickname={topRankedNickname}
-                    topRankedTotalStudyTime={topRankedTotalStudyTime}
-                    topRankedTitle={topRankedTitle}
-                  />
+                  <Rank token={token} topRankedList={topRankedList} />
                 </StContentMainTitelRank>
 
                 <RoomPagination token={token} />
