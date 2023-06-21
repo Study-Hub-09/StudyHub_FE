@@ -228,7 +228,8 @@ function Setting() {
                       src={
                         readerImage
                           ? readerImage
-                          : profile?.imageUrl === '대표 프로필 이미지 URL'
+                          : profile?.imageUrl === '대표 프로필 이미지 URL' ||
+                            profile?.imageUrl === null
                           ? userImage
                           : profile?.imageUrl
                       }
