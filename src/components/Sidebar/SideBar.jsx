@@ -3,7 +3,7 @@ import LogoW from '../../assets/Images/LogoW.svg';
 import Logoic from '../../assets/Images/Logoic.svg';
 import Dashboard from '../../assets/Images/Dashboard Icon.svg';
 import setting from '../../assets/Images/setting2.svg';
-import logout from '../../assets/Images/logout.svg';
+import logoutimg from '../../assets/Images/logout.svg';
 import profile from '../../assets/Images/Frame 19.svg';
 import profileout from '../../assets/Images/Frame 20.svg';
 import Straight from '../../assets/Images/Straight.svg';
@@ -17,12 +17,14 @@ import nTree from '../../assets/Icons/nTree.png';
 import nBigTree from '../../assets/Icons/nBigTree.png';
 import nCenturyTree from '../../assets/Icons/nCenturyTree.png';
 import nWorldTree from '../../assets/Icons/nWorldTree.png';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 import { useQuery } from 'react-query';
 import { getMypage } from '../../core/api/auth/mypage';
 import { instance } from '../../core/api/axios/instance';
+import { logout } from '../../core/api/auth/logout';
+import Swal from 'sweetalert2';
 
 function SideBar({ children }) {
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ function SideBar({ children }) {
   const [token, setToken] = useState('');
   const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [title, setTitle] = useState('');
-
+  const location = useLocation();
   // const { data, isLoading, isError } = useQuery('userInfo', getMypage, {
   //   enabled: !!token,
   // });
@@ -107,11 +109,39 @@ function SideBar({ children }) {
 
   const tokenHandler = () => {
     if (token) {
-      removeCookie('AccessToken', { path: '/' });
-      removeCookie('RefreshToken', { path: '/' });
-      localStorage.removeItem('member');
-      setToken('');
-      window.location.reload();
+      logout()
+        .then((response) => {
+          const {
+            status: statusCode,
+            data: { message: responseMessage },
+          } = response;
+          if (statusCode === 200 && responseMessage === '로그아웃 성공') {
+            removeCookie('AccessToken', { path: '/' });
+            removeCookie('RefreshToken', { path: '/' });
+            localStorage.removeItem('member');
+            setToken('');
+            Swal.fire({
+              icon: 'success',
+              iconColor: '#00573f',
+              text: responseMessage,
+              width: 400,
+              confirmButtonColor: '#00573f',
+              confirmButtonText: '확인',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                if (location.pathname === '/setting') {
+                  navigate('/main');
+                  // window.location.reload();
+                } else {
+                  // window.location.reload();
+                }
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -149,10 +179,10 @@ function SideBar({ children }) {
     {
       onClick: () => (token ? tokenHandler() : navigate('/members/login')),
       name: token ? '로그아웃' : '로그인',
-      icon: <img src={logout} alt="오류" />,
+      icon: <img src={logoutimg} alt="오류" />,
     },
   ];
-  console.log(data?.data?.imageUrl);
+
   return (
     <StContainer>
       <StSidebarContainer isOpen={isOpen}>

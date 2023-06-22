@@ -49,20 +49,16 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
           return (
             <div key={id}>
               <StChatTextBox>
-                {!isSameUser && (
+                {(!isSameUser || (isSameUser && !isSameTime)) && (
                   <StChatTextContent>
                     <StChatTextTitle>
                       {chatData.nickname !== getUserName && (
                         <StChatTextTitleUser color="var(--color-dark-green)">
                           <img src={profileimg} alt="Guest Profile" />
                           <p>{chatData.nickname} </p>
-                          {!isSameUser && isSameTime && (
-                            <StChatTextTitleTime>
-                              {chatData.createdAt}
-                            </StChatTextTitleTime>
-                          )}
                         </StChatTextTitleUser>
                       )}
+                      <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
                     </StChatTextTitle>
                   </StChatTextContent>
                 )}

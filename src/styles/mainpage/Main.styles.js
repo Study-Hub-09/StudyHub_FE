@@ -64,7 +64,9 @@ export const StSearchicon = styled.img`
 export const StButton = styled.button`
   width: 141px;
   height: 44px;
-  padding: 11px 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   border-radius: 30px;
   font-size: 15px;

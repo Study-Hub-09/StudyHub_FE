@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { styled } from 'styled-components';
 import Subtract from '../asset/Subtract.svg';
 import Vector from '../asset/Vector.svg';
 import check from '../asset/check.svg';
 import noncheck from '../asset/noncheck.svg';
-import allow from '../asset/Polygon 3.svg';
+import openAllow from '../asset/Polygon 3.svg';
+import closeAllow from '../asset/selectboxAllow.svg';
 import leftAllow from '../asset/leftArrow.svg';
 import rightAllow from '../asset/rightArrow.svg';
 import hoverLeftAllow from '../asset/hoverLeftArrow.svg';
@@ -62,6 +63,8 @@ function Main() {
   const [prevSelectedOption, setPrevSelectedOption] = useState('');
   const token = getCookie('AccessToken');
   const navigate = useNavigate();
+  const outside = useRef();
+
   useEffect(() => {
     setfilterData({ category: selectCategory, keyword: search });
   }, [search, selectCategory]);
@@ -131,7 +134,7 @@ function Main() {
     event.stopPropagation();
     setSelectOpen(!isSelectOpen);
   };
-  console.log(isSelectOpen);
+
   const joinmodalToggleHandler = (id) => {
     setJoinModalOpen(true);
     setSelectedRoomId(id);
@@ -156,6 +159,7 @@ function Main() {
   const handleCategory = (selectedOptions) => {
     setSelectCategory(selectedOptions);
   };
+
   // 최종 데이터
   let pageData = searchData?.data?.content ? searchData?.data?.content : currentPageData;
 
@@ -203,24 +207,22 @@ function Main() {
             </StSearchbox>
           </StTopline>
           <Stfilterbox>
-            {/* {checked ? (
-              <Stcheckboximg onClick={checkBoxHandler} src={check} alt="" />
-              ) : (
-                <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
-                )}
-              <Stfont>입장 가능한 방만 보기</Stfont> */}
             <Stfont>
               <span>분야 필터</span>
-              <StCategoryButton src={allow} alt="" onClick={selectToggleHandler} />
+              <StCategoryButton
+                src={isSelectOpen ? closeAllow : openAllow}
+                alt=""
+                onClick={selectToggleHandler}
+              />
             </Stfont>
             {isSelectOpen && (
               <Selectbox
-                selectToggleHandler={selectToggleHandler}
                 handleCategory={handleCategory}
                 isSelectOpen={isSelectOpen}
                 setSelectOpen={setSelectOpen}
                 prevSelectedOption={prevSelectedOption}
                 setPrevSelectedOption={setPrevSelectedOption}
+                outside={outside}
               />
             )}
           </Stfilterbox>
