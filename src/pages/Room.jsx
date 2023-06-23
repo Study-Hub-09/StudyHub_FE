@@ -79,6 +79,10 @@ function Room() {
     return stream;
   };
 
+  window.close = () => {
+    leaveSession(studyTime, mySessionId);
+  };
+
   window.onpopstate = () => {
     leaveSession(studyTime, mySessionId);
   };
