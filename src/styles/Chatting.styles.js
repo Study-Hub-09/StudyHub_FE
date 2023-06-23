@@ -73,13 +73,15 @@ export const StChatTextBox = styled.div`
 
 export const StChatTextTitle = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  align-items: center;
 `;
 
 export const StChatTextTitleUser = styled.div`
   display: flex;
+  /* width: 50%; */
   gap: 5px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   color: ${(props) => props.color};
 
@@ -96,18 +98,20 @@ export const StChatTextTitleUser = styled.div`
 export const StChatTextTitleTime = styled.span`
   font-size: 12px;
   color: var(--color-gray);
+  margin: 0px 10px;
 `;
 
 export const StChatTextContent = styled.div`
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center; */
-  p {
+  display: ${(props) => (props.textalign === 'right' ? 'flex' : 'block')};
+  justify-content: ${(props) => (props.textalign === 'right' ? 'end' : 'start')};
+  align-items: center;
+  margin-left: ${(props) => props.marginleft};
+  /* p {
     word-break: break-word;
     margin-left: ${(props) => props.marginleft};
     text-align: ${(props) => props.textalign};
     margin-right: ${(props) => props.marginright};
-  }
+  } */
 `;
 
 export const StChatInput = styled.div`
@@ -125,13 +129,22 @@ export const StChatInput = styled.div`
     align-self: center;
   }
 `;
-
+export const StChatTextTitleTimeWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: blue;
+`;
 export const StSendButton = styled.div`
   button {
     display: flex;
     align-items: center;
     justify-content: center;
   }
+`;
+
+export const StChatmessage = styled.div`
+  margin-left: ${(props) => props.marginleft};
+  /* word-break: break-word; */
 `;
 
 // export const Stchatbox = styled.div`
