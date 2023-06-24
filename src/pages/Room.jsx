@@ -319,7 +319,7 @@ function Room() {
               ) : (
                 <Sticon
                   src={micoff}
-                  alt="Red Mic Icon with Slash"
+                  alt="Red Mic Icon With Slash"
                   onClick={toggleAudioState}
                 />
               )}
