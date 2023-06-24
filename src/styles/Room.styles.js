@@ -166,3 +166,10 @@ export const StUserCam = styled.div`
   background-color: #d8deca;
   position: absolute;
 `;
+
+// ==============OV VIDEO COMPONENT STYLE=========== //
+export const Stvideo = styled.video`
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+`;

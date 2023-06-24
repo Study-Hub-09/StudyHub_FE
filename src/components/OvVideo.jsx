@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { styled } from 'styled-components';
+import { Stvideo } from '../styles/Room.styles';
 
-const OpenViduVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
-  // console.log('audioEnabled OVC >> ', audioEnabled);
-  // console.log('videoEnabled OVC >> ', videoEnabled);
+const OpenViduVideoComponent = ({ streamManager }) => {
   const videoRef = useRef();
 
   useEffect(() => {
@@ -16,9 +14,3 @@ const OpenViduVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) =
 };
 
 export default OpenViduVideoComponent;
-
-const Stvideo = styled.video`
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-`;
