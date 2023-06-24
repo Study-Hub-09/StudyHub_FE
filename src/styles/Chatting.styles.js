@@ -47,8 +47,8 @@ export const StChatArea = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  overflow: auto; /* 수정된 부분 */
+  /* justify-content: end; */
+  overflow: scroll; /* 수정된 부분 */
 
   &::-webkit-scrollbar {
     width: 10px; /* 스크롤 바 너비 */
@@ -65,6 +65,12 @@ export const StChatArea = styled.div`
     border-left: 2px solid #106511;
     background-color: blue;
   }
+`;
+export const StMessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: auto;
 `;
 
 export const StChatTextBox = styled.div`

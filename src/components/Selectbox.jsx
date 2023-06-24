@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import checkmark from '../asset/checkmark.svg';
 import {
   StSelectbox,
@@ -82,7 +82,7 @@ const Selectbox = ({
               handleOptionClick(item.name);
             }}
           >
-            {isSelected && <StCheckmark src={checkmark} alt="checkmark" />}
+            {isSelected && <StCheckmark src={checkmark} alt="checkmarkImage unable" />}
             <Stfont>{item.name}</Stfont>
           </Stbtn>
         );

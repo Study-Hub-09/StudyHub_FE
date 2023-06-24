@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { styled, keyframes, css } from 'styled-components';
+import { useMutation, useQueryClient } from 'react-query';
 import { addRoom } from '../api/api';
 import cancel from '../asset/cancel.svg';
 import lockimg from '../asset/lock.svg';
@@ -22,7 +21,6 @@ import teacherClick from '../asset/teacherClick.svg';
 import etcClick from '../asset/etcClick.svg';
 import dayjs from 'dayjs';
 import BasicDatePicker from './Datepicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from 'react-router-dom';
 import {
   StCircle,
@@ -41,14 +39,11 @@ import {
   Stfont,
   Sttitle,
   Stthumbnail,
-  StthumbnailbuttonA,
   StthumbnailbuttonB,
   StpasswordInput,
   Stcreatebutton,
   Stlockbutton,
   Stlockbuttonbg,
-  moveForward,
-  moveBackward,
   StlockbuttonBall,
   Stdatepickerbox,
   Stthumnailarea,
@@ -80,7 +75,7 @@ const Modal = ({ onClose }) => {
   const mutation = useMutation(addRoom, {
     onSuccess: (data) => {
       queryClient.invalidateQueries('rooms');
-      // console.log(data.data);
+
       navigate(`/rooms/${data.data.sessionId}/detail`, {
         state: { roomData: data.data },
       });
@@ -92,7 +87,6 @@ const Modal = ({ onClose }) => {
     if (!file) return;
     setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
-      // alert('이미지 파일만 업로드 가능합니다.');
       Swal.fire({
         icon: 'error',
         iconColor: '#00573f',
@@ -111,12 +105,7 @@ const Modal = ({ onClose }) => {
     };
     reader.readAsDataURL(file);
   };
-  // 랜덤 이미지 설정
-  // const imageArray = [roomimageA, roomimageB, roomimageC, roomimageD];
-  // const randomImageHandler = () => {
-  //   const randomIndex = Math.floor(Math.random() * imageArray.length);
-  //   setrandomImage(imageArray[randomIndex]);
-  // };
+
   // 방생성 핸들러
   const addbuttonHandler = async () => {
     const unarrayselectedCategories = selectedCategories.join(',');
@@ -259,7 +248,6 @@ const Modal = ({ onClose }) => {
         setSelectedCategories([...selectedCategories, categoryName]);
         setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
       } else {
-        // alert('최대 4개의 카테고리만 선택할 수 있습니다');
         Swal.fire({
           icon: 'error',
           iconColor: '#00573f',
@@ -331,7 +319,7 @@ const Modal = ({ onClose }) => {
           <StmodalRight>
             <Stlayoutbox>
               <button onClick={onClose}>
-                <img src={cancel} alt="" />
+                <img src={cancel} alt="cancelImage unable" />
               </button>
             </Stlayoutbox>
             <div>
@@ -348,17 +336,17 @@ const Modal = ({ onClose }) => {
                 <Stthumnailbox>
                   <Stthumbnail>
                     {readerImage ? (
-                      <img src={readerImage} alt="" width={136} height={100} />
-                    ) : randomImage ? (
-                      <img src={randomImage} alt="" width={136} height={100} />
+                      <img
+                        src={readerImage}
+                        alt="readerImage unable"
+                        width={136}
+                        height={100}
+                      />
                     ) : (
                       '이미지를 등록해 주세요'
                     )}
                   </Stthumbnail>
                   <div>
-                    {/* <StthumbnailbuttonA onClick={randomImageHandler}>
-                      랜덤이미지
-                    </StthumbnailbuttonA> */}
                     <StthumbnailbuttonB for="inputImage">
                       PC에서 업로드
                     </StthumbnailbuttonB>
@@ -385,7 +373,12 @@ const Modal = ({ onClose }) => {
                         비밀번호를 아는 사람만 입장할 수 있습니다.
                       </Stfontcolor>
                       <div>
-                        <img src={lockimg} alt="" width={10} height={14} />
+                        <img
+                          src={lockimg}
+                          alt="lockImage unable"
+                          width={10}
+                          height={14}
+                        />
                         <StpasswordInput
                           type="text"
                           placeholder="1234"

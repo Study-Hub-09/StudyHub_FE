@@ -130,7 +130,7 @@ function SideBar({ children }) {
             }).then((result) => {
               if (result.isConfirmed) {
                 if (location.pathname === '/setting') {
-                  navigate('/main');
+                  navigate('/');
                   // window.location.reload();
                 } else {
                   // window.location.reload();
