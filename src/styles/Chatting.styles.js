@@ -47,7 +47,7 @@ export const StChatArea = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  overflow: scroll; /* 수정된 부분 */
+  overflow: auto; /* 수정된 부분 */
 `;
 export const StMessageContainer = styled.div`
   display: flex;
