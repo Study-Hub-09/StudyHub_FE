@@ -1,7 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { styled } from 'styled-components';
 import { Chart, registerables } from 'chart.js';
+import { StGraphContainer } from '../../styles/mypage/Graph.styles';
 Chart.register(...registerables);
 
 const Graph = ({
@@ -245,10 +245,3 @@ const Graph = ({
 };
 
 export default Graph;
-
-const StGraphContainer = styled.div`
-  height: 100%;
-  width: 90%;
-  display: flex;
-  justify-content: center;
-`;

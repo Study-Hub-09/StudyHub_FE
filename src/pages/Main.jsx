@@ -70,6 +70,7 @@ function Main() {
   }, [search, selectCategory]);
 
   const roomData = useRoomData(page);
+
   const objectToQueryString = (obj) => {
     let queryString = '';
 
