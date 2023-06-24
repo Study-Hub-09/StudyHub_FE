@@ -1,36 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
 import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
 const UserVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
-  console.log('마이크 시파>>> ', audioEnabled);
+  const [userAudio, setUserAudio] = useState(streamManager.stream.audioActive);
+  const [userVideo, setUserVideo] = useState(streamManager.stream.videoActive);
 
-  const member = localStorage.getItem('member');
-  console.log('member>>> ', member);
   // 유저 닉네임 태그 함수
   const getNicknameTag = () => {
     return JSON.parse(streamManager.stream.connection.data).clientData;
   };
 
-  console.log('getNicknameTage>>> ', getNicknameTag());
+  useEffect(() => {
+    setUserAudio(streamManager.stream.audioActive);
+  }, [streamManager.stream.audioActive]);
+
+  useEffect(() => {
+    setUserVideo(streamManager.stream.videoActive);
+  }, [streamManager.stream.videoActive]);
 
   return (
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
           <Stcamboxname>{getNicknameTag()}</Stcamboxname>
-
           <OpenViduVideoComponent
             streamManager={streamManager}
             audioEnabled={audioEnabled}
             videoEnabled={videoEnabled}
           />
-          {!audioEnabled && getNicknameTag() === member && (
-            <StmicMuteIcon src={viewmic} alt="audio icon" />
-          )}
-          {!videoEnabled && getNicknameTag() === member && (
+          {!userAudio && <StmicMuteIcon src={viewmic} alt="audio icon" />}
+
+          {!userVideo && (
             <StUserCam>
               <img src={camuser} alt="unabled video user icon" />
             </StUserCam>
@@ -56,7 +59,6 @@ const Stcambox = styled.div`
   position: relative;
 `;
 const Stcamboxname = styled.div`
-  /* width: 68px; */
   height: 14%;
   background-color: #424242;
   border-radius: 7px;
@@ -70,21 +72,14 @@ const Stcamboxname = styled.div`
   bottom: 13.11px;
   left: 14.5px;
   padding: 0px 13px;
-  z-index: 1;
+  z-index: 2;
 `;
 const StmicMuteIcon = styled.img`
   position: absolute;
   right: 7.99px;
   bottom: 8.11px;
+  z-index: 1;
 `;
-// const StCamboximage = styled.img`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   padding: 14% 0%;
-//   z-index: 1;
-// `;
 
 const StUserCam = styled.div`
   width: 100%;

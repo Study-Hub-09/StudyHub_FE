@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { getCookie } from '../Cookies/Cookies';
 import Graph from '../components/Graph/Graph';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +8,43 @@ import Rank from '../components/Mypage/Rank';
 import StudyTitle from '../components/Mypage/StudyTitle';
 import { getMypage } from '../core/api/auth/mypage';
 import { useQuery } from 'react-query';
+import {
+  StMainContainer,
+  StHeaderContainer,
+  StHeaderLeft,
+  StHeaderMain,
+  StHeaderMainContainer,
+  StHeaderUserNameContainer,
+  StContentContainer,
+  StContentLeft,
+  StContentMain,
+  StContentMainContainerT,
+  StContentMainTotalTime,
+  StContentMainTotalTimeLayout,
+  StContentMainTotalTimeHead,
+  StContentMainTotalTimeTitel,
+  StContentMainTotalTimeText,
+  StContentMainTotalTimeText2,
+  StContentMainTotalTimeBody,
+  StContentMainTotalTimeView,
+  StContentMainTotalTimeViewT,
+  StContentMainTotalTimerLayout,
+  StContentMainTotalTimerTitle,
+  StContentMainTotalTimer,
+  StContentMainContainerB,
+  StContentMainStatistics,
+  StContentMainStatisticsTitleH,
+  StContentMainStatisticsTitl,
+  StContentMainStatisticsTitlBox,
+  StContentMainStatisticsTitlBoxList,
+  StContentMainStatisticsTitlBoxList2,
+  StContentMainStatisticsTitlBoxList3,
+  StContentMainStatisticsGraph,
+  StContentMainSubContainer,
+  StContentMainTitelRank,
+  StHeaderUserName,
+  StHeaderUserIntro,
+} from '../styles/mypage/Mypage.styles';
 
 function Mypage({ onClose }) {
   const nickname = localStorage.member;
@@ -189,7 +225,7 @@ function Mypage({ onClose }) {
                 </StHeaderDdayCon>
 
                 <StHeaderProfile>
-                  <StHeaderProfileImg src={profileLogo} alt="오류" />
+                  <StHeaderProfileImg src={profileLogo} alt="profileLogo" />
                 </StHeaderProfile>
               </StHeaderDdayProfile> */}
             </StHeaderMainContainer>
@@ -307,390 +343,3 @@ function Mypage({ onClose }) {
 }
 
 export default Mypage;
-
-const StMainContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  background: rgba(236, 243, 223, 0.1);
-  flex-direction: column;
-`;
-const StHeaderContainer = styled.div`
-  width: 100%;
-  height: 23.5%;
-  display: flex;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderLeft = styled.div`
-  width: 20%;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderMain = styled.div`
-  width: 59.2%;
-  display: flex;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderMainContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderUserNameContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 40%;
-  height: 30%;
-  margin-bottom: 3rem;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderUserName = styled.div`
-  width: 100%;
-  height: 59%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2vw;
-  line-height: 2.75rem;
-  color: #000000;
-  margin: 0rem 0rem 0.563rem 0rem;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderUserIntro = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.12vw;
-  line-height: 120%;
-  color: #9d9d9d;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderDdayProfile = styled.div`
-  width: 30%;
-  height: 22%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-bottom: 4.063rem;
-  margin-right: 1.25rem;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderDdayCon = styled.div`
-  width: 65%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderDday = styled.div`
-  width: 80%;
-  height: 100%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2vw;
-  line-height: 2.75rem;
-  color: #00573f;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderDdayOp = styled.div`
-  width: 35%;
-  height: 28%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.972vw;
-  line-height: 1.188rem;
-  text-decoration-line: underline;
-  color: #848484;
-  margin: 0vw 0vw 0.903vw 0.035vw;
-  cursor: pointer;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderProfile = styled.div`
-  width: 22.3%;
-  height: 100%;
-  margin-left: 1.944vw;
-  /* border: 1px solid #ff8d8d; */
-`;
-const StHeaderProfileImg = styled.img`
-  width: 100%;
-  height: 100%;
-  /* background: #9d9d9d; */
-`;
-const StContentContainer = styled.div`
-  width: 100%;
-  height: 76.5%;
-  display: flex;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentLeft = styled.div`
-  width: 20%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMain = styled.div`
-  width: 59.2%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainContainerT = styled.div`
-  width: 100%;
-  height: 42.5%;
-  display: flex;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTime = styled.div`
-  box-sizing: border-box;
-  width: 59%;
-  background: #ffffff;
-  border: 1px solid #bfbfbf;
-  border-radius: 12px;
-  margin-right: 1%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeLayout = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeHead = styled.div`
-  width: 100%;
-  height: 17.5%;
-  display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeTitel = styled.div`
-  display: flex;
-  align-items: center;
-  width: 50%;
-  height: 54%;
-  margin: 6% 0% 0% 14%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeText = styled.div`
-  width: 53%;
-  height: 100%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.389vw;
-  line-height: 1.688rem;
-  color: #000000;
-  margin-right: 5%;
-  display: flex;
-  justify-content: center;
-`;
-const StContentMainTotalTimeText2 = styled.div`
-  width: 38%;
-  height: 70%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.972vw;
-  line-height: 1.188rem;
-  color: #848484;
-`;
-const StContentMainTotalTimeBody = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeView = styled.div`
-  width: 55%;
-  height: 72%;
-  background: #d9efe9;
-  border-radius: 14.266px;
-  margin: 0vw 1.042vw 0vw 0.694vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimeViewT = styled.div`
-  width: 38.3%;
-  height: 20.5%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2.222vw;
-  line-height: 2.75rem;
-  color: #303031;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimerLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* align-items: flex-start; */
-  /* justify-content: flex-end; */
-  margin: 0rem 0rem 1.563rem 0rem;
-  width: 33%;
-  height: 60%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimerTitle = styled.div`
-  width: 100%;
-  height: 12%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.972vw;
-  line-height: 1.25rem;
-  color: #747475;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTotalTimer = styled.div`
-  width: 100%;
-  height: 23%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.806vw;
-  line-height: 2.188rem;
-  color: #303031;
-  margin: 0.313rem 0rem 0.5rem 0rem;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainContainerB = styled.div`
-  width: 100%;
-  height: 37.8%;
-  display: flex;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainStatistics = styled.div`
-  box-sizing: border-box;
-  width: 53%;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
-  border-radius: 12px;
-  margin: 1% 1% 0% 0%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainStatisticsTitleH = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 90%;
-  height: 10%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainStatisticsTitl = styled.div`
-  width: 20%;
-  height: 100%;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1.389vw;
-  line-height: 1.688rem;
-  color: #303031;
-  margin-right: 2.813rem;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainStatisticsTitlBox = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 53%;
-  height: 100%;
-  background: #f4f4f4;
-  border-radius: 3.34103px;
-  margin-right: 8px;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainStatisticsTitlBoxList = styled.div`
-  width: 6%;
-  height: 70%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.833vw;
-  line-height: 1rem;
-  color: #848484;
-  cursor: pointer;
-  &:hover {
-    width: 20%;
-    height: 70%;
-    padding: 0px 0px 0px 12px;
-    margin: 0px -15px 0px -12px;
-    background: #ffffff;
-  }
-`;
-const StContentMainStatisticsTitlBoxList2 = styled.div`
-  width: 6%;
-  height: 70%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.833vw;
-  line-height: 1rem;
-  color: #848484;
-  cursor: pointer;
-  &:hover {
-    width: 20%;
-    height: 70%;
-    padding: 0px 0px 0px 12px;
-    margin: 0px -12px 0px -12px;
-    background: #ffffff;
-  }
-`;
-const StContentMainStatisticsTitlBoxList3 = styled.div`
-  width: 6%;
-  height: 70%;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.833vw;
-  line-height: 1rem;
-  color: #848484;
-  cursor: pointer;
-  &:hover {
-    width: 20%;
-    height: 70%;
-    padding: 0px 0px 0px 12px;
-    margin: 0px -15px 0px -12px;
-    background: #ffffff;
-  }
-`;
-const StContentMainStatisticsGraph = styled.div`
-  width: 100%;
-  height: 63%;
-  margin: 1.25rem 0rem 0rem 0rem;
-  display: flex;
-  justify-content: center;
-  /* background: #eaeaea; */
-  /* border: 1px solid #8cacff; */
-`;
-// const StContentMainStatisticsSub = styled.div`
-//   display: flex;
-//   align-items: flex-start;
-//   width: 164.55px;
-//   height: 16px;
-//   border: 1px solid #8cacff;
-// `;
-// const StContentMainStatisticsSubT = styled.div`
-//   display: flex;
-//   align-items: flex-start;
-//   width: 164.55px;
-//   height: 16px;
-//   background: #f8f8f8;
-// `;
-const StContentMainSubContainer = styled.div`
-  width: 46%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 1%;
-  /* border: 1px solid #8cacff; */
-`;
-const StContentMainTitelRank = styled.div`
-  width: 100%;
-  height: 46%;
-  display: flex;
-  /* border: 1px solid #8cacff; */
-`;

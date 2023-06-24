@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 import { logout } from '../../core/api/auth/logout';
 import Swal from 'sweetalert2';
+import { setLogger } from 'react-query';
 
 function Header() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function Header() {
             removeCookie('AccessToken', { path: '/' });
             removeCookie('RefreshToken', { path: '/' });
             localStorage.removeItem('member');
+            setIsLogged(false);
             Swal.fire({
               icon: 'success',
               iconColor: '#00573f',
@@ -38,7 +40,7 @@ function Header() {
               confirmButtonText: '확인',
             }).then((result) => {
               if (result.isConfirmed) {
-                window.location.reload();
+                // window.location.reload();
               }
             });
           }

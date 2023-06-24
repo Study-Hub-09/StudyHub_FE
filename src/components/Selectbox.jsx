@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import checkmark from '../asset/checkmark.svg';
 import {
   StSelectbox,
@@ -12,23 +12,20 @@ const Selectbox = ({
   setSelectOpen,
   prevSelectedOption,
   setPrevSelectedOption,
-  selectToggleHandler,
+  outside,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState('');
-  const [oldSelectedOptions, setOldSelectedOptions] = useState('');
-  const outside = useRef();
+  const [selectedOptions, setSelectedOptions] = useState(prevSelectedOption);
 
   const handleClickOutside = (event) => {
     if (!outside.current.contains(event.target)) {
-      event.stopPropagation();
       setSelectOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, [isSelectOpen]);
 
@@ -58,25 +55,14 @@ const Selectbox = ({
       name: '기타',
     },
   ];
-  useEffect(() => {
-    if (isSelectOpen) {
-      setOldSelectedOptions(selectedOptions);
-    } else {
-      setSelectedOptions(oldSelectedOptions);
-    }
-  }, [isSelectOpen]);
 
   const handleOptionClick = (option) => {
-    if (!isSelectOpen) {
-      setOldSelectedOptions(selectedOptions);
+    if (selectedOptions === option && prevSelectedOption === option) {
+      setSelectedOptions('');
+      setPrevSelectedOption(''); // 이전 선택 값을 초기화합니다.
     } else {
-      if (selectedOptions === option) {
-        setSelectedOptions(''); // 이미 선택한 항목을 다시 클릭하면 선택 해제
-      } else {
-        setSelectedOptions(option); // 다른 항목을 선택합니다.
-      }
-
-      setPrevSelectedOption(option); // 이전 선택 값을 설정합니다.
+      setSelectedOptions(option);
+      setPrevSelectedOption(option); // 새로운 값으로 갱신합니다.
     }
   };
 
@@ -94,12 +80,9 @@ const Selectbox = ({
             selected={isSelected}
             onClick={() => {
               handleOptionClick(item.name);
-              if (!isSelectOpen) {
-                selectToggleHandler(); // 상위 컴포넌트에서 전달받은 함수를 실행합니다.
-              }
             }}
           >
-            {isSelected && <StCheckmark src={checkmark} alt="checkmark" />}
+            {isSelected && <StCheckmark src={checkmark} alt="checkmarkImage unable" />}
             <Stfont>{item.name}</Stfont>
           </Stbtn>
         );

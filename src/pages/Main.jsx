@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { styled } from 'styled-components';
+import React, { useState, useEffect, useRef } from 'react';
 import Subtract from '../asset/Subtract.svg';
 import Vector from '../asset/Vector.svg';
-import check from '../asset/check.svg';
-import noncheck from '../asset/noncheck.svg';
-import allow from '../asset/Polygon 3.svg';
+import openAllow from '../asset/Polygon 3.svg';
+import closeAllow from '../asset/selectboxAllow.svg';
 import leftAllow from '../asset/leftArrow.svg';
 import rightAllow from '../asset/rightArrow.svg';
 import hoverLeftAllow from '../asset/hoverLeftArrow.svg';
@@ -37,7 +35,6 @@ import {
   Stroomsubtitle,
   Stroomcountarea,
   Stroomcount,
-  Stcheckboximg,
   Stallowbox,
   Stallowicon,
   Stfont,
@@ -48,7 +45,6 @@ import { getCookie } from '../Cookies/Cookies';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 function Main() {
-  const [checked, setChecked] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isSelectOpen, setSelectOpen] = useState(false);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
@@ -56,17 +52,18 @@ function Main() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [selectCategory, setSelectCategory] = useState('');
-  const [url, setUrl] = useState('');
   const [filterData, setfilterData] = useState('');
-  const [oldSelectedOptions, setOldSelectedOptions] = useState('');
   const [prevSelectedOption, setPrevSelectedOption] = useState('');
   const token = getCookie('AccessToken');
   const navigate = useNavigate();
+  const outside = useRef();
+
   useEffect(() => {
     setfilterData({ category: selectCategory, keyword: search });
   }, [search, selectCategory]);
 
   const roomData = useRoomData(page);
+
   const objectToQueryString = (obj) => {
     let queryString = '';
 
@@ -104,10 +101,6 @@ function Main() {
   const currentPageData = roomData.data?.currentPageData || [];
   const nextPageData = roomData.data?.nextPageData || [];
 
-  const checkBoxHandler = () => {
-    setChecked(!checked);
-  };
-
   const modalToggleHandler = () => {
     if (token) {
       setModalOpen(true);
@@ -131,7 +124,7 @@ function Main() {
     event.stopPropagation();
     setSelectOpen(!isSelectOpen);
   };
-  console.log(isSelectOpen);
+
   const joinmodalToggleHandler = (id) => {
     setJoinModalOpen(true);
     setSelectedRoomId(id);
@@ -148,14 +141,11 @@ function Main() {
     }
   };
 
-  const handleSelectedOptions = (option) => {
-    setOldSelectedOptions(option);
-  };
-
   // 하위컴포넌트에서 데이터를 가지고오는 코드
   const handleCategory = (selectedOptions) => {
     setSelectCategory(selectedOptions);
   };
+
   // 최종 데이터
   let pageData = searchData?.data?.content ? searchData?.data?.content : currentPageData;
 
@@ -190,7 +180,7 @@ function Main() {
               <Stsubtitle>자유롭게 공개된 스터디에 참여해보세요!</Stsubtitle>
             </StTitlebox>
             <StSearchbox>
-              <StSearchicon src={Subtract} alt="" />
+              <StSearchicon src={Subtract} alt="SearchImage unable" />
               <StSearchinput
                 type="text"
                 placeholder="스터디방 이름 검색"
@@ -203,29 +193,27 @@ function Main() {
             </StSearchbox>
           </StTopline>
           <Stfilterbox>
-            {/* {checked ? (
-              <Stcheckboximg onClick={checkBoxHandler} src={check} alt="" />
-              ) : (
-                <Stcheckboximg onClick={checkBoxHandler} src={noncheck} alt="" />
-                )}
-              <Stfont>입장 가능한 방만 보기</Stfont> */}
             <Stfont>
               <span>분야 필터</span>
-              <StCategoryButton src={allow} alt="" onClick={selectToggleHandler} />
+              <StCategoryButton
+                src={isSelectOpen ? closeAllow : openAllow}
+                alt="selectBoxImage unable"
+                onClick={selectToggleHandler}
+              />
             </Stfont>
             {isSelectOpen && (
               <Selectbox
-                selectToggleHandler={selectToggleHandler}
                 handleCategory={handleCategory}
                 isSelectOpen={isSelectOpen}
                 setSelectOpen={setSelectOpen}
                 prevSelectedOption={prevSelectedOption}
                 setPrevSelectedOption={setPrevSelectedOption}
+                outside={outside}
               />
             )}
           </Stfilterbox>
           {pageData.length === 0 ? (
-            <StEmptyImage src={emptyRoom} alt="" />
+            <StEmptyImage src={emptyRoom} alt="emptyRoomImage unable" />
           ) : (
             <StroomArea>
               {pageData.map((item) => {
@@ -241,7 +229,7 @@ function Main() {
                         src={
                           item.imageUrl === '대표 이미지 URL' ? studyhub : item.imageUrl
                         }
-                        alt=""
+                        alt="roomImage unable"
                         width={82}
                         height={82}
                       />
@@ -251,10 +239,14 @@ function Main() {
                       </Stroomtext>
                       <div>
                         <Stroomcountarea>
-                          {item.secret ? <img src={lockimg} alt="" /> : ''}
+                          {item.secret ? (
+                            <img src={lockimg} alt="lockImage unable" />
+                          ) : (
+                            ''
+                          )}
                           <Stroomcount>
                             <span>{item.userCount} / 9</span>
-                            <img src={Vector} alt="" />
+                            <img src={Vector} alt="userImage unable" />
                           </Stroomcount>
                         </Stroomcountarea>
                       </div>
@@ -268,12 +260,12 @@ function Main() {
         <Stallowbox>
           <Stallowicon
             src={page > 1 ? hoverLeftAllow : leftAllow}
-            alt=""
+            alt="leftAllowImage unable"
             onClick={prevpageHandler}
           />
           <Stallowicon
             src={nextPageData.length > 0 ? hoverRightAllow : rightAllow}
-            alt=""
+            alt="rightAllowImage unable"
             onClick={nextpageHandler}
           />
         </Stallowbox>
