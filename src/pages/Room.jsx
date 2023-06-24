@@ -276,7 +276,7 @@ function Room() {
       navigate('/members/login');
     }
   }, []);
-
+  console.log(1 + subscribers.length);
   return loadingstate ? (
     <Loading />
   ) : (
@@ -288,7 +288,7 @@ function Room() {
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
-                <span>{roomData.userCount} / 9</span>
+                <span>{1 + subscribers.length} / 9</span>
                 <Stusericon
                   src={Vector}
                   alt="Rounded Green Background With Darkgreen User Icon"
