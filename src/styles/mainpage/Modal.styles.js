@@ -166,7 +166,6 @@ export const StpasswordInput = styled.input`
 `;
 
 export const Stcreatebutton = styled.button`
-  /* position: absolute; */
   transform: translateY(-50px);
   width: 90px;
   height: 44px;

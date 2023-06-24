@@ -40,14 +40,12 @@ export const StContentMainTodoListRoomList = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0px 20px 20px 20px;
-  border: 1px solid #8cacff;
 `;
 
 export const StContentMainTodoListRoomNaCa = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
-  border: 1px solid #8cacff;
 `;
 
 export const StContentMainTodoListRoomNa = styled.div`
@@ -74,6 +72,12 @@ export const StContentMainTodoListRoomCa = styled.div`
   color: #90b54c;
   display: flex;
   margin: 0px 0px 0px 20px;
+  cursor: pointer;
+  /* border: 1px solid #8cacff; */
+`;
+
+export const StContentMainTodoListRoomD = styled.div`
+  padding-right: 10px;
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;

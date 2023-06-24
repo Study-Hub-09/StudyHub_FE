@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import ModalPortal from '../Modal/ModalPortal';
 import Joinmodal from '../Joinmodal';
 import { useQuery } from 'react-query';
-import { getMypage } from '../../core/api/auth/mypage';
-import more from '../../assets/Icons/more.svg';
+import { getMypage } from '../../core/api/mypage/mypage';
+import close from '../../assets/Icons/close.svg';
 import { deleteRoom } from '../../api/api';
 import Swal from 'sweetalert2';
 import {
   StContentMainTodoList,
   StContentMainTodoListRoom,
   StContentMainTodoListRoomCa,
+  StContentMainTodoListRoomD,
   StContentMainTodoListRoomList,
   StContentMainTodoListRoomNa,
   StContentMainTodoListRoomNaCa,
@@ -22,7 +23,7 @@ function JoinStudyRoom({ token }) {
 
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
       setMyRooms(response.data.myRooms);
     },
     onError: (error) => {
@@ -30,7 +31,6 @@ function JoinStudyRoom({ token }) {
     },
     enabled: !!token,
   });
-  // console.log(myRooms);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -64,7 +64,6 @@ function JoinStudyRoom({ token }) {
       }).then((response) => {
         if (response.isConfirmed) {
           setMyRooms([]);
-          // console.log('Room deleted successfully:', result);
         }
       });
     } catch (error) {
@@ -95,13 +94,13 @@ function JoinStudyRoom({ token }) {
                     </StContentMainTodoListRoomCa>
                   </StContentMainTodoListRoomNaCa>
 
-                  <div
+                  <StContentMainTodoListRoomD
                     onClick={() => {
                       deleteRoomHandler(item.sessionId);
                     }}
                   >
-                    <img src={more} alt="more button" />
-                  </div>
+                    <img src={close} alt="close button" />
+                  </StContentMainTodoListRoomD>
                   {openModalIndex === index && (
                     <ModalPortal>
                       <Joinmodal roomData={item} onClose={closeJoinModal} />
