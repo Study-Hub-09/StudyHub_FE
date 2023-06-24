@@ -2,14 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../Cookies/Cookies';
 import { kakaoLogin } from '../core/api/auth/login';
-import Typed from 'react-typed';
-import {
-  StKakaoRedirectBox,
-  StKakaoRedirectContainer,
-  StKakaoRedirectContent,
-  StKakaoRedirectHeader,
-} from '../styles/Common.styles';
 import Swal from 'sweetalert2';
+import Loading from '../components/Loading/Loading';
 
 function KakaoRedirectPage() {
   const navigate = useNavigate();
@@ -78,21 +72,7 @@ function KakaoRedirectPage() {
     }
   }, []);
 
-  return (
-    <StKakaoRedirectContainer>
-      <StKakaoRedirectBox>
-        <StKakaoRedirectHeader>
-          <h1>
-            <Typed strings={['loading']} typeSpeed={120} backSpeed={150} loop />
-          </h1>
-        </StKakaoRedirectHeader>
-        <StKakaoRedirectContent>
-          <p width="506px">Strive for progress, not perfection</p>
-          <p width="387px">redirecting to study hub...</p>
-        </StKakaoRedirectContent>
-      </StKakaoRedirectBox>
-    </StKakaoRedirectContainer>
-  );
+  return <Loading />;
 }
 
 export default KakaoRedirectPage;
