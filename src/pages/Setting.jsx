@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import background from '../asset/settingbackground.svg';
 import infoIcon from '../asset/Info.svg';
 import allBadge from '../asset/allbadge.svg';
 import getBadgeA from '../asset/getbadge/getBadgeA.svg';
@@ -19,14 +18,12 @@ import nonGetBadgeG from '../asset/nongetbadge/nonGetBadgeG.svg';
 import userImage from '../asset/greenuser.svg';
 import editIcon from '../asset/editicon.svg';
 import imageEdit from '../asset/imageEdit.svg';
-import { styled } from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getProfile, updateProfile } from '../api/api';
 import Swal from 'sweetalert2';
 import {
   Stcontainer,
   StLayout,
-  Stbackground,
   StLayoutright,
   Stsetting,
   StSettingHeader,
@@ -253,7 +250,6 @@ function Setting() {
 
   return (
     <Stcontainer>
-      {/* <Stbackground src={background} alt="" /> */}
       <StLayout>
         <Stsetting>
           <StSettingHeader>
@@ -264,7 +260,11 @@ function Setting() {
               <StFontA>프로필 수정</StFontA>
               <StprofileInfoArea>
                 <Stprofileimagebox>
-                  <StimageEdit src={imageEdit} alt="" onClick={imageUpdateHandler} />
+                  <StimageEdit
+                    src={imageEdit}
+                    alt="imageEditIcon unable"
+                    onClick={imageUpdateHandler}
+                  />
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -282,7 +282,7 @@ function Setting() {
                           ? userImage
                           : profile?.imageUrl
                       }
-                      alt=""
+                      alt="readerImage unable"
                     />
                   </Stprofilebox>
                 </Stprofileimagebox>
@@ -310,7 +310,11 @@ function Setting() {
                     ) : (
                       <StboxD>{profile?.nickname}</StboxD>
                     )}
-                    <StboxC src={editIcon} alt="" onClick={nickNameEditHandler} />
+                    <StboxC
+                      src={editIcon}
+                      alt="editImage unable"
+                      onClick={nickNameEditHandler}
+                    />
                   </StprofileInfoBox>
                   <StprofileInfoBox>
                     <StboxD>칭호</StboxD>
@@ -343,7 +347,11 @@ function Setting() {
                   ) : (
                     <StboxB>●●●●●●●●</StboxB>
                   )}
-                  <StboxC src={editIcon} alt="" onClick={passWordEditHandler} />
+                  <StboxC
+                    src={editIcon}
+                    alt="editImage unable"
+                    onClick={passWordEditHandler}
+                  />
                 </StprofileInfoBoxB>
                 <StprofileInfoBoxB>
                   <Stbox>비밀번호 확인</Stbox>
@@ -391,31 +399,31 @@ function Setting() {
               <StMybadgeLayout>
                 <StbadgeIcon
                   src={totalStudyTimeHour > 0 ? getBadgeA : nonGetBadgeA}
-                  alt=""
+                  alt="badgeAImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 50 ? getBadgeB : nonGetBadgeB}
-                  alt=""
+                  alt="badgeBImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 200 ? getBadgeC : nonGetBadgeC}
-                  alt=""
+                  alt="badgeCImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 400 ? getBadgeD : nonGetBadgeD}
-                  alt=""
+                  alt="badgeDImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 650 ? getBadgeE : nonGetBadgeE}
-                  alt=""
+                  alt="badgeEImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 1000 ? getBadgeF : nonGetBadgeF}
-                  alt=""
+                  alt="badgeFImage unable"
                 />
                 <StbadgeIcon
                   src={totalStudyTimeHour > 1500 ? getBadgeG : nonGetBadgeG}
-                  alt=""
+                  alt="badgeGImage unable"
                 />
               </StMybadgeLayout>
             </StMybadgeBody>
@@ -423,7 +431,11 @@ function Setting() {
           <StAllbadge>
             <StAllbadgeHeader>
               <p>전체 칭호</p>
-              <StinfoIcon src={infoIcon} alt="" onClick={badgeInfoHandler} />
+              <StinfoIcon
+                src={infoIcon}
+                alt="infoImage unable"
+                onClick={badgeInfoHandler}
+              />
               {badgeInfo ? (
                 <StbadgeInfobox>
                   누적 타이머 시간에 따라 <br />
@@ -434,7 +446,7 @@ function Setting() {
               )}
             </StAllbadgeHeader>
             <StAllbadgeBody>
-              <StAllbadgeimg src={allBadge} alt="" />
+              <StAllbadgeimg src={allBadge} alt="allBadgeInfoImage unable" />
             </StAllbadgeBody>
           </StAllbadge>
         </StLayoutright>
