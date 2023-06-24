@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
-import { Subscriber } from 'openvidu-browser';
 import styled from 'styled-components';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
 
 const UserVideoComponent = ({ streamManager, audioEnabled, videoEnabled }) => {
-  console.log('streammadgasdfadfasdf>> ', streamManager);
-  // console.log('audioEnabled 제발 >> ', audioEnabled);
-  // console.log('videoEnabled 좀!!! >> ', videoEnabled);
-  const member = localStorage.getItem('member');
+  const [userAudio, setUserAudio] = useState(streamManager.stream.audioActive);
+  const [userVideo, setUserVideo] = useState(streamManager.stream.videoActive);
 
   // 유저 닉네임 태그 함수
   const getNicknameTag = () => {
     return JSON.parse(streamManager.stream.connection.data).clientData;
   };
 
-  const user = getNicknameTag() === member;
-  const subscriber = JSON.parse(streamManager.stream.connection.data).clientData;
-  console.log('ldjkfoasdjfoaisdj ', subscriber);
+  useEffect(() => {
+    setUserAudio(streamManager.stream.audioActive);
+  }, [streamManager.stream.audioActive]);
+
+  useEffect(() => {
+    setUserVideo(streamManager.stream.videoActive);
+  }, [streamManager.stream.videoActive]);
 
   return (
     <div>
       {streamManager !== undefined ? (
         <Stcambox>
           <Stcamboxname>{getNicknameTag()}</Stcamboxname>
-
           <OpenViduVideoComponent
             streamManager={streamManager}
             audioEnabled={audioEnabled}
             videoEnabled={videoEnabled}
           />
-          {!audioEnabled && user && <StmicMuteIcon src={viewmic} alt="audio icon" />}
-          {!videoEnabled && user && (
+          {!userAudio && <StmicMuteIcon src={viewmic} alt="audio icon" />}
+
+          {!userVideo && (
             <StUserCam>
               <img src={camuser} alt="unabled video user icon" />
             </StUserCam>
           )}
-          {/* {(!videoEnabled && getNicknameTag() === !member && (
-            <StUserCam>
-              <img src={camuser} alt="unabled video user icon" />
-            </StUserCam>
-          )) ||
-            (videoEnabled && getNicknameTag() === !member && (
-              <StUserCam>
-                <img src={camuser} alt="unabled video user icon" />
-              </StUserCam>
-            ))} */}
         </Stcambox>
       ) : null}
     </div>
