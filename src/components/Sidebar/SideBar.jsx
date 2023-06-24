@@ -19,7 +19,7 @@ import nWorldTree from '../../assets/Icons/nWorldTree.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getCookie, removeCookie } from '../../Cookies/Cookies';
 import { useQuery } from 'react-query';
-import { getMypage } from '../../core/api/auth/mypage';
+import { getMypage } from '../../core/api/mypage/mypage';
 import { logout } from '../../core/api/auth/logout';
 import Swal from 'sweetalert2';
 import {

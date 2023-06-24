@@ -6,7 +6,7 @@ import RoomPagination from '../components/Mypage/RoomPagination';
 import JoinStudyRoom from '../components/Mypage/JoinStudyRoom';
 import Rank from '../components/Mypage/Rank';
 import StudyTitle from '../components/Mypage/StudyTitle';
-import { getMypage } from '../core/api/auth/mypage';
+import { getMypage } from '../../src/core/api/mypage/mypage';
 import { useQuery } from 'react-query';
 import {
   StMainContainer,

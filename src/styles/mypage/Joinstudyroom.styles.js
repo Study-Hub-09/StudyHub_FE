@@ -75,3 +75,9 @@ export const StContentMainTodoListRoomCa = styled.div`
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
+
+export const StContentMainTodoListRoomD = styled.div`
+  padding-right: 10px;
+  cursor: pointer;
+  /* border: 1px solid #8cacff; */
+`;
