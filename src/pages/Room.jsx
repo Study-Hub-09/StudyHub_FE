@@ -276,7 +276,7 @@ function Room() {
       navigate('/members/login');
     }
   }, []);
-  console.log(1 + subscribers.length);
+
   return loadingstate ? (
     <Loading />
   ) : (
