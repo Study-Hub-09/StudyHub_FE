@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { styled, css } from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
-import { Subscriber } from 'openvidu-browser';
 import camOn from '../asset/camon.svg';
 import camoff from '../asset/camoff.svg';
 import chat from '../asset/chat.svg';
@@ -25,6 +23,20 @@ import {
   StKakaoRedirectContent,
   StKakaoRedirectHeader,
 } from '../styles/Common.styles';
+import {
+  Stcontainer,
+  StLayout,
+  StViewArea,
+  Stcamarea,
+  Stheader,
+  Sttitlebox,
+  Sttitle,
+  Stsettingbox,
+  Stfooter,
+  Sticon,
+  Stroomcount,
+  Stusericon,
+} from '../styles/Room.styles';
 
 function Room() {
   const location = useLocation();
@@ -49,9 +61,6 @@ function Room() {
 
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
-  const [subscriber, setSubscriber] = useState('');
-  const [isLocal, setIsLocal] = useState('');
-  const [streamPropertyChanged, setStreamPropertyChanged] = useState(false);
 
   const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
@@ -61,50 +70,37 @@ function Room() {
     setMessage(e.target.value);
   };
 
+  // 시간 저장 타이머 함수
   const handleSaveTime = (time) => {
     setStudyTime(time);
   };
 
+  // 사용자 Audio Toggle 함수
   const toggleAudioState = () => {
-    // if (streamPropertyChanged) {
-    //   setAudioEnabled((prevValue) => !prevValue);
-    //   publisher.publishAudio(!audioEnabled);
-    // } else {
-    //   setAudioEnabled((prevValue) => !prevValue);
-    //   publisher.publishAudio(!audioEnabled);
-    // }
     setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
 
+  // 사용자 Video Toggle 함수
   const toggleVideoState = () => {
     setVideoEnabled((prevValue) => !prevValue);
     publisher.publishVideo(!videoEnabled);
   };
 
-  const handleMainVideoStream = (stream) => {
-    if (mainStreamManager !== stream) {
-      setState((prevState) => ({ ...prevState, mainStreamManager: stream }));
-    }
-    return stream;
-  };
-
+  // 브라우저 창 닫을시 leaveSession 함수 호출
   window.close = () => {
     leaveSession(studyTime, mySessionId);
   };
 
+  // 브라우저 뒤로가기 클릭시 leaveSession 함수 호출
   window.onpopstate = () => {
     leaveSession(studyTime, mySessionId);
   };
 
+  // 브라우저 새로고침시 leaveSession 함수 호출
   window.onbeforeunload = () => {
     leaveSession(studyTime, mySessionId);
   };
-
-  // window.onbeforeunload = () => {
-  //   leaveSession(studyTime, state.mySessionId);
-  //   navigate('/main');
-  // };
 
   // 세션 입장을 위해 필요한 토큰을 가져오기
   const getToken = async () => {
@@ -112,7 +108,7 @@ function Room() {
       const response = await createToken(mySessionId);
       return response;
     } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: getToken');
+      console.error(error);
     }
   };
 
@@ -126,6 +122,7 @@ function Room() {
     });
   };
 
+  // 룸 세션 입장 함수
   const joinSession = () => {
     try {
       OV.current = new OpenVidu();
@@ -138,10 +135,6 @@ function Room() {
           ...prevState,
           subscribers: [...prevState.subscribers, subscriber],
         }));
-        const isLocal = subscriber.stream.isLocal();
-
-        console.log('Subscriber stream isLocal>>> ', isLocal);
-        setIsLocal(isLocal);
       });
 
       mySession.on('streamDestroyed', (event) => {
@@ -150,35 +143,6 @@ function Room() {
 
       mySession.on('exception', (exception) => {
         console.warn(exception);
-      });
-
-      mySession.on('streamPropertyChanged', (event) => {
-        const {
-          stream,
-          changedProperty,
-          newValue,
-          oldValue,
-          reason,
-          target: { streamManagers },
-        } = event;
-
-        const subscriberIndex = streamManagers.findIndex(
-          (manager) => manager.stream === stream && manager instanceof Subscriber
-        );
-
-        if (subscriberIndex !== -1 && !isLocal) {
-          // const subscriber = streamManagers[subscriberIndex];
-
-          if (changedProperty === 'audioActive') {
-            setStreamPropertyChanged(
-              (prevStreamPropertyChanged) => !prevStreamPropertyChanged
-            );
-          } else if (changedProperty === 'videoActive') {
-            setStreamPropertyChanged(
-              (prevStreamPropertyChanged) => !prevStreamPropertyChanged
-            );
-          }
-        }
       });
 
       setState((prevState) => ({
@@ -237,7 +201,6 @@ function Room() {
             .catch((error) => {
               const { message: errorMessage, name: errorName } = error;
               if (errorMessage && errorName) {
-                // alert(`${(errorMessage, errorName)}`);
                 console.log(`${(errorMessage, errorName)}`);
               }
             });
@@ -265,7 +228,7 @@ function Room() {
     setMessage('');
   };
 
-  // 서버에서 받는 채팅 데이터
+  // 신시간으로 받는 채팅 데이터
   const getChattingData = (data) => {
     const newData = JSON.parse(data.body);
 
@@ -305,23 +268,19 @@ function Room() {
       session: undefined,
       subscribers: [],
       mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
     });
   };
 
+  // 컴포넌트 마운트시 토큰 유무 확인 후 joinSession함수 호출
   useEffect(() => {
-    const fetchData = async () => {
-      if (token) {
-        joinSession();
-      } else {
-        alert('로그인 후 이용 가능한 페이지입니다');
-        navigate('/members/login');
-      }
-    };
-
-    fetchData();
+    if (token) {
+      joinSession();
+    } else {
+      alert('로그인 후 이용 가능한 페이지입니다');
+      navigate('/members/login');
+    }
   }, []);
 
   return loadingstate ? (
@@ -348,76 +307,70 @@ function Room() {
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
                 <span>{roomData.userCount} / 9</span>
-                <Stusericon src={Vector} alt="" />
+                <Stusericon
+                  src={Vector}
+                  alt="Rounded Green Background With Darkgreen User Icon"
+                />
               </Stroomcount>
             </Sttitlebox>
           </Stheader>
+
+          {/* 카메라 스트림 영역 */}
           <Stcamarea>
             {publisher !== undefined ? (
-              <div
-                className="stream-container col-md-6 col-xs-6"
-                onClick={() => {
-                  handleMainVideoStream(publisher);
-                }}
-              >
-                <UserVideoComponent
-                  streamManager={publisher}
-                  audioEnabled={audioEnabled}
-                  videoEnabled={videoEnabled}
-                  isLocal={isLocal}
-                />
+              <div className="stream-container col-md-6 col-xs-6">
+                <UserVideoComponent streamManager={publisher} />
               </div>
             ) : null}
             {subscribers.map((sub) => (
-              <div
-                key={sub.id}
-                className="stream-container col-md-6 col-xs-6"
-                onClick={() => {
-                  handleMainVideoStream(sub);
-                }}
-              >
+              <div key={sub.id} className="stream-container col-md-6 col-xs-6">
                 <span>{sub.id}</span>
-                <UserVideoComponent
-                  streamManager={sub}
-                  audioEnabled={audioEnabled}
-                  videoEnabled={videoEnabled}
-                  streamPropertyChanged={streamPropertyChanged}
-                  isLocal={isLocal}
-                />
+                <UserVideoComponent streamManager={sub} />
               </div>
             ))}
           </Stcamarea>
+
+          {/* 세팅 툴박스 */}
           <Stfooter>
             <Stsettingbox>
               {audioEnabled ? (
-                <Sticon src={micOn} alt="" onClick={toggleAudioState} />
+                <Sticon src={micOn} alt="White Mic Icon" onClick={toggleAudioState} />
               ) : (
-                <Sticon src={micoff} alt="" onClick={toggleAudioState} />
+                <Sticon
+                  src={micoff}
+                  alt="Red Mic Icon with Slash"
+                  onClick={toggleAudioState}
+                />
               )}
               {videoEnabled ? (
-                <Sticon src={camOn} alt="" onClick={toggleVideoState} />
+                <Sticon src={camOn} alt="White Camera Icon" onClick={toggleVideoState} />
               ) : (
-                <Sticon src={camoff} alt="" onClick={toggleVideoState} />
+                <Sticon
+                  src={camoff}
+                  alt="Red Camera Icon With Slash"
+                  onClick={toggleVideoState}
+                />
               )}
               <Sticon
                 src={chat}
-                alt=""
+                alt="White Message Dots Icon"
                 onClick={() => {
                   setisChatOpen(!ischatOpen);
                 }}
               />
-              <Sticon src={view} alt="" />
-              <Sticon src={setting} alt="" />
+              <Sticon src={view} alt="White Grid Icon" />
+              <Sticon src={setting} alt="White Gear Icon" />
               <Sticon
                 src={logout}
-                alt=""
+                alt="Red Arrow Right From Bracket"
                 onClick={() => leaveSession(studyTime, mySessionId)}
               />
             </Stsettingbox>
           </Stfooter>
         </StViewArea>
+
         {/* 채팅창 */}
-        {ischatOpen ? (
+        {ischatOpen && (
           <Chatting
             message={message}
             chatDatas={chatDatas}
@@ -428,8 +381,6 @@ function Room() {
             }}
             getUserName={getUserName}
           />
-        ) : (
-          ''
         )}
       </StLayout>
     </Stcontainer>
@@ -437,121 +388,3 @@ function Room() {
 }
 
 export default Room;
-
-const size = {
-  xs: (...args) => css`
-    @media (max-width: 1366px) {
-      ${css(...args)}
-    }
-  `,
-  md: (...args) => css`
-    @media (min-width: 1367px) and (max-width: 1500px) {
-      ${css(...args)}
-    }
-  `,
-  lg: (...args) => css`
-    @media (min-width: 1501px) {
-      ${css(...args)}
-    }
-  `,
-};
-
-const Stcontainer = styled.div`
-  background-color: #1e1e1e;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const StLayout = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`;
-
-const StViewArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100vh;
-  flex: 1;
-`;
-
-const Stcamarea = styled.div`
-  width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); // 기본적으로 3 열로 표시.
-  grid-gap: 8px 8px;
-  transform: translateY(-20px);
-`;
-
-const Stheader = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-  margin-top: 3rem;
-  /* gap: 10px; */
-  gap: 1vw;
-  width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
-  /* padding: 0px 40px; */
-`;
-
-const Sttitlebox = styled.div`
-  font-weight: 700;
-  /* font-size: 26px; */
-  font-size: 1.35vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-const Sttitle = styled.div`
-  color: #b6b6b6;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 4vw;
-`;
-
-const Stsettingbox = styled.div`
-  /* width: 424px; */
-  width: 22vw;
-  /* height: 64px; */
-  height: 6vh;
-  background-color: rgba(66, 66, 66, 0.8);
-  /* gap: 40px; */
-  gap: 2.1vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-`;
-
-const Stfooter = styled.div`
-  display: flex;
-  align-items: end;
-`;
-
-const Sticon = styled.img`
-  width: 1.7vw;
-  cursor: pointer;
-`;
-
-const Stroomcount = styled.span`
-  color: #90b54c;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5vw;
-`;
-const Stusericon = styled.img`
-  width: 1.2vw;
-`;
