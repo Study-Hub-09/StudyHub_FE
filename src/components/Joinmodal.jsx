@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useRef, useState } from 'react';
 import cancel from '../asset/cancel.svg';
 import usericon from '../asset/Vector.svg';
 import studyhub from '../asset/studyhub.svg';
@@ -7,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../Cookies/Cookies';
 import { createSession, exitRoom } from '../core/api/openvidu/openvidu';
 import lockimg from '../asset/lock.svg';
-import { disconnectClient } from '../core/sockJs/sockJs';
 import {
   Stcontainer,
   Stmodalbox,
@@ -96,7 +94,6 @@ function Joinmodal({ onClose, roomData }) {
             confirmButtonColor: '#00573f',
             confirmButtonText: '확인',
           });
-          // navigate('/main');
         }
 
         // Exception - 나가기 버튼 안 누르고, 새로고침 또는 브라우저 창을 닫아 버리면 퇴장 처리가 되지 않아 임시로 만들어 놓은 에러 핸들링.
@@ -148,17 +145,16 @@ function Joinmodal({ onClose, roomData }) {
       <Stmodalbox>
         <StLayout>
           <Stheaderbox>
-            {/* <Stthumnail /> */}
             <img
               src={roomData.imageUrl === '대표 이미지 URL' ? studyhub : roomData.imageUrl}
-              alt=""
+              alt="roomImage unable"
               width={120}
               height={120}
             />
             <Stheadericon>
               <Stcancelimg
                 src={cancel}
-                alt=""
+                alt="cancleImage unable"
                 width={13.41}
                 onClick={() => {
                   onClose(false);
@@ -166,7 +162,7 @@ function Joinmodal({ onClose, roomData }) {
               />
               <StroomCount>
                 <span>{roomData.userCount} / 9</span>
-                <img src={usericon} alt="" width={20} />
+                <img src={usericon} alt="userImage unable" width={20} />
               </StroomCount>
             </Stheadericon>
           </Stheaderbox>
@@ -176,7 +172,7 @@ function Joinmodal({ onClose, roomData }) {
           <Stjoinbuttonlayout as="form" onSubmit={joinbuttonHandler}>
             {roomData.secret ? (
               <>
-                <img src={lockimg} alt="" width={10} height={14} />
+                <img src={lockimg} alt="lockImage unable" width={10} height={14} />
                 <StpasswordInput
                   type="password"
                   placeholder=""

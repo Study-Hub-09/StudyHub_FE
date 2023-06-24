@@ -132,6 +132,9 @@ function SideBar({ children }) {
                   navigate('/');
                 } else if (location.pathname === '/mypage') {
                   navigate('/');
+                  // window.location.reload();
+                } else {
+                  // window.location.reload();
                 }
               }
             });
