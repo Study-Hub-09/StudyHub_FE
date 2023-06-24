@@ -76,7 +76,7 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                       <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
                     )}
                   </StChatTextTitle>
-                  <StChatmessage marginleft={!isOwnMessage && '30px'}>
+                  <StChatmessage marginleft={!isOwnMessage ? '30px' : undefined}>
                     {chatData.message}
                   </StChatmessage>
                 </StChatTextContent>
