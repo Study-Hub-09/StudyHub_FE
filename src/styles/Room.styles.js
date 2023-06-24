@@ -1,5 +1,6 @@
 import { styled, css } from 'styled-components';
 
+// ==============ROOM STYLE=========== //
 export const size = {
   xs: (...args) => css`
     @media (max-width: 1366px) {
@@ -116,4 +117,52 @@ export const Stroomcount = styled.span`
 `;
 export const Stusericon = styled.img`
   width: 1.2vw;
+`;
+
+// ==============USER VIDEO COMPONENT STYLE=========== //
+
+export const Stcambox = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  background-color: #d8deca;
+  position: relative;
+`;
+export const Stcamboxname = styled.div`
+  height: 14%;
+  background-color: #424242;
+  border-radius: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  position: absolute;
+  bottom: 13.11px;
+  left: 14.5px;
+  padding: 0px 13px;
+  z-index: 2;
+`;
+export const StmicMuteIcon = styled.img`
+  position: absolute;
+  right: 7.99px;
+  bottom: 8.11px;
+  z-index: 1;
+`;
+
+export const StUserCam = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d8deca;
+  position: absolute;
 `;
