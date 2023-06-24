@@ -37,7 +37,6 @@ import {
   Stroomcount,
   Stallowbox,
   Stallowicon,
-  Stfont,
   StCategoryButton,
   StEmptyImage,
 } from '../styles/mainpage/Main.styles';
@@ -193,14 +192,14 @@ function Main() {
             </StSearchbox>
           </StTopline>
           <Stfilterbox>
-            <Stfont>
+            <div>
               <span>분야 필터</span>
               <StCategoryButton
                 src={isSelectOpen ? closeAllow : openAllow}
                 alt="selectBoxImage unable"
                 onClick={selectToggleHandler}
               />
-            </Stfont>
+            </div>
             {isSelectOpen && (
               <Selectbox
                 handleCategory={handleCategory}
