@@ -162,6 +162,7 @@ export const Stallowbox = styled.div`
   width: 1018px;
   display: flex;
   justify-content: end;
+  /* gap: 21px; */
 `;
 
 export const Stallowicon = styled.img`
