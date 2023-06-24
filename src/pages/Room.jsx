@@ -25,6 +25,7 @@ import {
   StKakaoRedirectContent,
   StKakaoRedirectHeader,
 } from '../styles/Common.styles';
+
 function Room() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,6 +50,8 @@ function Room() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [subscriber, setSubscriber] = useState('');
+  const [isLocal, setIsLocal] = useState('');
+  const [streamPropertyChanged, setStreamPropertyChanged] = useState(false);
 
   const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
@@ -63,6 +66,13 @@ function Room() {
   };
 
   const toggleAudioState = () => {
+    // if (streamPropertyChanged) {
+    //   setAudioEnabled((prevValue) => !prevValue);
+    //   publisher.publishAudio(!audioEnabled);
+    // } else {
+    //   setAudioEnabled((prevValue) => !prevValue);
+    //   publisher.publishAudio(!audioEnabled);
+    // }
     setAudioEnabled((prevValue) => !prevValue);
     publisher.publishAudio(!audioEnabled);
   };
@@ -122,18 +132,19 @@ function Room() {
       const session = OV.current.initSession();
       const mySession = session;
 
-      console.log('shipporrrrr> ', OV.current);
-
       mySession.on('streamCreated', (event) => {
         const subscriber = mySession.subscribe(event.stream, undefined);
         setState((prevState) => ({
           ...prevState,
           subscribers: [...prevState.subscribers, subscriber],
         }));
+        const isLocal = subscriber.stream.isLocal();
+
+        console.log('Subscriber stream isLocal>>> ', isLocal);
+        setIsLocal(isLocal);
       });
 
       mySession.on('streamDestroyed', (event) => {
-        console.log('delete>>> ', event.stream.streamManager);
         deleteSubscriber(event.stream.streamManager);
       });
 
@@ -155,20 +166,17 @@ function Room() {
           (manager) => manager.stream === stream && manager instanceof Subscriber
         );
 
-        if (subscriberIndex !== -1) {
-          const subscriber = streamManagers[subscriberIndex];
-
-          console.log('subscriberIndex>>> ', subscriberIndex);
-          console.log('subscriber>>> ', subscriber);
-          console.log('changedProperty >>> ', changedProperty);
-          console.log('changedProperty >>> ', changedProperty);
-          console.log('newValue >>> ', newValue);
-          console.log('oldValue >>> ', oldValue);
+        if (subscriberIndex !== -1 && !isLocal) {
+          // const subscriber = streamManagers[subscriberIndex];
 
           if (changedProperty === 'audioActive') {
-            setAudioEnabled(newValue);
+            setStreamPropertyChanged(
+              (prevStreamPropertyChanged) => !prevStreamPropertyChanged
+            );
           } else if (changedProperty === 'videoActive') {
-            setVideoEnabled(newValue);
+            setStreamPropertyChanged(
+              (prevStreamPropertyChanged) => !prevStreamPropertyChanged
+            );
           }
         }
       });
@@ -197,28 +205,23 @@ function Room() {
                 insertMode: 'APPEND',
                 mirror: true,
               });
-              console.log('publisher>>>>>> ', publisher);
 
               mySession.publish(publisher);
 
               const devices = await OV.current.getDevices();
-              console.log('devices>>>> ', devices);
 
               const videoDevices = devices.filter(
                 (device) => device.kind === 'videoinput'
               );
-              console.log('videoDevices>>>> ', videoDevices);
 
               const currentVideoDeviceId = publisher.stream
                 .getMediaStream()
                 .getVideoTracks()[0]
                 .getSettings().deviceId;
-              console.log('currentVidoDeviceId>>>> ', currentVideoDeviceId);
 
               const currentVideoDevice = videoDevices.find(
                 (device) => device.deviceId === currentVideoDeviceId
               );
-              console.log('currentVidoDevice>>>> ', currentVideoDevice);
 
               setState((prevState) => ({
                 ...prevState,
@@ -361,6 +364,7 @@ function Room() {
                   streamManager={publisher}
                   audioEnabled={audioEnabled}
                   videoEnabled={videoEnabled}
+                  isLocal={isLocal}
                 />
               </div>
             ) : null}
@@ -377,7 +381,8 @@ function Room() {
                   streamManager={sub}
                   audioEnabled={audioEnabled}
                   videoEnabled={videoEnabled}
-                  subscriber={subscriber}
+                  streamPropertyChanged={streamPropertyChanged}
+                  isLocal={isLocal}
                 />
               </div>
             ))}
