@@ -68,8 +68,8 @@ export const StKakaoBtn = styled(Link)`
   height: 54px;
 `;
 
-// ===============KAKAO REDIRECT PAGE================ //
-export const StKakaoRedirectContainer = styled.div`
+// ===============LOADING COMPONENT================ //
+export const StRedirectContainer = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
@@ -77,7 +77,7 @@ export const StKakaoRedirectContainer = styled.div`
   align-items: center;
 `;
 
-export const StKakaoRedirectBox = styled.div`
+export const StRedirectBox = styled.div`
   width: 506px;
   height: 173px;
   display: flex;
@@ -86,7 +86,7 @@ export const StKakaoRedirectBox = styled.div`
   align-items: center;
 `;
 
-export const StKakaoRedirectHeader = styled.header`
+export const StRedirectHeader = styled.header`
   width: 370px;
   height: 82px;
 
@@ -97,7 +97,7 @@ export const StKakaoRedirectHeader = styled.header`
   }
 `;
 
-export const StKakaoRedirectContent = styled.div`
+export const StRedirectContent = styled.div`
   width: 506px;
   height: 59px;
   display: flex;
