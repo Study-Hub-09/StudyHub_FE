@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cancel from '../../asset/cancel_white.svg';
 import logo from '../../asset/logo.svg';
-import profileimg from '../../asset/user.svg';
 import send from '../../asset/send.svg';
 import {
   StChatContainer,
@@ -17,6 +16,7 @@ import {
   StSendButton,
   StChatmessage,
   StMessageContainer,
+  StChatUserProfileImg,
 } from '../../styles/Chatting.styles';
 
 function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName }) {
@@ -65,7 +65,9 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                     {!isOwnMessage && isFirstMessageOfBlock && (
                       <>
                         <StChatTextTitleUser color="var(--color-dark-green)">
-                          <img src={profileimg} alt="Guest Profile" />
+                          <StChatUserProfileImg>
+                            <img src={chatData.profile} alt="Guest Profile" />
+                          </StChatUserProfileImg>
                           <p>{chatData.nickname} </p>
                         </StChatTextTitleUser>
                         {/* 사용자 프로필 옆에 chatData.createdAt 표시하기 */}

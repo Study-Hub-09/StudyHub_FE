@@ -215,7 +215,6 @@ function Room() {
     }
     sendMessage({
       sessionId: mySessionId,
-      profile: 'profileimg',
       nickname: getUserName,
       message,
     });
@@ -230,7 +229,7 @@ function Room() {
       const receivedDatas = {
         sessionId: newData.sessionId,
         createdAt: newData.createdAt,
-        profile: newData.profile,
+        profile: newData.profileImg,
         nickname: newData.nickname,
         message: newData.message,
       };

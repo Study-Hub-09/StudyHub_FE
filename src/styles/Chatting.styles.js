@@ -67,13 +67,21 @@ export const StChatTextTitleUser = styled.div`
   align-items: center;
   color: ${(props) => props.color};
 
-  img {
-    width: 25px;
-    height: 25px;
-  }
-
   p {
     font-weight: var(--weight-bold);
+  }
+`;
+
+export const StChatUserProfileImg = styled.div`
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
   }
 `;
 
