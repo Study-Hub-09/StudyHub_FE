@@ -16,13 +16,7 @@ import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
-import Typed from 'react-typed';
-import {
-  StKakaoRedirectBox,
-  StKakaoRedirectContainer,
-  StKakaoRedirectContent,
-  StKakaoRedirectHeader,
-} from '../styles/Common.styles';
+import Loading from '../components/Loading/Loading';
 import {
   Stcontainer,
   StLayout,
@@ -284,19 +278,7 @@ function Room() {
   }, []);
 
   return loadingstate ? (
-    <StKakaoRedirectContainer>
-      <StKakaoRedirectBox>
-        <StKakaoRedirectHeader>
-          <h1>
-            <Typed strings={['loading']} typeSpeed={120} backSpeed={150} loop />
-          </h1>
-        </StKakaoRedirectHeader>
-        <StKakaoRedirectContent>
-          <p width="506px">Strive for progress, not perfection</p>
-          <p width="387px">redirecting to study hub...</p>
-        </StKakaoRedirectContent>
-      </StKakaoRedirectBox>
-    </StKakaoRedirectContainer>
+    <Loading />
   ) : (
     <Stcontainer>
       <StLayout>
