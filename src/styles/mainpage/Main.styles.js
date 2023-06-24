@@ -115,7 +115,6 @@ export const Stroomboxlayout = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
 `;
 
@@ -126,7 +125,6 @@ export const Stroomtext = styled.div`
   gap: 13px;
   padding-left: 26px;
   height: 100%;
-  /* transform: translate3d(-70px, -15px, 0px); */
 `;
 
 export const Stroomtitle = styled.div`
@@ -164,14 +162,11 @@ export const Stallowbox = styled.div`
   width: 1018px;
   display: flex;
   justify-content: end;
-  /* gap: 21px; */
 `;
 
 export const Stallowicon = styled.img`
   cursor: pointer;
 `;
-
-export const Stfont = styled.div``;
 
 export const StCategoryButton = styled.img`
   cursor: pointer;

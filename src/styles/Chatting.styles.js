@@ -47,24 +47,7 @@ export const StChatArea = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  /* justify-content: end; */
   overflow: scroll; /* 수정된 부분 */
-
-  &::-webkit-scrollbar {
-    width: 10px; /* 스크롤 바 너비 */
-    background-color: red;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    /* 스크롤바 색상 */
-    background-color: #4f1414;
-  }
-
-  &::-webkit-scrollbar-track {
-    /* 스크롤 바 트랙 색상 */
-    border-left: 2px solid #106511;
-    background-color: blue;
-  }
 `;
 export const StMessageContainer = styled.div`
   display: flex;
@@ -73,21 +56,14 @@ export const StMessageContainer = styled.div`
   margin-top: auto;
 `;
 
-export const StChatTextBox = styled.div`
-  /* padding: 5px; */
-`;
-
 export const StChatTextTitle = styled.div`
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
 `;
 
 export const StChatTextTitleUser = styled.div`
   display: flex;
-  /* width: 50%; */
   gap: 5px;
-  /* justify-content: space-between; */
   align-items: center;
   color: ${(props) => props.color};
 
@@ -112,12 +88,6 @@ export const StChatTextContent = styled.div`
   justify-content: ${(props) => (props.textalign === 'right' ? 'end' : 'start')};
   align-items: center;
   margin-left: ${(props) => props.marginleft};
-  /* p {
-    word-break: break-word;
-    margin-left: ${(props) => props.marginleft};
-    text-align: ${(props) => props.textalign};
-    margin-right: ${(props) => props.marginright};
-  } */
 `;
 
 export const StChatInput = styled.div`
@@ -150,35 +120,4 @@ export const StSendButton = styled.div`
 
 export const StChatmessage = styled.div`
   margin-left: ${(props) => props.marginleft};
-  /* word-break: break-word; */
 `;
-
-// export const Stchatbox = styled.div`
-//   background-color: white;
-//   width: 280px;
-//   height: 100%;
-//   border: 1px solid #bfbfbf;
-//   border-radius: 7px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: flex-end;
-//   /* overflow-y: auto;
-//   scrollbar-width: thin;
-//   scrollbar-color: #4f1414 #bfbfbf; */
-// `;
-
-// // &::-webkit-scrollbar {
-// //     width: 15px; /* 스크롤 바 너비 */
-// //     background-color: red;
-// //   }
-
-// //   &::-webkit-scrollbar-thumb {
-// //     /* 스크롤바 색상 */
-// //     background-color: #4f1414;
-// //   }
-
-// //   &::-webkit-scrollbar-track {
-// //     /* 스크롤 바 트랙 색상 */
-// //     border-left: 2px solid #106511;
-// //     background-color: blue;
-// //   }

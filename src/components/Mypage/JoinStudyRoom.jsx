@@ -30,7 +30,6 @@ function JoinStudyRoom({ token }) {
     },
     enabled: !!token,
   });
-  // console.log(myRooms);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -64,7 +63,6 @@ function JoinStudyRoom({ token }) {
       }).then((response) => {
         if (response.isConfirmed) {
           setMyRooms([]);
-          // console.log('Room deleted successfully:', result);
         }
       });
     } catch (error) {
