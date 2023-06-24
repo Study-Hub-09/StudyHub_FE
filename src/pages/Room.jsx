@@ -108,7 +108,7 @@ function Room() {
       const response = await createToken(mySessionId);
       return response;
     } catch (error) {
-      console.error('인터넷 요청이 실패했습니다: getToken');
+      console.error(error);
     }
   };
 
@@ -201,7 +201,6 @@ function Room() {
             .catch((error) => {
               const { message: errorMessage, name: errorName } = error;
               if (errorMessage && errorName) {
-                // alert(`${(errorMessage, errorName)}`);
                 console.log(`${(errorMessage, errorName)}`);
               }
             });
@@ -269,12 +268,12 @@ function Room() {
       session: undefined,
       subscribers: [],
       mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
       mainStreamManager: undefined,
       publisher: undefined,
     });
   };
 
+  // 컴포넌트 마운트시 토큰 유무 확인 후 joinSession함수 호출
   useEffect(() => {
     if (token) {
       joinSession();
