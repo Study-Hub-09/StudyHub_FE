@@ -215,7 +215,6 @@ function Room() {
     }
     sendMessage({
       sessionId: mySessionId,
-      profile: 'profileimg',
       nickname: getUserName,
       message,
     });
@@ -230,7 +229,7 @@ function Room() {
       const receivedDatas = {
         sessionId: newData.sessionId,
         createdAt: newData.createdAt,
-        profile: newData.profile,
+        profile: newData.profileImg,
         nickname: newData.nickname,
         message: newData.message,
       };
@@ -288,7 +287,7 @@ function Room() {
             <Sttitlebox>
               <Sttitle>{roomData?.roomName}</Sttitle>
               <Stroomcount>
-                <span>{roomData.userCount} / 9</span>
+                <span>{1 + subscribers.length} / 9</span>
                 <Stusericon
                   src={Vector}
                   alt="Rounded Green Background With Darkgreen User Icon"
@@ -320,7 +319,7 @@ function Room() {
               ) : (
                 <Sticon
                   src={micoff}
-                  alt="Red Mic Icon with Slash"
+                  alt="Red Mic Icon With Slash"
                   onClick={toggleAudioState}
                 />
               )}
