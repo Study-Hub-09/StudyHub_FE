@@ -29,11 +29,19 @@ const UserVideoComponent = ({ streamManager }) => {
         <Stcambox>
           <Stcamboxname>{getNicknameTag()}</Stcamboxname>
           <OpenViduVideoComponent streamManager={streamManager} />
-          {!userAudio && <StmicMuteIcon src={viewmic} alt="audio icon" />}
+          {!userAudio && (
+            <StmicMuteIcon
+              src={viewmic}
+              alt="Rounded Gray Background, White Mic With Slash"
+            />
+          )}
 
           {!userVideo && (
             <StUserCam>
-              <img src={camuser} alt="unabled video user icon" />
+              <img
+                src={camuser}
+                alt="Light Green Background, Rounded White Background With Green User Icon"
+              />
             </StUserCam>
           )}
         </Stcambox>
