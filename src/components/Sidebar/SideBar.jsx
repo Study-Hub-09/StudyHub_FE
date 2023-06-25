@@ -104,45 +104,42 @@ function SideBar({ children }) {
     return nSeed;
   };
 
-  const tokenHandler = () => {
+  const tokenHandler = async () => {
     if (token) {
-      logout()
-        .then((response) => {
-          const {
-            status: statusCode,
-            data: { message: responseMessage },
-          } = response;
-          if (statusCode === 200 && responseMessage === '로그아웃 성공') {
-            removeCookie('AccessToken', { path: '/' });
-            removeCookie('RefreshToken', { path: '/' });
-            localStorage.removeItem('member');
-            setToken('');
-            Swal.fire({
-              icon: 'success',
-              iconColor: '#00573f',
-              text: responseMessage,
-              width: 400,
-              confirmButtonColor: '#00573f',
-              confirmButtonText: '확인',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                if (location.pathname === '/setting') {
-                  navigate('/');
-                } else if (location.pathname === '/main') {
-                  navigate('/');
-                } else if (location.pathname === '/mypage') {
-                  navigate('/');
-                  // window.location.reload();
-                } else {
-                  // window.location.reload();
-                }
+      try {
+        const {
+          status: statusCode,
+          data: { message: responseMessage },
+        } = await logout();
+        if (statusCode === 200 && responseMessage === '로그아웃 성공') {
+          removeCookie('AccessToken', { path: '/' });
+          removeCookie('RefreshToken', { path: '/' });
+          localStorage.removeItem('member');
+          setToken('');
+          Swal.fire({
+            icon: 'success',
+            iconColor: '#00573f',
+            text: responseMessage,
+            width: 400,
+            confirmButtonColor: '#00573f',
+            confirmButtonText: '확인',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              if (location.pathname === '/setting') {
+                navigate('/');
+              } else if (location.pathname === '/main') {
+                navigate('/');
+              } else if (location.pathname === '/mypage') {
+                navigate('/');
+              } else {
+                return;
               }
-            });
-          }
-        })
-        .catch((error) => {
-          // console.log(error);
-        });
+            }
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
