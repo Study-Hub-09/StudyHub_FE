@@ -118,6 +118,12 @@ export const Stroomboxlayout = styled.div`
   align-items: center;
 `;
 
+export const Stroomboxlmage = styled.img`
+  width: 82px;
+  height: 82px;
+  object-fit: fill;
+`;
+
 export const Stroomtext = styled.div`
   display: flex;
   flex-direction: column;
