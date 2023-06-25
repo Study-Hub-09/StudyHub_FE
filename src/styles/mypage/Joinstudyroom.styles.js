@@ -53,11 +53,11 @@ export const StContentMainTodoListRoomNa = styled.div`
   height: 10%;
   font-style: normal;
   font-weight: 700;
-  font-size: 0.938rem;
-  line-height: 20px;
+  font-size: 1.042vw;
+  line-height: 1.188rem;
   color: #000000;
   display: flex;
-  margin: 0px 0px 0px 20px;
+  margin: 0px 0px 5px 20px;
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
@@ -67,11 +67,11 @@ export const StContentMainTodoListRoomCa = styled.div`
   height: 16px; // 수정필요
   font-style: normal;
   font-weight: 500;
-  font-size: 0.75rem;
-  line-height: 16px;
+  font-size: 0.75vw;
+  line-height: 1vw;
   color: #90b54c;
   display: flex;
-  margin: 0px 0px 0px 20px;
+  margin: 0px 0px 5px 20px;
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;

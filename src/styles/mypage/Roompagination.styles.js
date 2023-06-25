@@ -75,14 +75,14 @@ export const StContentMainSubStudyRoomNaCa = styled.div`
 `;
 
 export const StContentMainSubStudyRoomName = styled.div`
-  width: 90%;
+  width: 100%;
   height: 100%;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1.042vw;
   line-height: 1.188rem;
   color: #000000;
-  margin: 0px 0px 0px 20px;
+  margin: 0px 0px 5px 20px;
   /* border: 1px solid #8cacff; */
 `;
 
@@ -91,8 +91,8 @@ export const StContentMainSubStudyRoomCa = styled.div`
   height: 100%;
   font-style: normal;
   font-weight: 500;
-  font-size: 0.833vw;
-  line-height: 1rem;
+  font-size: 0.75vw;
+  line-height: 1vw;
   color: #90b54c;
   margin: 0px 0px 0px 20px;
   /* border: 1px solid #8cacff; */
