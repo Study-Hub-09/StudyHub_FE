@@ -133,19 +133,19 @@ export const Stcambox = styled.div`
   position: relative;
 `;
 export const Stcamboxname = styled.div`
-  height: 14%;
+  /* height: 14%; */
   background-color: #424242;
   border-radius: 7px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.795vw;
   font-weight: 500;
   position: absolute;
-  bottom: 13.11px;
-  left: 14.5px;
-  padding: 0px 13px;
+  bottom: 0.684vw;
+  left: 0.756vw;
+  padding: 0.261vw 0.678vw;
   z-index: 2;
 `;
 export const StmicMuteIcon = styled.img`
@@ -153,6 +153,7 @@ export const StmicMuteIcon = styled.img`
   right: 7.99px;
   bottom: 8.11px;
   z-index: 1;
+  width: 1.875vw;
 `;
 
 export const StUserCam = styled.div`
@@ -165,6 +166,9 @@ export const StUserCam = styled.div`
   align-items: center;
   background-color: #d8deca;
   position: absolute;
+`;
+export const StUserimg = styled.img`
+  width: 5.21vw;
 `;
 
 // ==============OV VIDEO COMPONENT STYLE=========== //
