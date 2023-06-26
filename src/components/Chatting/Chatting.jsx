@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import cancel from '../../asset/cancel_white.svg';
 import logo from '../../asset/logo.svg';
 import send from '../../asset/send.svg';
+import userimg from '../../asset/greenuser.svg';
 import {
   StChatContainer,
   StChatHeader,
@@ -66,7 +67,15 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                       <>
                         <StChatTextTitleUser color="var(--color-dark-green)">
                           <StChatUserProfileImg>
-                            <img src={chatData.profile} alt="Guest Profile" />
+                            <img
+                              src={
+                                chatData.profile === null ||
+                                chatData.profile === '대표 이미지 URL'
+                                  ? userimg
+                                  : chatData.profile
+                              }
+                              alt="Guest Profile"
+                            />
                           </StChatUserProfileImg>
                           <p>{chatData.nickname} </p>
                         </StChatTextTitleUser>
