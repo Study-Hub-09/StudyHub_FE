@@ -126,7 +126,7 @@ export const Sttitle = styled.div`
 
 export const Stthumbnail = styled.div`
   width: 136px;
-  height: 100px;
+  height: 136px;
   background-color: #e8e8e8;
   border-radius: 12px;
   font-size: 11px;
@@ -135,6 +135,7 @@ export const Stthumbnail = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: cover;
 `;
 
 export const StthumbnailbuttonA = styled.button`
@@ -264,4 +265,9 @@ export const Stlayoutbox = styled.div`
 
 export const Stfontcolor = styled.div`
   color: #9d9d9d;
+`;
+export const StreaderImagebox = styled.img`
+  width: 105px;
+  height: 105px;
+  object-fit: cover;
 `;

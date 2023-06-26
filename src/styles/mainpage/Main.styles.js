@@ -121,7 +121,7 @@ export const Stroomboxlayout = styled.div`
 export const Stroomboxlmage = styled.img`
   width: 82px;
   height: 82px;
-  object-fit: fill;
+  object-fit: cover;
 `;
 
 export const Stroomtext = styled.div`

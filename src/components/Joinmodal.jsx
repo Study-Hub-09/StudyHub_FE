@@ -20,6 +20,7 @@ import {
   Stcancelimg,
   Stjoinbutton,
   StpasswordInput,
+  Stroomboxlmage,
 } from '../styles/mainpage/Joinmodal.styles';
 import Swal from 'sweetalert2';
 
@@ -145,11 +146,9 @@ function Joinmodal({ onClose, roomData }) {
       <Stmodalbox>
         <StLayout>
           <Stheaderbox>
-            <img
+            <Stroomboxlmage
               src={roomData.imageUrl === '대표 이미지 URL' ? studyhub : roomData.imageUrl}
               alt="roomImage unable"
-              width={120}
-              height={120}
             />
             <Stheadericon>
               <Stcancelimg

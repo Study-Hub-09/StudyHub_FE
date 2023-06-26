@@ -52,6 +52,7 @@ import {
   Stlockboxinner,
   Stlayoutbox,
   Stfontcolor,
+  StreaderImagebox,
 } from '../styles/mainpage/Modal.styles';
 import Swal from 'sweetalert2';
 
@@ -334,18 +335,11 @@ const Modal = ({ onClose }) => {
               <Stthumnailarea>
                 <Stfont>대표이미지</Stfont>
                 <Stthumnailbox>
-                  <Stthumbnail>
-                    {readerImage ? (
-                      <img
-                        src={readerImage}
-                        alt="readerImage unable"
-                        width={136}
-                        height={100}
-                      />
-                    ) : (
-                      '이미지를 등록해 주세요'
-                    )}
-                  </Stthumbnail>
+                  {readerImage ? (
+                    <StreaderImagebox src={readerImage} alt="readerImage unable" />
+                  ) : (
+                    <Stthumbnail>'이미지를 등록해 주세요'</Stthumbnail>
+                  )}
                   <div>
                     <StthumbnailbuttonB for="inputImage">
                       PC에서 업로드

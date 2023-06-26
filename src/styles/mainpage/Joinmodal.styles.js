@@ -62,6 +62,12 @@ export const Stcontent = styled.div`
   height: 120px;
 `;
 
+export const Stroomboxlmage = styled.img`
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+`;
+
 export const Stheaderbox = styled.div`
   display: flex;
   justify-content: space-between;
