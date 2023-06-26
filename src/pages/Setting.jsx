@@ -398,7 +398,7 @@ function Setting() {
             <StMybadgeBody>
               <StMybadgeLayout>
                 <StbadgeIcon
-                  src={totalStudyTimeHour > 0 ? getBadgeA : nonGetBadgeA}
+                  src={totalStudyTimeHour >= 0 ? getBadgeA : nonGetBadgeA}
                   alt="badgeAImage unable"
                 />
                 <StbadgeIcon
