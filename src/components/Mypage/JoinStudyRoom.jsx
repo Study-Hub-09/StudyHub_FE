@@ -4,7 +4,7 @@ import Joinmodal from '../Joinmodal';
 import { useQuery } from 'react-query';
 import { getMypage } from '../../core/api/mypage/mypage';
 import close from '../../assets/Icons/close.svg';
-import { deleteRoom } from '../../api/api';
+import { deleteRoom } from '../../core/api/crud/api';
 import Swal from 'sweetalert2';
 import {
   StContentMainTodoList,
