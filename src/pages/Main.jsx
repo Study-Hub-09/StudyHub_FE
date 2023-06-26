@@ -39,6 +39,7 @@ import {
   Stallowicon,
   StCategoryButton,
   StEmptyImage,
+  Stroomboxlmage,
 } from '../styles/mainpage/Main.styles';
 import { getCookie } from '../Cookies/Cookies';
 import { useNavigate } from 'react-router-dom';
@@ -224,13 +225,11 @@ function Main() {
                     }}
                   >
                     <Stroomboxlayout>
-                      <img
+                      <Stroomboxlmage
                         src={
                           item.imageUrl === '대표 이미지 URL' ? studyhub : item.imageUrl
                         }
                         alt="roomImage unable"
-                        width={82}
-                        height={82}
                       />
                       <Stroomtext>
                         <Stroomtitle>{item.roomName}</Stroomtitle>

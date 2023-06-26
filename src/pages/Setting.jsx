@@ -19,7 +19,7 @@ import userImage from '../asset/greenuser.svg';
 import editIcon from '../asset/editicon.svg';
 import imageEdit from '../asset/imageEdit.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getProfile, updateProfile } from '../api/api';
+import { getProfile, updateProfile } from '../core/api/crud/api';
 import Swal from 'sweetalert2';
 import {
   Stcontainer,
@@ -398,7 +398,7 @@ function Setting() {
             <StMybadgeBody>
               <StMybadgeLayout>
                 <StbadgeIcon
-                  src={totalStudyTimeHour > 0 ? getBadgeA : nonGetBadgeA}
+                  src={totalStudyTimeHour >= 0 ? getBadgeA : nonGetBadgeA}
                   alt="badgeAImage unable"
                 />
                 <StbadgeIcon

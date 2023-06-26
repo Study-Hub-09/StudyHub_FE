@@ -1,4 +1,4 @@
-import { instance } from '../core/api/axios/instance';
+import { instance } from '../axios/instance';
 
 // 게시글 조회
 const getRoom = async (page) => {
@@ -14,23 +14,6 @@ const addRoom = async (newRoom) => {
   });
   return response.data;
 };
-
-// 게시글 상세조회
-// const getRoomDetail = async (sessionId) => {
-//   const token = getToken;
-//   const token2 = getToken2;
-
-//   const response = await axios.get(
-//     `${process.env.REACT_APP_SERVER_URL}/api/rooms/${sessionId}`,
-//     {
-//       headers: {
-//         ACCESS_KEY: `Bearer ${token}`,
-//         REFRESH_KEY: `Bearer ${token2}`,
-//       },
-//     }
-//   );
-//   return response.data;
-// };
 
 // 스터디룸 입장
 const joinRoom = async (sessionId, memberData) => {

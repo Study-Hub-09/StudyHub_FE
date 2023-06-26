@@ -31,6 +31,7 @@ import {
   Stroomcount,
   Stusericon,
 } from '../styles/Room.styles';
+import Swal from 'sweetalert2';
 
 function Room() {
   const location = useLocation();
@@ -271,11 +272,30 @@ function Room() {
     if (token) {
       joinSession();
     } else {
-      alert('로그인 후 이용 가능한 페이지입니다');
-      navigate('/members/login');
+      Swal.fire({
+        icon: 'info',
+        iconColor: '#00573f',
+        text: '로그인이 필요한 서비스입니다',
+        width: 400,
+        confirmButtonColor: '#00573f',
+        confirmButtonText: '확인',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/members/login');
+        }
+      });
     }
   }, []);
-
+  const nondevAlert = () => {
+    Swal.fire({
+      icon: 'info',
+      iconColor: '#00573f',
+      width: 400,
+      text: '개발중입니다.',
+      confirmButtonColor: '#00573f',
+      confirmButtonText: '확인',
+    });
+  };
   return loadingstate ? (
     <Loading />
   ) : (
@@ -339,8 +359,8 @@ function Room() {
                   setisChatOpen(!ischatOpen);
                 }}
               />
-              <Sticon src={view} alt="White Grid Icon" />
-              <Sticon src={setting} alt="White Gear Icon" />
+              <Sticon src={view} alt="White Grid Icon" onClick={nondevAlert} />
+              <Sticon src={setting} alt="White Gear Icon" onClick={nondevAlert} />
               <Sticon
                 src={logout}
                 alt="Red Arrow Right From Bracket"

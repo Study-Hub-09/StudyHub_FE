@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import { addRoom } from '../api/api';
+import { addRoom } from '../core/api/crud/api';
 import cancel from '../asset/cancel.svg';
 import lockimg from '../asset/lock.svg';
 import languageunClick from '../asset/language.svg';

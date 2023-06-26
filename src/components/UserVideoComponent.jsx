@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import OpenViduVideoComponent from './OvVideo';
 import viewmic from '../asset/viewmic.svg';
 import camuser from '../asset/camoffuser.svg';
-import { Stcambox, Stcamboxname, StmicMuteIcon, StUserCam } from '../styles/Room.styles';
+import {
+  Stcambox,
+  Stcamboxname,
+  StmicMuteIcon,
+  StUserCam,
+  StUserimg,
+} from '../styles/Room.styles';
 
 const UserVideoComponent = ({ streamManager }) => {
   const [userAudio, setUserAudio] = useState(streamManager.stream.audioActive);
@@ -38,7 +44,7 @@ const UserVideoComponent = ({ streamManager }) => {
 
           {!userVideo && (
             <StUserCam>
-              <img
+              <StUserimg
                 src={camuser}
                 alt="Light Green Background, Rounded White Background With Green User Icon"
               />
