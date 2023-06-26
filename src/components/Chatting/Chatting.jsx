@@ -70,7 +70,7 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                             <img
                               src={
                                 chatData.profile === null ||
-                                chatData.profile === '대표 이미지 URL'
+                                chatData.profile === '대표 프로필 이미지 URL'
                                   ? userimg
                                   : chatData.profile
                               }
