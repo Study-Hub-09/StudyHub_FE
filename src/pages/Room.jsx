@@ -45,7 +45,6 @@ function Room() {
   const [state, setState] = useState({
     mySessionId: roomData.sessionId,
     session: undefined,
-    mainStreamManager: undefined,
     publisher: undefined,
     subscribers: [],
   });
@@ -59,7 +58,7 @@ function Room() {
 
   const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
-  const { mySessionId, mainStreamManager, publisher, subscribers, session } = state;
+  const { mySessionId, publisher, subscribers, session } = state;
 
   const onChangeMessageHandler = (e) => {
     setMessage(e.target.value);
@@ -167,24 +166,8 @@ function Room() {
 
               mySession.publish(publisher);
 
-              const devices = await OV.current.getDevices();
-
-              const videoDevices = devices.filter(
-                (device) => device.kind === 'videoinput'
-              );
-
-              const currentVideoDeviceId = publisher.stream
-                .getMediaStream()
-                .getVideoTracks()[0]
-                .getSettings().deviceId;
-
-              const currentVideoDevice = videoDevices.find(
-                (device) => device.deviceId === currentVideoDeviceId
-              );
-
               setState((prevState) => ({
                 ...prevState,
-                currentVideoDevice: currentVideoDevice,
                 mainStreamManager: publisher,
                 publisher: publisher,
               }));
@@ -196,7 +179,51 @@ function Room() {
             .catch((error) => {
               const { message: errorMessage, name: errorName } = error;
               if (errorMessage && errorName) {
-                console.log(`${(errorMessage, errorName)}`);
+                if (errorName === 'DEVICE_ACCESS_DENIED') {
+                  Swal.fire({
+                    icon: 'info',
+                    iconColor: '#00573f',
+                    width: 400,
+                    text: '카메라 및 마이크를 허용해 주세요.',
+                    confirmButtonColor: '#00573f',
+                    confirmButtonText: '확인',
+                  }).then((result) => {
+                    if (result.isConfirmed) navigate(-1);
+                  });
+                } else if (errorName === 'DEVICE_ALREADY_IN_USE') {
+                  Swal.fire({
+                    icon: 'info',
+                    iconColor: '#00573f',
+                    width: 400,
+                    text: '카메라 및 마이크가 이미 다른 곳에서 사용 중입니다.',
+                    confirmButtonColor: '#00573f',
+                    confirmButtonText: '확인',
+                  }).then((result) => {
+                    if (result.isConfirmed) navigate(-1);
+                  });
+                } else if (errorName === 'INPUT_VIDEO_DEVICE_NOT_FOUND') {
+                  Swal.fire({
+                    icon: 'info',
+                    iconColor: '#00573f',
+                    width: 400,
+                    text: '카메라를 연결해 주세요.',
+                    confirmButtonColor: '#00573f',
+                    confirmButtonText: '확인',
+                  }).then((result) => {
+                    if (result.isConfirmed) navigate(-1);
+                  });
+                }
+              } else {
+                Swal.fire({
+                  icon: 'info',
+                  iconColor: '#00573f',
+                  width: 400,
+                  text: `${(errorMessage, errorName)}`,
+                  confirmButtonColor: '#00573f',
+                  confirmButtonText: '확인',
+                }).then((result) => {
+                  if (result.isConfirmed) navigate(-1);
+                });
               }
             });
         })
@@ -248,7 +275,6 @@ function Room() {
           data: { message },
         } = response;
         if (statusCode === 200 && message === '스터디 룸 퇴장 성공') {
-          session.unpublish(mainStreamManager);
           session.disconnect(); // 세션 종료
           disconnectClient(); // 채팅 종료
           navigate('/main');
