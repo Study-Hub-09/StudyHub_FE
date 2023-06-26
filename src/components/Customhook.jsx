@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getSearchRoom, getRoom } from '../api/api';
+import { getSearchRoom, getRoom } from '../core/api/crud/api';
 
 const useSearchData = (page, queryString, enabled) => {
   return useQuery(
