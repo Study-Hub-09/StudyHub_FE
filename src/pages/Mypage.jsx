@@ -65,7 +65,7 @@ function Mypage({ onClose }) {
 
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
-      // console.log(response);
+      console.log(response);
       setDailyStudyChart(response.data.dailyStudyChart);
       setDailyStudyTime(response.data.dailyStudyTime);
       setMonthlyStudyChart(response.data.monthlyStudyChart);
@@ -117,27 +117,37 @@ function Mypage({ onClose }) {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  // 한 주 총 공부한 시간
-  const weeklyentries = Object.entries(dailyStudyChart);
-  weeklyentries.forEach(([key, value]) => {
-    // console.log(key, value); // 각 키와 값 출력
-  });
+  // Date 객체를 활용하여 주차를 구하는 함수 (getWeek)
+  const getWeek = (date) => {
+    const oneJan = new Date(date.getFullYear(), 0, 1);
+    const weekNum = Math.ceil(((date - oneJan) / 86400000 + oneJan.getDay() + 1) / 7);
+    return weekNum;
+  };
 
-  let weeklysum = 0;
-  for (const key in dailyStudyChart) {
-    weeklysum += dailyStudyChart[key];
-  }
+  const getWeeklyStudyTime = () => {
+    const currentDate = new Date();
+    const currentWeek = getWeek(currentDate);
+    const currentWeekData = weeklyStudyChart[currentWeek] || 0;
+    return currentWeekData;
+  };
 
-  const weeklyTime = (weeklysum) => {
-    const hours = Math.floor(weeklysum / 3600)
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600)
       .toString()
       .padStart(2, '0');
-    const minutes = Math.floor((weeklysum % 3600) / 60)
+    const minutes = Math.floor((time % 3600) / 60)
       .toString()
       .padStart(2, '0');
-    const seconds = (weeklysum % 60).toString().padStart(2, '0');
+    const seconds = (time % 60).toString().padStart(2, '0');
     return `${hours}:${minutes}:${seconds}`;
   };
+
+  // 한 주 총 공부 시간 계산
+  const weeklyStudyTime = getWeeklyStudyTime();
+  const formattedWeeklyTime = formatTime(weeklyStudyTime);
+
+  ///////////
+  //////////
 
   // 총 공부한 시간
   const totalTime = (totalStudyTime) => {
@@ -268,7 +278,7 @@ function Mypage({ onClose }) {
                         이번주 공부 시간
                       </StContentMainTotalTimerTitle>
                       <StContentMainTotalTimer>
-                        {weeklyTime(weeklysum)}
+                        {formattedWeeklyTime}
                       </StContentMainTotalTimer>
                       <StContentMainTotalTimerTitle>
                         {result}
