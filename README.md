@@ -84,6 +84,59 @@
 | **JUnit5 + Mockito** | 테스트 코드를 사용하면 개발 과정 중에 발생할 수 있는 예상치 못한 문제를 컴파일 시점에서 찾을 수 있습니다.<br> 이는 런타임 오류를 방지하고, 버그를 사전에 발견하여 디버깅 시간을 절약할 수 있습니다.<br> 또한 작성한 코드가 의도한 대로 동작하는지 확인할 수 있습니다.<br> 테스트 코드는 예상되는 입력과 출력을 정의하고, 코드 실행 결과를 확인하여 코드의 정확성을 검증하는 역할을 합니다.<br> 이를 통해 코드 변경이나 리팩토링 후에도 기능의 동작이 올바른지 확인할 수 있기 때문에 도입하게 되었습니다. |
 <br>
 
+## 🧨 트러블 슈팅
+### FRONT END
+<details>
+  <summary> 💥 스터디룸 입장 시 openVidu 세션 연결 이슈 </summary>
+    <br>
+  
+  **`문제`**
+    
+  스터디룸 입장 후 바로 마이크나 카메라를 끄면 openvidu 세션 연결이  되지 않는 오류가 발생
+     
+    
+  **`시도`**
+    
+  Redirect 페이지를 방 입장후 setTimeOut을 적용하여 3초가 지난 후 스터디룸 페이지가 보이게 하여 마이크나 카메라에 대한 조작을 할 수 없게 하려고 하였다.<br> 하지만 시간만 적용을 해주면 유저별 세션 연결 시간에 대한 편차가 있어서 redirect 페이지가 사라진 후에도 세션 연결이 안된 유저가 마이크나 카메라를 껐을 때 여전히 세션 연결이 되지않았다.
+     
+    
+  **`해결`**
+    
+  스터디룸 입장 후 세션연결하는 코드안에 redirect 페이지를 넣어줘서 이전처럼 시간이 지난 후 스터디룸이 보이는 아니라 세션 연결이 완료 된 후 스터디룸 페이지가 보이도록 수정
+
+
+</details>
+
+<details>
+  <summary> 💥 스터디룸에서 상대방의 카메라, 마이크 상태 확인 이슈 </summary>
+    <br>
+  
+  **`문제`**
+    
+   OpenViduLogger(오픈비두 콘솔 메세지)는 상대방이 카메라나 마이크를 켜거나 끄는 작업(publish/unpublish)을 볼 수 없음.<br> 유저는 자신이 수행한 카메라/마이크 상태 변경만 확인할 수 있으며, 상대방의 카메라/마이크 유무를 확인하지 못 하는 문제 발생
+     
+    
+  **`시도`**
+    
+  'streamPropertyChanged' 오픈비두 이벤트를 사용하여 stream을 변경할 때만 상태를 업데이트 시도.<br> 그러나 오픈비두는 내가 발행자이자 구독자이기 때문에 정확히 구분하는 방법이 어려워서 이 이벤트를 사용할 수 없
+     
+    
+  **`해결`**
+    
+  'streamManager'를 사용하여 문제 해결, 'streamManager'를 통해 구독자와 발행자를 구분 가능.<br>'streamManager.stream.audioActive'와 'streamManager.stream.videoActive'를 사용하여 
+나와 상대방의 오디오 및 비디오 상태를 확인하고, UI를 업데이트할 수 있었다.<br>이렇게 함으로써 상대방이 마이크나 카메라를 끄거나 켤 때 이를 시각적으로 알 수 있게 됨.
+
+  **`해결 코드`**
+  
+  <img width="599" alt="스크린샷 2023-06-26 오후 11 40 12" src="https://github.com/Study-Hub-09/StudyHub_FE/assets/129656095/db39ba2e-f28a-4a39-8b06-ff8df529e8ab">
+
+
+
+  
+
+</details>
+<br>
+
 ## 👨‍👩‍👧‍👦 스터브 팀
 - Front: 강한빛([Github](https://github.com/hanbitk)), 김시옥([Github](https://github.com/gigupc11)), 신민철([Github](https://github.com/MinCheolS))
 - Back: 김근보([Github](https://github.com/CaptainGombo)), 박성우([Github](https://github.com/seongwop)), 한승희([Github](https://github.com/seunghee58)))
