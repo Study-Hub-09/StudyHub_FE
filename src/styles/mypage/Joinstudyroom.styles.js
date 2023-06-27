@@ -71,7 +71,7 @@ export const StContentMainTodoListRoomCa = styled.div`
   line-height: 1vw;
   color: #90b54c;
   display: flex;
-  margin: 0px 0px 5px 20px;
+  margin: 0px 0px 0px 20px;
   cursor: pointer;
   /* border: 1px solid #8cacff; */
 `;
