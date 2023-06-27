@@ -63,7 +63,9 @@ function JoinStudyRoom({ token }) {
         showCancelButton: true, // 취소 버튼 표시 설정
       }).then((response) => {
         if (response.isConfirmed) {
-          setMyRooms([]);
+          const updatedRooms = myRooms.filter((room) => room.sessionId !== sessionId);
+          setMyRooms(updatedRooms);
+          // setMyRooms([]);
         }
       });
     } catch (error) {
