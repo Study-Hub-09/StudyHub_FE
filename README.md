@@ -17,6 +17,7 @@
 <br>
 
 ## 📚 Project Architecture
+![Group 6 (3)](https://github.com/Study-Hub-09/StudyHub_FE/assets/125139072/1c37c461-a450-4c4c-8768-1477d480188f)
 
 
 <br>
