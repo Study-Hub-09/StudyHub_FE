@@ -378,7 +378,9 @@ function Register() {
   // 이메일 중복 확인 뮤테이션 훅
   const validateEmailMutation = useMutation(validateEmail, {
     onSuccess: (response) => {
-      const { data: verificationCode } = response;
+      const {
+        data: { data: verificationCode },
+      } = response;
       setIsEmailLoading(false);
       setMessages((prevMessages) => ({
         ...prevMessages,
