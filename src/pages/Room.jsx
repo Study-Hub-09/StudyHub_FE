@@ -31,7 +31,7 @@ import {
   Stroomcount,
   Stusericon,
 } from '../styles/Room.styles';
-import Swal from 'sweetalert2';
+import { Alert } from '@mui/material';
 
 function Room() {
   const location = useLocation();
@@ -180,50 +180,18 @@ function Room() {
               const { message: errorMessage, name: errorName } = error;
               if (errorMessage && errorName) {
                 if (errorName === 'DEVICE_ACCESS_DENIED') {
-                  Swal.fire({
-                    icon: 'info',
-                    iconColor: '#00573f',
-                    width: 400,
-                    text: '카메라 및 마이크를 허용해 주세요.',
-                    confirmButtonColor: '#00573f',
-                    confirmButtonText: '확인',
-                  }).then((result) => {
-                    if (result.isConfirmed) navigate(-1);
-                  });
+                  Alert('info', '카메라 및 마이크를 허용해 주세요.', () => navigate(-1));
                 } else if (errorName === 'DEVICE_ALREADY_IN_USE') {
-                  Swal.fire({
-                    icon: 'info',
-                    iconColor: '#00573f',
-                    width: 400,
-                    text: '카메라 및 마이크가 이미 다른 곳에서 사용 중입니다.',
-                    confirmButtonColor: '#00573f',
-                    confirmButtonText: '확인',
-                  }).then((result) => {
-                    if (result.isConfirmed) navigate(-1);
-                  });
+                  Alert(
+                    'info',
+                    '카메라 및 마이크가 이미 다른 곳에서 사용 중입니다.',
+                    () => navigate(-1)
+                  );
                 } else if (errorName === 'INPUT_VIDEO_DEVICE_NOT_FOUND') {
-                  Swal.fire({
-                    icon: 'info',
-                    iconColor: '#00573f',
-                    width: 400,
-                    text: '카메라를 연결해 주세요.',
-                    confirmButtonColor: '#00573f',
-                    confirmButtonText: '확인',
-                  }).then((result) => {
-                    if (result.isConfirmed) navigate(-1);
-                  });
+                  Alert('info', '카메라를 연결해 주세요.', () => navigate(-1));
                 }
               } else {
-                Swal.fire({
-                  icon: 'info',
-                  iconColor: '#00573f',
-                  width: 400,
-                  text: `${(errorMessage, errorName)}`,
-                  confirmButtonColor: '#00573f',
-                  confirmButtonText: '확인',
-                }).then((result) => {
-                  if (result.isConfirmed) navigate(-1);
-                });
+                Alert('info', `${(errorMessage, errorName)}`, () => navigate(-1));
               }
             });
         })
@@ -298,30 +266,12 @@ function Room() {
     if (token) {
       joinSession();
     } else {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        text: '로그인이 필요한 서비스입니다',
-        width: 400,
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/members/login');
-        }
-      });
+      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('/members/login'));
     }
   }, []);
-  const nondevAlert = () => {
-    Swal.fire({
-      icon: 'info',
-      iconColor: '#00573f',
-      width: 400,
-      text: '개발중입니다.',
-      confirmButtonColor: '#00573f',
-      confirmButtonText: '확인',
-    });
-  };
+
+  const nondevAlert = () => Alert('info', '개발중입니다.');
+
   return loadingstate ? (
     <Loading />
   ) : (
