@@ -26,13 +26,6 @@ function NicknameInput({
 }) {
   const nicknameRef = useRef();
 
-  const getBordercolor = () => {
-    if (value) {
-      return validNickname ? 'green' : 'red';
-    }
-    return bordercolor;
-  };
-
   useEffect(() => {
     nicknameRef.current.focus();
   }, []);
@@ -41,7 +34,7 @@ function NicknameInput({
     <StInputBox>
       <label>닉네임</label>
       <StInputFrame>
-        <StInputDiv bordercolor={getBordercolor()} onFocus={onFocus} onBlur={onBlur}>
+        <StInputDiv bordercolor={bordercolor} onFocus={onFocus} onBlur={onBlur}>
           <StInput
             ref={nicknameRef}
             type="text"

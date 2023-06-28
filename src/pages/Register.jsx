@@ -299,7 +299,10 @@ function Register() {
     });
   };
 
-  const borderColor = (border) => {
+  const borderColor = (value, validation, border) => {
+    if (value) {
+      return validation ? 'var(--color-dark-green)' : 'var(--color-red)';
+    }
     return border ? 'var(--color-dark-gray)' : 'var(--color-gray)';
   };
 
@@ -559,7 +562,7 @@ function Register() {
               validNickname={validNickname}
               isNicknameVerified={isNicknameVerified}
               button="확인"
-              bordercolor={() => borderColor(nicknameBorder)}
+              bordercolor={() => borderColor(nickname, validNickname, nicknameBorder)}
               onFocus={() => onFocusInputBorder('nicknameBorder')}
               onBlur={() => onBlurInputBorder('nicknameBorder')}
               onClick={(e) => validateNicknameHandler(e)}
