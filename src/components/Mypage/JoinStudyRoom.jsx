@@ -5,7 +5,6 @@ import { useQuery } from 'react-query';
 import { getMypage } from '../../core/api/mypage/mypage';
 import close from '../../assets/Icons/close.svg';
 import { deleteRoom } from '../../core/api/crud/api';
-import Swal from 'sweetalert2';
 import {
   StContentMainTodoList,
   StContentMainTodoListRoom,
@@ -16,6 +15,7 @@ import {
   StContentMainTodoListRoomNaCa,
   StContentMainTodoListTitle,
 } from '../../styles/mypage/Joinstudyroom.styles';
+import { confirmCancelAlert } from '../../CustomAlert/Alert';
 
 function JoinStudyRoom({ token }) {
   const [myRooms, setMyRooms] = useState([]);
@@ -51,22 +51,9 @@ function JoinStudyRoom({ token }) {
   const deleteRoomHandler = async (sessionId) => {
     try {
       const result = await deleteRoom(sessionId);
-      Swal.fire({
-        icon: 'question',
-        iconColor: '#00573f',
-        text: '삭제하시겠습니까?',
-        width: 400,
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-        cancelButtonColor: '#570000',
-        cancelButtonText: '취소',
-        showCancelButton: true, // 취소 버튼 표시 설정
-      }).then((response) => {
-        if (response.isConfirmed) {
-          const updatedRooms = myRooms.filter((room) => room.sessionId !== sessionId);
-          setMyRooms(updatedRooms);
-          // setMyRooms([]);
-        }
+      confirmCancelAlert('question', '삭제하시겠습니까?', () => {
+        const updatedRooms = myRooms.filter((room) => room.sessionId !== sessionId);
+        setMyRooms(updatedRooms);
       });
     } catch (error) {
       // console.log('Error deleting room:', error);

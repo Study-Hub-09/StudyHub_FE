@@ -242,9 +242,7 @@ function Register() {
         data: { message: responseMessage },
       } = response;
       if (statusCode === 200 && responseMessage === '회원가입 성공') {
-        Alert('success', '회원가입 성공', () => {
-          navigate('/members/login');
-        });
+        Alert('success', '회원가입 성공', () => navigate('/members/login'));
       }
     },
     onError: (error) => {

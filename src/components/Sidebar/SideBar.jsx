@@ -21,7 +21,6 @@ import { getCookie, removeCookie } from '../../Cookies/Cookies';
 import { useQuery } from 'react-query';
 import { getMypage } from '../../core/api/mypage/mypage';
 import { logout } from '../../core/api/auth/logout';
-import Swal from 'sweetalert2';
 import {
   StContainer,
   StSidebarContainer,
@@ -46,6 +45,7 @@ import {
   StPofileText2,
   StOutFrame,
 } from '../../styles/sidebar/Sidebar.styles';
+import { Alert } from '../../CustomAlert/Alert';
 
 function SideBar({ children }) {
   const navigate = useNavigate();
@@ -116,24 +116,15 @@ function SideBar({ children }) {
           removeCookie('RefreshToken', { path: '/' });
           localStorage.removeItem('member');
           setToken('');
-          Swal.fire({
-            icon: 'success',
-            iconColor: '#00573f',
-            text: responseMessage,
-            width: 400,
-            confirmButtonColor: '#00573f',
-            confirmButtonText: '확인',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              if (location.pathname === '/setting') {
-                navigate('/');
-              } else if (location.pathname === '/main') {
-                navigate('/');
-              } else if (location.pathname === '/mypage') {
-                navigate('/');
-              } else {
-                return;
-              }
+          Alert('success', responseMessage, () => {
+            if (location.pathname === '/setting') {
+              navigate('/');
+            } else if (location.pathname === '/main') {
+              navigate('/');
+            } else if (location.pathname === '/mypage') {
+              navigate('/');
+            } else {
+              return;
             }
           });
         }
