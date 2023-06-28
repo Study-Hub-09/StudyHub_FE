@@ -299,6 +299,10 @@ function Register() {
     });
   };
 
+  const borderColor = (border) => {
+    return border ? 'var(--color-dark-gray)' : 'var(--color-gray)';
+  };
+
   // 회원가입 뮤테이션 훅
   const registerMutation = useMutation(register, {
     onSuccess: (response) => {
@@ -555,9 +559,7 @@ function Register() {
               validNickname={validNickname}
               isNicknameVerified={isNicknameVerified}
               button="확인"
-              bordercolor={
-                nicknameBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
-              }
+              bordercolor={() => borderColor(nicknameBorder)}
               onFocus={() => onFocusInputBorder('nicknameBorder')}
               onBlur={() => onBlurInputBorder('nicknameBorder')}
               onClick={(e) => validateNicknameHandler(e)}
@@ -578,7 +580,7 @@ function Register() {
                 validEmail={validEmail}
                 isEmailVerified={isEmailVerified}
                 isEmailLoading={isEmailLoading}
-                bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
+                bordercolor={() => borderColor(emailBorder)}
                 onFocus={() => onFocusInputBorder('emailBorder')}
                 onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
@@ -595,9 +597,7 @@ function Register() {
                 label="인증번호"
                 placeholder="1234"
                 inputwidth="85px"
-                bordercolor={
-                  checkCodeBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
-                }
+                bordercolor={() => borderColor(checkCodeBorder)}
                 onFocus={() => onFocusInputBorder('checkCodeBorder')}
                 onBlur={() => onBlurInputBorder('checkCodeBorder')}
                 onClick={(e) => verificateEmailCodeHandler(e)}
@@ -621,9 +621,7 @@ function Register() {
                 label="비밀번호"
                 placeholder="비밀번호"
                 inputwidth="243px"
-                bordercolor={
-                  passwordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
-                }
+                bordercolor={() => borderColor(passwordBorder)}
                 onFocus={() => onFocusInputBorder('passwordBorder')}
                 onBlur={() => onBlurInputBorder('passwordBorder')}
                 inputboxheight="105px"
@@ -642,9 +640,7 @@ function Register() {
                 label="비밀번호 확인"
                 placeholder="비밀번호 확인"
                 inputwidth="243px"
-                bordercolor={
-                  checkPasswordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
-                }
+                bordercolor={() => borderColor(checkPasswordBorder)}
                 onFocus={() => onFocusInputBorder('checkPasswordBorder')}
                 onBlur={() => onBlurInputBorder('checkPasswordBorder')}
                 inputboxheight="82px"
