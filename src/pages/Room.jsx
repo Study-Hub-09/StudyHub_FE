@@ -31,7 +31,7 @@ import {
   Stroomcount,
   Stusericon,
 } from '../styles/Room.styles';
-import { Alert } from '@mui/material';
+import { Alert } from '../CustomAlert/Alert';
 
 function Room() {
   const location = useLocation();
