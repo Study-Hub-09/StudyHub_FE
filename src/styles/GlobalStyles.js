@@ -4,22 +4,31 @@ import { Link } from 'react-router-dom';
 
 export const GlobalStyles = createGlobalStyle`
     :root{
-        /* Color */
-        --color-dark-green: #00573f;
-        --color-light-green: #90b54c;
+        /* ============COLOR============ */
+        /* Green Palette */
+        --color-dark-green: #00573F;
+        --color-light-green: #90B54C;
         --color-green: #233734;
-        --color-yellow: #FFF5D0;
-        --color-background: #bcc2b0;
-        --color-black: #000000; 
-        --color-white: #ffffff;
-        --color-light-white: #f5f5f5;
-        --color-dark-gray: #424242;
-        --color-white-gray: #fefefe;
-        --color-gray: #9d9d9d;
-        --color-light-gray: #e8e8e8;
+        --color-spotlight-green: #D9EFE9;
+        --color-active-green: #007C5C;
         
+        /* Black&Gray Palette */
+        --color-black: #000000; 
+        --color-dark-gray: #424242;
+        --color-gray: #9D9D9D;
+        
+        /* White Palette */
+        --color-white-gray: #FEFEFE;
+        --color-light-gray: #E8E8E8;
+        --color-light-white: #F5F5F5;
+        --color-white: #FFFFFF;
 
-        /* Font size */
+        /* Others */
+        --color-yellow: #FFF5D0;
+        --color-red: #EA4335;
+        --color-background: #BCC2B0;
+
+        /* ============FONT SIZE============ */
         --font-extra-large: 60px;
         --font-large: 32px;
         --font-medium: 20px;
@@ -27,13 +36,13 @@ export const GlobalStyles = createGlobalStyle`
         --font-small: 14px;
         --font-micro: 12px;
 
-        /* Font weight */
+        /* ============FONT WEIGHT============ */
         --weight-bold: 700;
         --weight-semi-bold: 600; 
         --weight-regular: 400;
         --weight-light: 300;
 
-        /* Size */
+        /* ============SIZE============ */
         --size-extra-large: 200px;
         --size-large: 150px;
         --size-medium: 120px;
