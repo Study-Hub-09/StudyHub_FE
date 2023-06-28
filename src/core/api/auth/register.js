@@ -8,12 +8,12 @@ const register = async (member) => {
 const validateEmail = async ({ email }) => {
   const params = new URLSearchParams();
   params.append('email', email);
-  const response = await instance.post(`/api/members/register/emailConfirm?${params}`);
+  const response = await instance.post(`/api/members/register/email-confirm?${params}`);
   return response;
 };
 
 const validateNickname = async ({ nickname }) => {
-  const response = await instance.get(`/api/members/checkNickname/${nickname}`);
+  const response = await instance.get(`/api/members/check-nickname/${nickname}`);
   return response;
 };
 
