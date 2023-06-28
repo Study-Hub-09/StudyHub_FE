@@ -10,9 +10,13 @@ function Input({
   value,
   onFocus,
   onBlur,
-  bordercolor,
+  border,
+  emailBorder,
+  passwordBorder,
 }) {
   const emailRef = useRef();
+
+  const inputBorder = border(emailBorder || passwordBorder);
 
   useEffect(() => {
     if (name === 'email') {
@@ -25,7 +29,7 @@ function Input({
       <label>{label}</label>
       <StInputDiv
         divwith="366px"
-        bordercolor={bordercolor}
+        bordercolor={inputBorder}
         onFocus={onFocus}
         onBlur={onBlur}
       >
