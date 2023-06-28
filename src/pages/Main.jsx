@@ -43,7 +43,7 @@ import {
 } from '../styles/mainpage/Main.styles';
 import { getCookie } from '../Cookies/Cookies';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { Alert } from '../CustomAlert/Alert';
 function Main() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isSelectOpen, setSelectOpen] = useState(false);
@@ -105,18 +105,7 @@ function Main() {
     if (token) {
       setModalOpen(true);
     } else {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        text: '로그인이 필요한 서비스입니다',
-        width: 400,
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/members/login');
-        }
-      });
+      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('members/login'));
     }
   };
   const selectToggleHandler = (event) => {
