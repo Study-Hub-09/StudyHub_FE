@@ -1,5 +1,6 @@
-# 🌳 항해99 14기 9조 실전 프로젝트 : STUDY HUB 🌳
-![1](https://github.com/Study-Hub-09/StudyHub_FE/assets/129656095/995d1d64-5777-4434-b8e0-25d31e33fd64)
+# 🌳 STUDY HUB 🌳
+![1](https://github.com/Study-Hub-09/StudyHub_FE/assets/129656095/254612fa-d707-48af-b1db-2b66fd825a84)
+
 
 
 >🧑‍💻 개발 기간 : 2023.05.19 ~ 2023.06.30</p> 👉 서비스 URL : https://www.study-hub.shop </P>
