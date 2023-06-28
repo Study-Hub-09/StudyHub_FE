@@ -5,6 +5,7 @@ import studyhub from '../asset/studyhub.svg';
 import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../Cookies/Cookies';
 import { createSession, exitRoom } from '../core/api/openvidu/openvidu';
+import { Alert } from '../CustomAlert/Alert';
 import lockimg from '../asset/lock.svg';
 import {
   Stcontainer,
@@ -22,7 +23,6 @@ import {
   StpasswordInput,
   Stroomboxlmage,
 } from '../styles/mainpage/Joinmodal.styles';
-import Swal from 'sweetalert2';
 
 function Joinmodal({ onClose, roomData }) {
   const outside = useRef();
@@ -62,40 +62,16 @@ function Joinmodal({ onClose, roomData }) {
 
         // 룸 비밀번호가 일치하지 않을 때
         if (statusCode === 400 && errorMessage === '비밀번호가 일치하지 않습니다.') {
-          if (!roomPassword) {
-            Swal.fire({
-              icon: 'info',
-              iconColor: '#00573f',
-              width: 400,
-              text: '비밀번호를 입력해 주세요.',
-              confirmButtonColor: '#00573f',
-              confirmButtonText: '확인',
-            });
-          }
-          if (roomPassword) {
-            Swal.fire({
-              icon: 'info',
-              iconColor: '#00573f',
-              width: 400,
-              text: errorMessage,
-              confirmButtonColor: '#00573f',
-              confirmButtonText: '확인',
-            });
+          if (!roomPassword) Alert('info', '비밀번호를 입력해 주세요');
+          else if (roomPassword) {
+            Alert('error', errorMessage);
             setRoomPassword('');
           }
         }
 
         // 이미 참여하는 스터티 룸이 있는데 다른 방에 참여할 경우 오류
-        if (statusCode === 409 && errorMessage === '하나의 방에만 입장할 수 있습니다') {
-          Swal.fire({
-            icon: 'info',
-            iconColor: '#00573f',
-            width: 400,
-            text: errorMessage,
-            confirmButtonColor: '#00573f',
-            confirmButtonText: '확인',
-          });
-        }
+        if (statusCode === 409 && errorMessage === '하나의 방에만 입장할 수 있습니다')
+          Alert('error', errorMessage);
 
         // Exception - 나가기 버튼 안 누르고, 새로고침 또는 브라우저 창을 닫아 버리면 퇴장 처리가 되지 않아 임시로 만들어 놓은 에러 핸들링.
         if (statusCode === 409 && errorMessage === '이미 입장한 멤버입니다.') {
@@ -110,23 +86,12 @@ function Joinmodal({ onClose, roomData }) {
             }
             return response;
           } catch (error) {
-            console.log('exitRoom Error>>> ', error);
+            console.log(error);
           }
         }
       }
     } else {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '로그인이 필요한 서비스입니다',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/members/login');
-        }
-      });
+      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('/members/login'));
     }
     onClose(false);
   };
