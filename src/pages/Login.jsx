@@ -52,6 +52,10 @@ function Login() {
     });
   };
 
+  const borderColor = (border) => {
+    return border ? 'var(--color-dark-gray)' : 'var(--color-gray)';
+  };
+
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       const {
@@ -125,7 +129,8 @@ function Login() {
                 name="email"
                 value={values.email}
                 onChange={onChangeHandler}
-                bordercolor={emailBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'}
+                border={borderColor}
+                emailBorder={emailBorder}
                 onFocus={() => onFocusBorder('emailBorder')}
                 onBlur={() => onBlurBorder('emailBorder')}
               />
@@ -136,9 +141,8 @@ function Login() {
                 name="password"
                 value={values.password}
                 onChange={onChangeHandler}
-                bordercolor={
-                  passwordBorder ? 'var(--color-dark-gray)' : 'var(--color-gray)'
-                }
+                passwordBorder={passwordBorder}
+                border={borderColor}
                 onFocus={() => onFocusBorder('passwordBorder')}
                 onBlur={() => onBlurBorder('passwordBorder')}
               />
