@@ -626,7 +626,7 @@ function Register() {
                 label="비밀번호"
                 placeholder="비밀번호"
                 inputwidth="243px"
-                bordercolor={() => borderColor(passwordBorder)}
+                bordercolor={() => borderColor(password, validPwd, passwordBorder)}
                 onFocus={() => onFocusInputBorder('passwordBorder')}
                 onBlur={() => onBlurInputBorder('passwordBorder')}
                 inputboxheight="105px"
@@ -645,7 +645,9 @@ function Register() {
                 label="비밀번호 확인"
                 placeholder="비밀번호 확인"
                 inputwidth="243px"
-                bordercolor={() => borderColor(checkPasswordBorder)}
+                bordercolor={() =>
+                  borderColor(checkPassword, matchPwd, checkPasswordBorder)
+                }
                 onFocus={() => onFocusInputBorder('checkPasswordBorder')}
                 onBlur={() => onBlurInputBorder('checkPasswordBorder')}
                 inputboxheight="82px"
