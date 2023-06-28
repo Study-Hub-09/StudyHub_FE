@@ -17,7 +17,7 @@ import {
 import Button from '../components/Buttons/Button';
 import KakaoButton from '../components/Buttons/KakaoButton';
 import Input from '../components/Inputs/Input';
-import Swal from 'sweetalert2';
+import { Alert } from '../CustomAlert/Alert';
 
 function Login() {
   const navigate = useNavigate();
@@ -60,17 +60,8 @@ function Login() {
       } = response;
 
       if (statusCode === 200 && responseMessage === '로그인 성공') {
-        Swal.fire({
-          icon: 'success',
-          iconColor: '#00573f',
-          text: responseMessage,
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/main');
-          }
+        return Alert('success', responseMessage, () => {
+          navigate('/main');
         });
       }
     },
@@ -81,61 +72,20 @@ function Login() {
           data: { message: errorMessage },
         },
       } = error;
-      if (statusCode === 400 && errorMessage === '비밀번호를 다시 입력해주세요.') {
-        Swal.fire({
-          icon: 'info',
-          iconColor: '#00573f',
-          text: errorMessage,
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
-      }
-      if (statusCode === 404 && errorMessage === '해당 유저 정보를 찾을 수 없습니다') {
-        Swal.fire({
-          icon: 'error',
-          iconColor: '#00573f',
-          text: errorMessage,
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
-      }
-      if (statusCode === 400 && errorMessage === '카카오 아이디가 존재합니다.') {
-        Swal.fire({
-          icon: 'info',
-          iconColor: '#00573f',
-          text: `${errorMessage} 카카오로 로그인해 주세요.`,
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
-      }
+      if (statusCode === 400 && errorMessage === '비밀번호를 다시 입력해주세요.')
+        return Alert('error', errorMessage);
+      else if (statusCode === 404 && errorMessage === '해당 유저 정보를 찾을 수 없습니다')
+        return Alert('error', errorMessage);
+      else if (statusCode === 400 && errorMessage === '카카오 아이디가 존재합니다.')
+        return Alert('info', `${errorMessage} 카카오로 로그인해 주세요.`);
     },
   });
 
   const onSubitLoginHandler = async (e) => {
     e.preventDefault();
     if (!values.email || !values.password) {
-      if (!values.email) {
-        Swal.fire({
-          icon: 'info',
-          iconColor: '#00573f',
-          text: '이메일을 입력해주세요',
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
-      } else {
-        Swal.fire({
-          icon: 'info',
-          iconColor: '#00573f',
-          text: '비밀번호를 입력해주세요',
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
-      }
+      if (!values.email) return Alert('info', '이메일을 입력해주세요');
+      else Alert('info', '비밀번호를 입력해주세요');
     } else {
       loginMutation.mutate({
         email: values.email,
@@ -147,17 +97,8 @@ function Login() {
   useEffect(() => {
     const accessToken = getCookie('AccessToken');
     if (accessToken) {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        text: '이미 로그인되어 있습니다',
-        width: 400,
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/main');
-        }
+      return Alert('success', '이미 로그인되어 있습니다', () => {
+        navigate('/main');
       });
     }
   }, []);
