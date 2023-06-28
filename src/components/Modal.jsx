@@ -54,7 +54,7 @@ import {
   Stfontcolor,
   StreaderImagebox,
 } from '../styles/mainpage/Modal.styles';
-import Swal from 'sweetalert2';
+import { Alert } from '../CustomAlert/Alert';
 
 const Modal = ({ onClose }) => {
   const [roomName, setRoomName] = useState('');
@@ -88,14 +88,7 @@ const Modal = ({ onClose }) => {
     if (!file) return;
     setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '이미지 파일만 업로드 가능합니다.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '이미지 파일만 업로드 가능합니다.');
       return;
     }
 
@@ -143,33 +136,12 @@ const Modal = ({ onClose }) => {
       }
     } else {
       if (roomName === '') {
-        Swal.fire({
-          icon: 'error',
-          iconColor: '#00573f',
-          width: 400,
-          text: '제목을 입력해주세요.',
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
+        Alert('error', '제목을 입력해주세요.');
       } else if (roomContent === '') {
-        Swal.fire({
-          icon: 'error',
-          iconColor: '#00573f',
-          width: 400,
-          text: '내용을 입력해주세요.',
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
+        Alert('error', '내용을 입력해주세요.');
       }
       if (selectDate === '') {
-        Swal.fire({
-          icon: 'error',
-          iconColor: '#00573f',
-          width: 400,
-          text: '만료일을 입력해주세요.',
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
+        Alert('error', '만료일을 입력해주세요.');
       }
     }
   };
@@ -249,14 +221,7 @@ const Modal = ({ onClose }) => {
         setSelectedCategories([...selectedCategories, categoryName]);
         setSelectedCategoriesB([...selectedCategoriesB, customCategoryName]);
       } else {
-        Swal.fire({
-          icon: 'error',
-          iconColor: '#00573f',
-          width: 400,
-          text: '최대 4개의 카테고리만 선택할 수 있습니다.',
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        });
+        Alert('error', '최대 4개의 카테고리만 선택할 수 있습니다.');
       }
     }
   };
