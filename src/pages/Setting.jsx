@@ -20,7 +20,6 @@ import editIcon from '../asset/editicon.svg';
 import imageEdit from '../asset/imageEdit.svg';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getProfile, updateProfile } from '../core/api/crud/api';
-import Swal from 'sweetalert2';
 import {
   Stcontainer,
   StLayout,
@@ -65,6 +64,7 @@ import {
   StAllbadgeimg,
   StbadgeInfobox,
 } from '../styles/Setting.styles';
+import { Alert } from '../CustomAlert/Alert';
 
 function Setting() {
   const [nickNameEdit, setNickNameEdit] = useState(false);
@@ -96,14 +96,7 @@ function Setting() {
   const mutation = useMutation(updateProfile, {
     onSuccess: (data) => {
       queryClient.invalidateQueries('profile');
-      Swal.fire({
-        icon: 'success',
-        iconColor: '#00573f',
-        width: 400,
-        text: '수정이 완료되었습니다',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('success', '수정이 완료되었습니다');
       setNickNameEdit(false);
       setPassWordEdit(false);
       setNickname('');
@@ -118,14 +111,7 @@ function Setting() {
     if (!file) return;
     setUploadedImage(file);
     if (!file.type.startsWith('image/')) {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '이미지 파일만 업로드 가능합니다.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '이미지 파일만 업로드 가능합니다.');
       return;
     }
 
@@ -140,41 +126,16 @@ function Setting() {
   const profileUpdateHandler = async () => {
     const PWD_REGEX = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?=\S+$).{8,15}$/;
     if (nickNameEdit && nickname === '') {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '수정할 닉네임을 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '수정할 닉네임을 입력해주세요.');
     } else if (passWordEdit && password === '') {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '수정할 비밀번호를 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '수정할 비밀번호를 입력해주세요.');
     } else if (passWordEdit && !PWD_REGEX.test(password)) {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '비밀번호는 최소 8자 이상 15자 이하이며,\n알파벳 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert(
+        'error',
+        '비밀번호는 최소 8자 이상 15자 이하이며,\n알파벳 대소문자, 숫자, 특수문자를 모두 포함해야 합니다.'
+      );
     } else if (checkPassword !== password) {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '비밀번호를 확인해 주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '비밀번호를 확인해 주세요.');
     } else {
       const formData = new FormData();
       const contentrString = JSON.stringify(content);
