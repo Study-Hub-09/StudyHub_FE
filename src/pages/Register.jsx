@@ -22,7 +22,7 @@ import {
 } from '../styles/Register.styles';
 import { register, validateEmail, validateNickname } from '../core/api/auth/register';
 import { KAKAO_AUTH_URL } from '../core/api/auth/OAuth';
-import Swal from 'sweetalert2';
+import { Alert } from '../CustomAlert/Alert';
 
 function Register() {
   const navigate = useNavigate();
@@ -130,90 +130,40 @@ function Register() {
   const onSubmitFormHandler = (e) => {
     e.preventDefault();
     if (
-      (nickname === '' && nickname.trim() === ' ') ||
-      (email === '' && email.trim() === ' ') ||
-      (checkCode === '' && checkCode.trim() === ' ') ||
-      (password === '' && password.trim() === ' ') ||
-      (checkPassword === '' && checkPassword === ' ')
+      nickname === '' ||
+      nickname.trim() === ' ' ||
+      email === '' ||
+      email.trim() === ' ' ||
+      checkCode === '' ||
+      checkCode.trim() === ' ' ||
+      password === '' ||
+      password.trim() === ' ' ||
+      checkPassword === '' ||
+      checkPassword === ' '
     )
-      return Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '모든 칸을 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
+      return Alert('info', '모든 칸을 입력해주세요.');
+    else if (!isNicknameVerified) return Alert('info', '닉네임 중복 확인을 해주세요.');
+    else if (!isEmailVerified) return Alert('info', '이메일 발송 확인을 해주세요.');
+    else if (!isEmailCodeVerified)
+      return Alert('info', '이메일 인증코드를 확인해주세요.');
+    else if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
+      return Alert('info', '모든 약관에 동의해주세요.');
+    else
+      registerMutation.mutate({
+        nickname,
+        email,
+        password,
+        checkPassword,
       });
-
-    if (!isNicknameVerified)
-      return Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '닉네임 중복 확인을 해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    if (!isEmailVerified)
-      return Swal.fire({
-        icon: 'success',
-        iconColor: '#00573f',
-        width: 400,
-        title: '이메일 발송!',
-        text: '메일함을 확인 해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    if (!isEmailCodeVerified)
-      return Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '이메일 인증코드를 확인해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    if (!isPersonalPolicyChecked || !isTermsPolicyChecked)
-      return Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '모든 약관에 동의해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-
-    registerMutation.mutate({
-      nickname,
-      email,
-      password,
-      checkPassword,
-    });
   };
 
   // 이메일 확인 버튼 핸들러
   const validateEmailHandler = (e) => {
     e.preventDefault();
 
-    if (!email || email.trim() === '') {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '이메일을 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    } else if (!isValidEmail) {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '잘못된 이메일 형식입니다.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    } else {
+    if (!email || email.trim() === '') return Alert('info', '이메일을 입력해주세요.');
+    else if (!isValidEmail) return Alert('error', '잘못된 이메일 형식입니다.');
+    else {
       setIsEmailLoading(true);
       validateEmailMutation.mutate({
         email,
@@ -225,25 +175,10 @@ function Register() {
   const validateNicknameHandler = (e) => {
     e.preventDefault();
 
-    if (!nickname) {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '닉네임을 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    } else if (!isValidNickname || nickname.trim() === ' ') {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        width: 400,
-        text: '잘못된 닉네임 형식입니다.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    } else {
+    if (!nickname) return Alert('info', '닉네임을 입력해주세요.');
+    else if (!isValidNickname || nickname.trim() === ' ')
+      return Alert('error', '잘못된 닉네임 형식입니다.');
+    else {
       validateNickNameMutation.mutate({
         nickname,
       });
@@ -253,16 +188,9 @@ function Register() {
   // 이메일 인증번호 확인 버튼 핸들러
   const verificateEmailCodeHandler = (e) => {
     e.preventDefault();
-    if (!checkCode || checkCode.trim() === '') {
-      Swal.fire({
-        icon: 'info',
-        iconColor: '#00573f',
-        width: 400,
-        text: '인증번호를 입력해주세요.',
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
-    } else if (checkCode === verificationCode) {
+    if (!checkCode || checkCode.trim() === '')
+      return Alert('info', '인증번호를 입력해주세요.');
+    else if (checkCode === verificationCode) {
       setValidations((prevValidations) => ({
         ...prevValidations,
         validEmailCode: true,
@@ -314,29 +242,13 @@ function Register() {
         data: { message: responseMessage },
       } = response;
       if (statusCode === 200 && responseMessage === '회원가입 성공') {
-        Swal.fire({
-          icon: 'success',
-          iconColor: '#00573f',
-          text: '회원가입 성공!',
-          width: 400,
-          confirmButtonColor: '#00573f',
-          confirmButtonText: '확인',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate('/members/login');
-          }
+        Alert('success', '회원가입 성공', () => {
+          navigate('/members/login');
         });
       }
     },
     onError: (error) => {
-      Swal.fire({
-        icon: 'error',
-        iconColor: '#00573f',
-        text: '회원가입 실패',
-        width: 400,
-        confirmButtonColor: '#00573f',
-        confirmButtonText: '확인',
-      });
+      Alert('error', '회원가입 실패');
     },
   });
 
@@ -564,7 +476,8 @@ function Register() {
               validNickname={validNickname}
               isNicknameVerified={isNicknameVerified}
               button="확인"
-              bordercolor={() => borderColor(nickname, validNickname, nicknameBorder)}
+              nicknameBorder={nicknameBorder}
+              border={borderColor}
               onFocus={() => onFocusInputBorder('nicknameBorder')}
               onBlur={() => onBlurInputBorder('nicknameBorder')}
               onClick={(e) => validateNicknameHandler(e)}
@@ -585,7 +498,8 @@ function Register() {
                 validEmail={validEmail}
                 isEmailVerified={isEmailVerified}
                 isEmailLoading={isEmailLoading}
-                bordercolor={() => borderColor(email, validEmail, emailBorder)}
+                emailBorder={emailBorder}
+                border={borderColor}
                 onFocus={() => onFocusInputBorder('emailBorder')}
                 onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
@@ -602,9 +516,8 @@ function Register() {
                 label="인증번호"
                 placeholder="1234"
                 inputwidth="85px"
-                bordercolor={() =>
-                  borderColor(checkCode, validEmailCode, checkCodeBorder)
-                }
+                checkCodeBorder={checkCodeBorder}
+                border={borderColor}
                 onFocus={() => onFocusInputBorder('checkCodeBorder')}
                 onBlur={() => onBlurInputBorder('checkCodeBorder')}
                 onClick={(e) => verificateEmailCodeHandler(e)}
@@ -628,7 +541,8 @@ function Register() {
                 label="비밀번호"
                 placeholder="비밀번호"
                 inputwidth="243px"
-                bordercolor={() => borderColor(password, validPwd, passwordBorder)}
+                passwordBorder={passwordBorder}
+                border={borderColor}
                 onFocus={() => onFocusInputBorder('passwordBorder')}
                 onBlur={() => onBlurInputBorder('passwordBorder')}
                 inputboxheight="105px"
@@ -647,9 +561,8 @@ function Register() {
                 label="비밀번호 확인"
                 placeholder="비밀번호 확인"
                 inputwidth="243px"
-                bordercolor={() =>
-                  borderColor(checkPassword, matchPwd, checkPasswordBorder)
-                }
+                checkPasswordBorder={checkPasswordBorder}
+                border={borderColor}
                 onFocus={() => onFocusInputBorder('checkPasswordBorder')}
                 onBlur={() => onBlurInputBorder('checkPasswordBorder')}
                 inputboxheight="82px"
