@@ -583,7 +583,7 @@ function Register() {
                 validEmail={validEmail}
                 isEmailVerified={isEmailVerified}
                 isEmailLoading={isEmailLoading}
-                bordercolor={() => borderColor(emailBorder)}
+                bordercolor={() => borderColor(email, validEmail, emailBorder)}
                 onFocus={() => onFocusInputBorder('emailBorder')}
                 onBlur={() => onBlurInputBorder('emailBorder')}
                 onClick={(e) => validateEmailHandler(e)}
@@ -600,7 +600,9 @@ function Register() {
                 label="인증번호"
                 placeholder="1234"
                 inputwidth="85px"
-                bordercolor={() => borderColor(checkCodeBorder)}
+                bordercolor={() =>
+                  borderColor(checkCode, validEmailCode, checkCodeBorder)
+                }
                 onFocus={() => onFocusInputBorder('checkCodeBorder')}
                 onBlur={() => onBlurInputBorder('checkCodeBorder')}
                 onClick={(e) => verificateEmailCodeHandler(e)}
