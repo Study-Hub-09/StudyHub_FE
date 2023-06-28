@@ -38,13 +38,6 @@ function PasswordInput({
     setshowPwd(!showPwd);
   };
 
-  const getBordercolor = () => {
-    if (value) {
-      return validPwd || matchPwd ? 'green' : 'red';
-    }
-    return bordercolor;
-  };
-
   return (
     <StInputBox inputboxwidth={inputboxwidth} inputboxheight={inputboxheight}>
       <StLabel>
@@ -52,7 +45,7 @@ function PasswordInput({
       </StLabel>
       <StInputFrame>
         <StInputDiv
-          bordercolor={getBordercolor()}
+          bordercolor={bordercolor}
           onFocus={onFocus}
           onBlur={onBlur}
           divwith={divwith}
