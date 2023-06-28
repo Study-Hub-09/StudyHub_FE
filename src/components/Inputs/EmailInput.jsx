@@ -17,6 +17,9 @@ function EmailInput({
   inputboxwidth,
   divwith,
   bordercolor,
+  border,
+  checkCodeBorder,
+  emailBorder,
   onFocus,
   onBlur,
   onClick,
@@ -36,12 +39,11 @@ function EmailInput({
   const isButtonDisabled = isEmailVerified || isEmailCodeVerified;
   const isInputDisabled = isEmailVerified || isEmailCodeVerified;
 
-  const getBordercolor = () => {
-    if (value) {
-      return validEmailCode || validEmail || isEmailVerified ? 'green' : 'red';
-    }
-    return bordercolor;
-  };
+  const emailBorderColor = border(
+    value,
+    validEmail || validEmailCode,
+    emailBorder || checkCodeBorder
+  );
 
   return (
     <StInputBox inputboxwidth={inputboxwidth}>
@@ -49,7 +51,7 @@ function EmailInput({
       <StInputFrame>
         <StInputDiv
           divwith={divwith}
-          bordercolor={getBordercolor()}
+          bordercolor={emailBorderColor}
           onFocus={onFocus}
           onBlur={onBlur}
         >
