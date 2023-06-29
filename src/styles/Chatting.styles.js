@@ -39,7 +39,7 @@ export const StChatHeaderLeft = styled.div`
 export const StChatHeaderRight = styled.div``;
 
 export const StChatArea = styled.div`
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   background-color: white;
   width: 280px;
   height: 100%;
@@ -106,7 +106,7 @@ export const StChatInput = styled.div`
   input {
     width: 231px;
     height: 36px;
-    border: 1px solid #bfbfbf;
+    border: 1px solid var(--color-argent);
     border-radius: 7px;
     padding-left: 10px;
     background-color: white;

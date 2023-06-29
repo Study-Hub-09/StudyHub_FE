@@ -35,7 +35,7 @@ export const StTitle = styled.div`
 export const Stsubtitle = styled.div`
   font-size: 18px;
   font-weight: var(--weight-regular);
-  color: #84848484;
+  color: var(--color-old-silver);
 `;
 
 export const StSearchbox = styled.div`
@@ -72,7 +72,7 @@ export const StButton = styled.button`
   font-size: 15px;
   font-weight: var(--weight-bold);
   color: var(--color-dark-green);
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   &:hover {
     border: none;
     color: var(--color-white);
@@ -83,7 +83,7 @@ export const StButton = styled.button`
 export const Stroombox = styled.div`
   width: 485px;
   height: 125px;
-  border: 1px solid #bfbfbfbf;
+  border: 1px solid var(--color-argent);
   border-radius: 20px;
   display: flex;
   align-items: center;

@@ -30,7 +30,7 @@ export const StLayoutright = styled.div`
 export const Stsetting = styled.div`
   width: 100%;
   height: 100%;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   border-radius: 12px;
   background-color: var(--color-white);
 `;
@@ -82,7 +82,7 @@ export const Stprofileimg = styled.img`
 export const StFontA = styled.div`
   font-size: 0.78vw;
   font-weight: var(--weight-bold);
-  color: #bfbfbf;
+  color: var(--color-argent);
 `;
 
 export const StFontB = styled.span`
@@ -129,7 +129,7 @@ export const StprofileInfoBox = styled.div`
   display: flex;
   font-size: 0.78vw;
   align-items: center;
-  border-bottom: 1px solid #bfbfbf;
+  border-bottom: 1px solid var(--color-argent);
 `;
 
 export const StprofileInfoBoxB = styled.div`
@@ -138,7 +138,7 @@ export const StprofileInfoBoxB = styled.div`
   display: flex;
   font-size: 0.78vw;
   align-items: center;
-  border-bottom: 1px solid #bfbfbf;
+  border-bottom: 1px solid var(--color-argent);
 `;
 
 export const Stbox = styled.span`
@@ -164,7 +164,7 @@ export const StpasswordB = styled.input`
   width: 10.42vw;
 `;
 export const StSaveButton = styled.button`
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   width: 6.67vw;
   height: 4.4vh;
   background-color: var(--color-white-gray);
@@ -191,7 +191,7 @@ export const Stmybadge = styled.div`
   width: 68%;
   height: 77%;
   border-radius: 12px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   background-color: var(--color-white);
 `;
 export const StMybadgeHeader = styled.div`
@@ -245,7 +245,7 @@ export const StAllbadge = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   background-color: var(--color-white);
 `;
 

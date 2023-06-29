@@ -20,7 +20,7 @@ export const Stmodalbox = styled.div`
   width: 987px;
   height: 503px;
   border-radius: 20px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   padding: 36px, 56px, 60px;
   gap: 10px;
 `;
@@ -47,7 +47,7 @@ export const StmodalRight = styled.div`
 
 export const Stline = styled.div`
   height: 316px;
-  border-left: 1.5px solid #bfbfbf;
+  border-left: 1.5px solid var(--color-argent);
 `;
 
 export const StCircle = styled.button`
@@ -56,7 +56,7 @@ export const StCircle = styled.button`
   border-radius: 50px;
   color: ${(props) => (props.isSelected ? 'var(--color-white)' : 'var(--color-black)')};
   background-color: ${(props) =>
-    props.isSelected ? '#var(--color-dark-green)' : '#var(--color-light-gray)'};
+    props.isSelected ? 'var(--color-dark-green)' : 'var(--color-light-gray)'};
   gap: 3px;
   display: flex;
   flex-direction: column;
@@ -171,7 +171,7 @@ export const Stcreatebutton = styled.button`
   transform: translateY(-50px);
   width: 90px;
   height: 44px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   border-radius: 30px;
   color: var(--color-gray);
   font-size: 15px;
@@ -192,7 +192,8 @@ export const Stlockbuttonbg = styled.div`
   position: relative;
   width: 36px;
   height: 18px;
-  background-color: ${(props) => (props.lock ? 'var(--color-dark-green)' : '#bfbfbf')};
+  background-color: ${(props) =>
+    props.lock ? 'var(--color-dark-green)' : 'var(--color-argent)'};
   border-radius: 30px;
 `;
 
