@@ -12,7 +12,7 @@ export const Stcontainer = styled.div`
 `;
 
 export const Stmodalbox = styled.div`
-  background-color: white;
+  background-color: var(--color-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,15 +54,16 @@ export const StCircle = styled.button`
   width: 70px;
   height: 70px;
   border-radius: 50px;
-  color: ${(props) => (props.isSelected ? 'white' : 'black')};
-  background-color: ${(props) => (props.isSelected ? '#00573f' : '#e8e8e8')};
+  color: ${(props) => (props.isSelected ? 'var(--color-white)' : 'var(--color-black)')};
+  background-color: ${(props) =>
+    props.isSelected ? '#var(--color-dark-green)' : '#var(--color-light-gray)'};
   gap: 3px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 `;
 
 export const Stcategory = styled.div`
@@ -75,7 +76,7 @@ export const Stcategory = styled.div`
 `;
 
 export const StinputA = styled.input`
-  background-color: #e8e8e8;
+  background-color: var(--color-light-gray);
   width: 184px;
   height: 32px;
   border-radius: 12px;
@@ -85,7 +86,7 @@ export const StinputA = styled.input`
 
 export const StinputB = styled.textarea`
   display: block;
-  background-color: #e8e8e8;
+  background-color: var(--color-light-gray);
   width: 261px;
   height: 57px;
   border-radius: 12px;
@@ -115,19 +116,19 @@ export const Stcatebox = styled.div`
 
 export const Stfont = styled.div`
   font-size: 18px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 `;
 
 export const Sttitle = styled.div`
   width: 875px;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 `;
 
 export const Stthumbnail = styled.div`
   width: 136px;
   height: 136px;
-  background-color: #e8e8e8;
+  background-color: var(--color-light-gray);
   border-radius: 12px;
   font-size: 11px;
   font-weight: 500;
@@ -143,7 +144,7 @@ export const StthumbnailbuttonA = styled.button`
   font-size: 12px;
   border-radius: 4px;
   &:hover {
-    background-color: #e8e8e8;
+    background-color: var(--color-light-gray);
   }
 `;
 export const StthumbnailbuttonB = styled.label`
@@ -152,17 +153,17 @@ export const StthumbnailbuttonB = styled.label`
   border-radius: 4px;
   &:hover {
     cursor: pointer;
-    background-color: #e8e8e8;
+    background-color: var(--color-light-gray);
   }
 `;
 
 export const StpasswordInput = styled.input`
   width: 68px;
   height: 32px;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   border-radius: 7px;
   padding-left: 14px;
-  border: 1px solid #9d9d9d;
+  border: 1px solid var(--color-gray);
   margin-left: 14px;
 `;
 
@@ -172,12 +173,12 @@ export const Stcreatebutton = styled.button`
   height: 44px;
   border: 1px solid #bfbfbf;
   border-radius: 30px;
-  color: #9d9d9d;
+  color: var(--color-gray);
   font-size: 15px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   &:hover {
-    background-color: #00573f;
-    color: #ffffff;
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
   }
 `;
 
@@ -191,7 +192,7 @@ export const Stlockbuttonbg = styled.div`
   position: relative;
   width: 36px;
   height: 18px;
-  background-color: ${(props) => (props.lock ? '#00573f' : '#bfbfbf')};
+  background-color: ${(props) => (props.lock ? 'var(--color-dark-green)' : '#bfbfbf')};
   border-radius: 30px;
 `;
 
@@ -218,7 +219,7 @@ export const StlockbuttonBall = styled.div`
   width: 14.5px;
   height: 14.5px;
   border-radius: 30px;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   z-index: 1;
   transform: ${(props) => (props.lock ? 'translateX(19.15px)' : 'translateX(1.53px)')};
   ${(props) =>
@@ -264,7 +265,7 @@ export const Stlayoutbox = styled.div`
 `;
 
 export const Stfontcolor = styled.div`
-  color: #9d9d9d;
+  color: var(--color-gray);
 `;
 export const StreaderImagebox = styled.img`
   width: 105px;

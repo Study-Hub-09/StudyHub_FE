@@ -15,12 +15,6 @@ const addRoom = async (newRoom) => {
   return response.data;
 };
 
-// 스터디룸 입장
-const joinRoom = async (sessionId, memberData) => {
-  const response = await instance.post(`/api/rooms/${sessionId}/enter`, memberData);
-  return response.data;
-};
-
 // 카테고리,검색 조회
 const getSearchRoom = async (page, queryString) => {
   const response = await instance.get(`/api/main?page=${page}&${queryString}`);
@@ -54,12 +48,4 @@ const deleteRoom = async (sessionId) => {
   }
 };
 
-export {
-  getRoom,
-  addRoom,
-  joinRoom,
-  getSearchRoom,
-  getProfile,
-  updateProfile,
-  deleteRoom,
-};
+export { getRoom, addRoom, getSearchRoom, getProfile, updateProfile, deleteRoom };

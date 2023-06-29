@@ -29,12 +29,12 @@ export const StTitlebox = styled.div`
 
 export const StTitle = styled.div`
   font-size: 32px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 `;
 
 export const Stsubtitle = styled.div`
   font-size: 18px;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   color: #84848484;
 `;
 
@@ -49,7 +49,7 @@ export const StSearchinput = styled.input`
   position: relative;
   width: 229px;
   height: 36px;
-  background-color: #e8e8e8;
+  background-color: var(--color-light-gray);
   border-radius: 12px;
   padding-left: 43px;
   font-size: 15px;
@@ -70,13 +70,13 @@ export const StButton = styled.button`
   gap: 10px;
   border-radius: 30px;
   font-size: 15px;
-  font-weight: 700;
-  color: #00573f;
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-green);
   border: 1px solid #bfbfbf;
   &:hover {
     border: none;
-    color: #ffffff;
-    background-color: #00573f;
+    color: var(--color-white);
+    background-color: var(--color-dark-green);
   }
 `;
 
@@ -92,7 +92,7 @@ export const Stroombox = styled.div`
   cursor: pointer;
   background-color: white;
   &:hover {
-    border: 1px solid #00573f;
+    border: 1px solid var(--color-dark-green);
   }
 `;
 
@@ -134,7 +134,7 @@ export const Stroomtext = styled.div`
 `;
 
 export const Stroomtitle = styled.div`
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 15px;
 `;
 
@@ -154,7 +154,7 @@ export const Stroomcount = styled.div`
   display: flex;
   gap: 10px;
   font-size: 15px;
-  color: #90b54c;
+  color: var(--color-light-green);
   width: 65px;
   font-weight: 500;
 `;
