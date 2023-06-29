@@ -61,7 +61,12 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
 
             return (
               <div key={id}>
-                <StChatTextContent textalign={isOwnMessage ? 'right' : 'left'}>
+                <StChatTextContent
+                  textalign={isOwnMessage ? 'right' : 'left'}
+                  alignitem={isOwnMessage ? 'end' : 'center'}
+                  margintop={isOwnMessage ? undefined : '20px'}
+                  marginbottom={isOwnMessage ? undefined : '20px'}
+                >
                   <StChatTextTitle>
                     {!isOwnMessage && isFirstMessageOfBlock && (
                       <>
@@ -87,7 +92,10 @@ function Chatting({ onChange, onSubmit, onClick, message, chatDatas, getUserName
                       <StChatTextTitleTime>{chatData.createdAt}</StChatTextTitleTime>
                     )}
                   </StChatTextTitle>
-                  <StChatmessage marginleft={!isOwnMessage ? '30px' : undefined}>
+                  <StChatmessage
+                    marginleft={!isOwnMessage ? '30px' : undefined}
+                    maxwidth={isOwnMessage ? '72%' : '100%'}
+                  >
                     {chatData.message}
                   </StChatmessage>
                 </StChatTextContent>
