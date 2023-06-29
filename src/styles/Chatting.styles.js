@@ -8,7 +8,7 @@ export const StChatContainer = styled.form`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  border-left: 1px solid #424242;
+  border-left: 1px solid var(--color-dark-gray);
   padding-block: 10px;
   overflow: auto;
 `;

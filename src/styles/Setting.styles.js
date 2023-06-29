@@ -32,7 +32,7 @@ export const Stsetting = styled.div`
   height: 100%;
   border: 1px solid #bfbfbf;
   border-radius: 12px;
-  background-color: #ffffff;
+  background-color: var(--color-white);
 `;
 export const StSettingHeader = styled.div`
   height: 13.19%;
@@ -40,7 +40,7 @@ export const StSettingHeader = styled.div`
   padding-left: 5.6%;
   align-items: center;
   font-size: 1.355vw;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   box-shadow: 0px 12px 16px -4px rgba(0, 87, 63, 0.04),
     0px 4px 6px -2px rgba(0, 87, 63, 0.02);
 `;
@@ -81,7 +81,7 @@ export const Stprofileimg = styled.img`
 
 export const StFontA = styled.div`
   font-size: 0.78vw;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   color: #bfbfbf;
 `;
 
@@ -89,7 +89,7 @@ export const StFontB = styled.span`
   width: 100px;
   font-size: 0.78vw;
   font-weight: 500;
-  color: #00573f;
+  color: var(--color-dark-green);
 `;
 export const StFontC = styled.span`
   font-size: 0.78vw;
@@ -167,14 +167,14 @@ export const StSaveButton = styled.button`
   border: 1px solid #bfbfbf;
   width: 6.67vw;
   height: 4.4vh;
-  background-color: #fefefe;
+  background-color: var(--color-white-gray);
   border-radius: 30px;
-  color: #00573f;
+  color: var(--color-dark-green);
   font-size: 0.78vw;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   &:hover {
-    color: #ffffff;
-    background-color: #00573f;
+    color: var(--color-white);
+    background-color: var(--color-dark-green);
   }
 `;
 export const StnonSaveButton = styled.button`
@@ -192,7 +192,7 @@ export const Stmybadge = styled.div`
   height: 77%;
   border-radius: 12px;
   border: 1px solid #bfbfbf;
-  background-color: #ffffff;
+  background-color: var(--color-white);
 `;
 export const StMybadgeHeader = styled.div`
   height: 31.355%;
@@ -205,20 +205,20 @@ export const StMybadgeHeader = styled.div`
 
 export const StMybadgeFontA = styled.p`
   font-size: 1.355vw;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   margin-right: 14.12%;
 `;
 
 export const StMybadgeFontB = styled.span`
   font-size: 0.73vw;
-  color: #9d9d9d;
+  color: var(--color-gray);
   font-weight: 500;
   margin-right: 6.11%;
 `;
 
 export const StMybadgeFontC = styled.span`
   font-size: 0.73vw;
-  color: #00573f;
+  color: var(--color-dark-green);
   font-weight: 500;
 `;
 
@@ -246,7 +246,7 @@ export const StAllbadge = styled.div`
   height: 100%;
   border-radius: 12px;
   border: 1px solid #bfbfbf;
-  background-color: #ffffff;
+  background-color: var(--color-white);
 `;
 
 export const StAllbadgeHeader = styled.div`
@@ -255,7 +255,7 @@ export const StAllbadgeHeader = styled.div`
   padding-left: 5.6%;
   align-items: center;
   font-size: 1.355vw;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   gap: 2%;
   box-shadow: 0px 12px 16px -4px rgba(0, 87, 63, 0.04),
     0px 4px 6px -2px rgba(0, 87, 63, 0.02);
@@ -285,7 +285,7 @@ export const StbadgeInfobox = styled.div`
   width: 14.49vw;
   height: 6.575vh;
   font-size: 0.73vw;
-  color: #9d9d9d;
+  color: var(--color-gray);
   font-weight: 500;
   padding: 1.39vh 1.042vw;
   box-shadow: 0px 12px 16px -4px rgba(0, 87, 63, 0.04),

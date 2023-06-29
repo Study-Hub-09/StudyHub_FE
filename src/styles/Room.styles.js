@@ -59,15 +59,12 @@ export const Stheader = styled.div`
   align-items: center;
   margin-bottom: 1rem;
   margin-top: 3rem;
-  /* gap: 10px; */
   gap: 1vw;
   width: ${({ ischatOpen }) => (ischatOpen ? '80%' : '70%')};
-  /* padding: 0px 40px; */
 `;
 
 export const Sttitlebox = styled.div`
-  font-weight: 700;
-  /* font-size: 26px; */
+  font-weight: var(--weight-bold);
   font-size: 1.35vw;
   display: flex;
   align-items: center;
@@ -85,12 +82,9 @@ export const Sttitle = styled.div`
 `;
 
 export const Stsettingbox = styled.div`
-  /* width: 424px; */
   width: 22vw;
-  /* height: 64px; */
   height: 6vh;
   background-color: rgba(66, 66, 66, 0.8);
-  /* gap: 40px; */
   gap: 2.1vw;
   display: flex;
   justify-content: center;
@@ -109,7 +103,7 @@ export const Sticon = styled.img`
 `;
 
 export const Stroomcount = styled.span`
-  color: #90b54c;
+  color: var(--color-light-green);
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -133,8 +127,7 @@ export const Stcambox = styled.div`
   position: relative;
 `;
 export const Stcamboxname = styled.div`
-  /* height: 14%; */
-  background-color: #424242;
+  background-color: var(--color-dark-gray);
   border-radius: 7px;
   display: flex;
   justify-content: center;
