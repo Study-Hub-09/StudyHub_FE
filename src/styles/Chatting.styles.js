@@ -94,8 +94,10 @@ export const StChatTextTitleTime = styled.span`
 export const StChatTextContent = styled.div`
   display: ${(props) => (props.textalign === 'right' ? 'flex' : 'block')};
   justify-content: ${(props) => (props.textalign === 'right' ? 'end' : 'start')};
-  align-items: center;
+  align-items: ${(props) => props.alignitem};
   margin-left: ${(props) => props.marginleft};
+  margin-top: ${(props) => props.margintop};
+  margin-bottom: ${(props) => props.marginbottom};
 `;
 
 export const StChatInput = styled.div`
@@ -127,7 +129,7 @@ export const StSendButton = styled.div`
 `;
 
 export const StChatmessage = styled.p`
-  max-width: 100%;
+  max-width: ${(props) => props.maxwidth};
   margin-left: ${(props) => props.marginleft};
   word-wrap: break-word;
 `;
