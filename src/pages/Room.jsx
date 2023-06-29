@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
 import camOn from '../asset/camon.svg';
 import camoff from '../asset/camoff.svg';
@@ -36,6 +36,7 @@ import { Alert } from '../CustomAlert/Alert';
 function Room() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id: sessionId } = useParams();
   const token = getCookie('AccessToken');
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
@@ -43,7 +44,7 @@ function Room() {
   const { roomData } = location.state || {};
 
   const [state, setState] = useState({
-    mySessionId: roomData.sessionId,
+    mySessionId: sessionId,
     session: undefined,
     publisher: undefined,
     subscribers: [],
@@ -58,6 +59,7 @@ function Room() {
 
   const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
+  const [isChangedProperty, setIsChangedProperty] = useState(false);
   const { mySessionId, publisher, subscribers, session } = state;
 
   const onChangeMessageHandler = (e) => {
@@ -94,6 +96,7 @@ function Room() {
   // 브라우저 새로고침시 leaveSession 함수 호출
   window.onbeforeunload = () => {
     leaveSession(studyTime, mySessionId);
+    navigate('/main');
   };
 
   // 세션 입장을 위해 필요한 토큰을 가져오기
@@ -139,6 +142,12 @@ function Room() {
         console.warn(exception);
       });
 
+      mySession.on('streamPropertyChanged', (event) => {
+        const { newValue, changedProperty } = event;
+        if (changedProperty === 'videoActive' || changedProperty === 'audioActive')
+          setIsChangedProperty(newValue);
+      });
+
       setState((prevState) => ({
         ...prevState,
         session: mySession,
@@ -168,7 +177,6 @@ function Room() {
 
               setState((prevState) => ({
                 ...prevState,
-                mainStreamManager: publisher,
                 publisher: publisher,
               }));
 
@@ -260,6 +268,13 @@ function Room() {
       publisher: undefined,
     });
   };
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      subscribers: [...prevState.subscribers],
+    }));
+  }, [isChangedProperty]);
 
   // 컴포넌트 마운트시 토큰 유무 확인 후 joinSession함수 호출
   useEffect(() => {

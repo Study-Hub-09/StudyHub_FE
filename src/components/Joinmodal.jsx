@@ -47,7 +47,7 @@ function Joinmodal({ onClose, roomData }) {
           data: { message: responseMessage },
         } = response;
         if (statusCode === 200 && responseMessage === '스터디 룸 입장 성공') {
-          navigate(`/rooms/${roomData.sessionId}/detail`, {
+          navigate(`/rooms/${roomData.sessionId}`, {
             state: { roomData, memberData },
           });
         }

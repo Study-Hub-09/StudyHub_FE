@@ -12,7 +12,7 @@ export const Stcontainer = styled.div`
 `;
 
 export const Stmodalbox = styled.div`
-  background-color: white;
+  background-color: var(--color-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,7 +20,7 @@ export const Stmodalbox = styled.div`
   width: 532px;
   height: 497px;
   border-radius: 20px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   padding: 36px, 56px, 60px;
   gap: 10px;
 `;
@@ -43,21 +43,21 @@ export const Stheadericon = styled.div`
 
 export const Sttitle = styled.div`
   font-size: 32px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   margin-bottom: 9.39px;
 `;
 
 export const Stcategory = styled.div`
   font-size: 18px;
-  font-weight: 400;
-  color: #90b54c;
+  font-weight: var(--weight-regular);
+  color: var(--color-light-green);
   margin-bottom: 27px;
 `;
 
 export const Stcontent = styled.div`
   font-size: 18px;
-  font-weight: 400;
-  color: #848484;
+  font-weight: var(--weight-regular);
+  color: var(--color-old-silver);
   width: 420px;
   height: 120px;
 `;
@@ -77,7 +77,7 @@ export const Stheaderbox = styled.div`
 export const StroomCount = styled.div`
   display: flex;
   gap: 9px;
-  color: #90b54c;
+  color: var(--color-light-green);
   font-weight: 500;
   font-size: 15px;
 `;
@@ -95,24 +95,24 @@ export const Stjoinbutton = styled.button`
   width: 104px;
   height: 40px;
   border-radius: 30px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   line-height: 20px;
-  background-color: #fefefe;
-  color: #00574f;
-  border: 1px solid #bfbfbf;
+  background-color: var(--color-white-gray);
+  color: var(--color-dark-green);
+  border: 1px solid var(--color-argent);
   margin-left: 17px;
   &:hover {
-    background-color: #00574f;
-    color: #fefefe;
+    background-color: var(--color-dark-green);
+    color: var(--color-white-gray);
   }
 `;
 
 export const StpasswordInput = styled.input`
   width: 68px;
   height: 32px;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   border-radius: 7px;
   padding-left: 14px;
-  border: 1px solid #9d9d9d;
+  border: 1px solid var(--color-gray);
   margin-left: 14px;
 `;

@@ -8,7 +8,7 @@ export const StChatContainer = styled.form`
   justify-content: center;
   align-items: center;
   gap: 16px;
-  border-left: 1px solid #424242;
+  border-left: 1px solid var(--color-dark-gray);
   padding-block: 10px;
   overflow: auto;
 `;
@@ -39,7 +39,7 @@ export const StChatHeaderLeft = styled.div`
 export const StChatHeaderRight = styled.div``;
 
 export const StChatArea = styled.div`
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   background-color: white;
   width: 280px;
   height: 100%;
@@ -94,8 +94,10 @@ export const StChatTextTitleTime = styled.span`
 export const StChatTextContent = styled.div`
   display: ${(props) => (props.textalign === 'right' ? 'flex' : 'block')};
   justify-content: ${(props) => (props.textalign === 'right' ? 'end' : 'start')};
-  align-items: center;
+  align-items: ${(props) => props.alignitem};
   margin-left: ${(props) => props.marginleft};
+  margin-top: ${(props) => props.margintop};
+  margin-bottom: ${(props) => props.marginbottom};
 `;
 
 export const StChatInput = styled.div`
@@ -106,7 +108,7 @@ export const StChatInput = styled.div`
   input {
     width: 231px;
     height: 36px;
-    border: 1px solid #bfbfbf;
+    border: 1px solid var(--color-argent);
     border-radius: 7px;
     padding-left: 10px;
     background-color: white;
@@ -127,5 +129,7 @@ export const StSendButton = styled.div`
 `;
 
 export const StChatmessage = styled.p`
+  max-width: ${(props) => props.maxwidth};
   margin-left: ${(props) => props.marginleft};
+  word-wrap: break-word;
 `;
