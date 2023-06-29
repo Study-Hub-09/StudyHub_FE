@@ -20,7 +20,7 @@ export const Stmodalbox = styled.div`
   width: 532px;
   height: 497px;
   border-radius: 20px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   padding: 36px, 56px, 60px;
   gap: 10px;
 `;
@@ -57,7 +57,7 @@ export const Stcategory = styled.div`
 export const Stcontent = styled.div`
   font-size: 18px;
   font-weight: var(--weight-regular);
-  color: #848484;
+  color: var(--color-old-silver);
   width: 420px;
   height: 120px;
 `;
@@ -99,7 +99,7 @@ export const Stjoinbutton = styled.button`
   line-height: 20px;
   background-color: var(--color-white-gray);
   color: var(--color-dark-green);
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   margin-left: 17px;
   &:hover {
     background-color: var(--color-dark-green);

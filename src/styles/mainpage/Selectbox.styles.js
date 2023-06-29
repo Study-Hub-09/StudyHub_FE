@@ -6,7 +6,7 @@ export const StSelectbox = styled.div`
   position: fixed;
   padding: 10px 0px;
   border-radius: 12px;
-  border: 1px solid #bfbfbf;
+  border: 1px solid var(--color-argent);
   margin-top: 26px;
   background-color: white;
   z-index: 1;
