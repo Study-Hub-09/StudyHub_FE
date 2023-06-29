@@ -13,8 +13,8 @@ export const StSidebarContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  background: #00573f;
-  filter: drop-shadow(6px 6px 10px #d9e7dd);
+  background: var(--color-dark-green);
+  filter: drop-shadow(6px 6px 10px var(--color-chinese-white));
   transition: width 0.3s ease;
   ${({ isOpen }) =>
     !isOpen &&
@@ -42,11 +42,12 @@ export const StNavLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
+  background-color: ${({ active }) =>
+    active ? 'var(--color-active-green)' : 'transparent'};
   &:hover {
     /* height: 29.5px;
     margin: 15px 0px 15px 0px; */
-    border-right: 3px solid #ffffff;
+    border-right: 3px solid var(--color-white);
   }
 `;
 
@@ -59,9 +60,10 @@ export const StNavLink2 = styled.div`
   &:hover {
     /* height: 29.5px;
     margin: 15px 0px 15px 0px; */
-    border-right: 3px solid #ffffff;
+    border-right: 3px solid var(--color-white);
   }
-  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
+  background-color: ${({ active }) =>
+    active ? 'var(--color-active-green)' : 'transparent'};
 `;
 
 export const StMenuItems = styled.div`
@@ -73,7 +75,8 @@ export const StMenuItems = styled.div`
     `
     margin: 0px 28px 0px 28px; /* isOpen이 false일 때의 너비 */
   `}
-  background-color: ${({ active }) => (active ? '#007c5c' : 'transparent')};
+  background-color: ${({ active }) =>
+    active ? 'var(--color-active-green)' : 'transparent'};
 `;
 
 export const StIcon = styled.div`
@@ -89,7 +92,7 @@ export const StName = styled.div`
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
-  color: #ffffff;
+  color: var(--color-white);
   ${({ isOpen }) =>
     !isOpen &&
     `
@@ -144,7 +147,7 @@ export const StProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #e8e8e8;
+  border-top: 1px solid var(--color-light-gray);
 `;
 
 export const StProfileLaout = styled.div`
@@ -203,7 +206,7 @@ export const StPofileName = styled.div`
   height: 16px;
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: var(--color-white);
 `;
 
 export const StPofileText2 = styled.div`
@@ -213,7 +216,7 @@ export const StPofileText2 = styled.div`
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
-  color: #e8e8e8e8;
+  color: var(--color-light-gray);
   display: flex;
   align-items: flex-end;
   ${({ isOpen }) =>
@@ -225,7 +228,8 @@ export const StPofileText2 = styled.div`
 
 export const StOutFrame = styled.div`
   width: ${({ isOpen }) => (!isOpen ? '20px' : '0px')};
-  background: ${({ isOpen }) => (!isOpen ? '#00573f' : 'transparent')};
+  background: ${({ isOpen }) => (!isOpen ? 'var(--color-dark-green)' : 'transparent')};
   opacity: ${({ isOpen }) => (!isOpen ? 0.8 : 0)};
-  box-shadow: ${({ isOpen }) => (!isOpen ? '6px 6px 10px #d9e7dd' : 'none')};
+  box-shadow: ${({ isOpen }) =>
+    !isOpen ? '6px 6px 10px var(--color-chinese-white)' : 'none'};
 `;

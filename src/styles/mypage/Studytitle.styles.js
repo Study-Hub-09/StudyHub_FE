@@ -4,8 +4,8 @@ export const StContentMainTitel = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
+  background: var(--color-white);
+  border: 1px solid var(--color-argent);
   border-radius: 12px;
   margin-right: 1.7%;
   display: flex;
@@ -29,7 +29,7 @@ export const StContentMainMyTitel = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1rem;
-  color: #848484;
+  color: var(--color-old-silver);
   padding: 0px 0px 20px 0px;
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
@@ -39,10 +39,10 @@ export const StContentMainTitelName = styled.div`
   width: 80%;
   height: 40%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.25vw;
   line-height: 1.563rem;
-  color: #303031;
+  color: var(--color-dark-charcoal);
   /* margin: 0.313rem 0rem 0rem 1.125rem; */
   display: flex;
   align-items: center;
@@ -59,10 +59,10 @@ export const StContentMainTitelN = styled.div`
   width: 100%;
   height: 100%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.1111vw;
   line-height: 1.563rem;
-  color: #303031;
+  color: var(--color-dark-charcoal);
   /* margin: 0rem 0rem 0rem 0.313rem; */
   display: flex;
   align-items: center;
@@ -85,7 +85,7 @@ export const StContentMainTitelNextEx = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1.188rem;
-  color: #848484;
+  color: var(--color-old-silver);
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
@@ -104,6 +104,6 @@ export const StContentMainTitelNextTime = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1.188rem;
-  color: #90b54c;
+  color: var(--color-light-green);
   /* border: 1px solid #8cacff; */
 `;

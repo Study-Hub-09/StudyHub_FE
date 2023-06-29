@@ -17,16 +17,24 @@ export const GlobalStyles = createGlobalStyle`
         --color-dark-gray: #424242;
         --color-gray: #9D9D9D;
         
+        /* Argent&Silver Palette */
+        --color-argent: #BFBFBF;
+        --color-old-silver: #848484;
+        --color-sonic-silver: #747475;
+    
         /* White Palette */
         --color-white-gray: #FEFEFE;
         --color-light-gray: #E8E8E8;
         --color-light-white: #F5F5F5;
         --color-white: #FFFFFF;
+        --color-chinese-white: #D9E7DD;
+        --color-cultured-white: #F4F4F4;
 
         /* Others */
         --color-yellow: #FFF5D0;
         --color-red: #EA4335;
         --color-background: #BCC2B0;
+        --color-dark-charcoal: #303031;
 
         /* ============FONT SIZE============ */
         --font-extra-large: 60px;

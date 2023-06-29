@@ -65,7 +65,7 @@ function Mypage({ onClose }) {
 
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
       setDailyStudyChart(response.data.dailyStudyChart);
       setDailyStudyTime(response.data.dailyStudyTime);
       setMonthlyStudyChart(response.data.monthlyStudyChart);
