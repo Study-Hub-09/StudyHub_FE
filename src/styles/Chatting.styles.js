@@ -126,6 +126,6 @@ export const StSendButton = styled.div`
   }
 `;
 
-export const StChatmessage = styled.div`
+export const StChatmessage = styled.p`
   margin-left: ${(props) => props.marginleft};
 `;

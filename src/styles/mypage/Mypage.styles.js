@@ -49,20 +49,20 @@ export const StHeaderUserName = styled.div`
   width: 100%;
   height: 59%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 2vw;
   line-height: 2.75rem;
-  color: #000000;
+  color: var(--color-black);
   margin: 0rem 0rem 0.563rem 0rem;
   /* border: 1px solid #ff8d8d; */
 `;
 
 export const StHeaderUserIntro = styled.div`
   font-style: normal;
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   font-size: 1.12vw;
   line-height: 120%;
-  color: #9d9d9d;
+  color: var(--color-gray);
   /* border: 1px solid #ff8d8d; */
 `;
 
@@ -93,8 +93,8 @@ export const StContentMainContainerT = styled.div`
 export const StContentMainTotalTime = styled.div`
   box-sizing: border-box;
   width: 59%;
-  background: #ffffff;
-  border: 1px solid #bfbfbf;
+  background: var(--color-white);
+  border: 1px solid var(--color-argent);
   border-radius: 12px;
   margin-right: 1%;
   display: flex;
@@ -134,10 +134,10 @@ export const StContentMainTotalTimeText = styled.div`
   width: 53%;
   height: 100%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.389vw;
   line-height: 1.688rem;
-  color: #000000;
+  color: var(--color-black);
   margin-right: 5%;
   display: flex;
   justify-content: center;
@@ -150,7 +150,7 @@ export const StContentMainTotalTimeText2 = styled.div`
   font-weight: 500;
   font-size: 0.972vw;
   line-height: 1.188rem;
-  color: #848484;
+  color: var(--color-old-silver);
 `;
 
 export const StContentMainTotalTimeBody = styled.div`
@@ -165,7 +165,7 @@ export const StContentMainTotalTimeBody = styled.div`
 export const StContentMainTotalTimeView = styled.div`
   width: 55%;
   height: 72%;
-  background: #d9efe9;
+  background: var(--color-spotlight-green);
   border-radius: 14.266px;
   margin: 0vw 1.042vw 0vw 0.694vw;
   display: flex;
@@ -178,10 +178,10 @@ export const StContentMainTotalTimeViewT = styled.div`
   width: 38.3%;
   height: 20.5%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 2.222vw;
   line-height: 2.75rem;
-  color: #303031;
+  color: var(--color-dark-charcoal);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -206,7 +206,7 @@ export const StContentMainTotalTimerTitle = styled.div`
   font-weight: 500;
   font-size: 0.972vw;
   line-height: 1.25rem;
-  color: #747475;
+  color: var(--color-sonic-silver);
   /* border: 1px solid #8cacff; */
 `;
 
@@ -214,10 +214,10 @@ export const StContentMainTotalTimer = styled.div`
   width: 100%;
   height: 23%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.806vw;
   line-height: 2.188rem;
-  color: #303031;
+  color: var(--color-dark-charcoal);
   margin: 0.313rem 0rem 0.5rem 0rem;
   /* border: 1px solid #8cacff; */
 `;
@@ -232,8 +232,8 @@ export const StContentMainContainerB = styled.div`
 export const StContentMainStatistics = styled.div`
   box-sizing: border-box;
   width: 53%;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
+  background: var(--color-white);
+  border: 1px solid var(--color-argent);
   border-radius: 12px;
   margin: 1% 1% 0% 0%;
   display: flex;
@@ -256,10 +256,10 @@ export const StContentMainStatisticsTitl = styled.div`
   width: 20%;
   height: 100%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.389vw;
   line-height: 1.688rem;
-  color: #303031;
+  color: var(--color-dark-charcoal);
   margin-right: 2.813rem;
   /* border: 1px solid #8cacff; */
 `;
@@ -270,7 +270,7 @@ export const StContentMainStatisticsTitlBox = styled.div`
   align-items: center;
   width: 53%;
   height: 100%;
-  background: #f4f4f4;
+  background: var(--color-cultured-white);
   border-radius: 3.34103px;
   margin-right: 8px;
   /* border: 1px solid #8cacff; */
@@ -283,14 +283,14 @@ export const StContentMainStatisticsTitlBoxList = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1rem;
-  color: #848484;
+  color: var(--color-old-silver);
   cursor: pointer;
   &:hover {
     width: 20%;
     height: 70%;
     padding: 0px 0px 0px 12px;
     margin: 0px -15px 0px -12px;
-    background: #ffffff;
+    background: var(--color-white);
   }
 `;
 
@@ -301,14 +301,14 @@ export const StContentMainStatisticsTitlBoxList2 = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1rem;
-  color: #848484;
+  color: var(--color-old-silver);
   cursor: pointer;
   &:hover {
     width: 20%;
     height: 70%;
     padding: 0px 0px 0px 12px;
     margin: 0px -12px 0px -12px;
-    background: #ffffff;
+    background: var(--color-white);
   }
 `;
 
@@ -319,14 +319,14 @@ export const StContentMainStatisticsTitlBoxList3 = styled.div`
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1rem;
-  color: #848484;
+  color: var(--color-old-silver);
   cursor: pointer;
   &:hover {
     width: 20%;
     height: 70%;
     padding: 0px 0px 0px 12px;
     margin: 0px -15px 0px -12px;
-    background: #ffffff;
+    background: var(--color-white);
   }
 `;
 
