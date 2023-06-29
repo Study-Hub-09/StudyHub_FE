@@ -4,8 +4,8 @@ export const StContentMainSubStudyRoom = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 60%;
-  background: #ffffff;
-  border: 1px solid #bfbfbfbf;
+  background: var(--color-white);
+  border: 1px solid var(--color-argent);
   border-radius: 12px;
   margin-top: 1.6%;
   display: flex;
@@ -34,10 +34,10 @@ export const StContentMainSubStudyRoomTitle = styled.div`
   width: 50%;
   height: 70%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.389vw;
   line-height: 1.688rem;
-  color: #000000;
+  color: var(--color-black);
   /* margin: 14px 0px 10px 15px; */
   /* border: 1px solid #8cacff; */
 `;
@@ -49,7 +49,7 @@ export const StContentMainSubStudyRoomMore = styled.div`
   font-weight: 500;
   font-size: 0.972vw;
   line-height: 1.188rem;
-  color: #848484;
+  color: var(--color-old-silver);
   text-decoration-line: underline;
   margin: 25px -10px 12px 0px;
   cursor: pointer;
@@ -78,10 +78,10 @@ export const StContentMainSubStudyRoomName = styled.div`
   width: 100%;
   height: 100%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 1.042vw;
   line-height: 1.188rem;
-  color: #000000;
+  color: var(--color-black);
   margin: 0px 0px 5px 20px;
   /* border: 1px solid #8cacff; */
 `;
@@ -93,12 +93,12 @@ export const StContentMainSubStudyRoomCa = styled.div`
   font-weight: 500;
   font-size: 0.75vw;
   line-height: 1vw;
-  color: #90b54c;
+  color: var(--color-light-green);
   margin: 0px 0px 0px 20px;
   /* border: 1px solid #8cacff; */
 `;
 
-export const StContentMainSubStudyRoomBtn = styled.button`
+export const StContentMainSubStudyRoomBtn = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -106,8 +106,8 @@ export const StContentMainSubStudyRoomBtn = styled.button`
   justify-content: center;
   width: 31%;
   height: 80%;
-  background: #fefefefe;
-  border: 1px solid #bfbfbfbf;
+  background: var(--color-white-gray);
+  border: 1px solid var(--color-argent);
   border-radius: 30px;
   margin-right: 10px;
   /* border: 1px solid #8cacff; */
@@ -117,13 +117,13 @@ export const StContentMainSubStudyRoomBtnF = styled.button`
   width: 60%;
   height: 40%;
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 0.972vw;
   line-height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00573f;
+  color: var(--color-dark-green);
   /* border: 1px solid #8cacff; */
 `;
 

@@ -13,18 +13,17 @@ export const StTimerContainer = styled.div`
 export const StTimer = styled.div`
   /* width: 209px; */
   /* height: 71px; */
-  font-family: 'Noto Sans';
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   /* font-size: 52px; */
   font-size: 2.7vw;
   /* line-height: 71px; */
   /* margin-right: 30px; */
-  color: #ea4335;
+  color: var(--color-red);
   ${({ isPaused }) =>
     !isPaused &&
     `
-    color: #ffffff;
+    color: var(--color-white);
   `}
 `;
 
