@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { OpenVidu } from 'openvidu-browser';
 import camOn from '../asset/camon.svg';
 import camoff from '../asset/camoff.svg';
@@ -36,6 +36,7 @@ import { Alert } from '../CustomAlert/Alert';
 function Room() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id: sessionId } = useParams();
   const token = getCookie('AccessToken');
   const OV = useRef(null);
   const getUserName = localStorage.getItem('member');
@@ -43,7 +44,7 @@ function Room() {
   const { roomData } = location.state || {};
 
   const [state, setState] = useState({
-    mySessionId: roomData.sessionId,
+    mySessionId: sessionId,
     session: undefined,
     publisher: undefined,
     subscribers: [],
@@ -94,6 +95,7 @@ function Room() {
   // 브라우저 새로고침시 leaveSession 함수 호출
   window.onbeforeunload = () => {
     leaveSession(studyTime, mySessionId);
+    navigate('/main');
   };
 
   // 세션 입장을 위해 필요한 토큰을 가져오기
@@ -168,7 +170,6 @@ function Room() {
 
               setState((prevState) => ({
                 ...prevState,
-                mainStreamManager: publisher,
                 publisher: publisher,
               }));
 
