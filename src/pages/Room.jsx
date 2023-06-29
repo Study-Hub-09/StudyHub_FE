@@ -59,6 +59,7 @@ function Room() {
 
   const [studyTime, setStudyTime] = useState(null || 0);
   const [loadingstate, setLoadingState] = useState(true);
+  const [isChangedProperty, setIsChangedProperty] = useState(false);
   const { mySessionId, publisher, subscribers, session } = state;
 
   const onChangeMessageHandler = (e) => {
@@ -139,6 +140,12 @@ function Room() {
 
       mySession.on('exception', (exception) => {
         console.warn(exception);
+      });
+
+      mySession.on('streamPropertyChanged', (event) => {
+        const { newValue, changedProperty } = event;
+        if (changedProperty === 'videoActive' || changedProperty === 'audioActive')
+          setIsChangedProperty(newValue);
       });
 
       setState((prevState) => ({
@@ -261,6 +268,13 @@ function Room() {
       publisher: undefined,
     });
   };
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      subscribers: [...prevState.subscribers],
+    }));
+  }, [isChangedProperty]);
 
   // 컴포넌트 마운트시 토큰 유무 확인 후 joinSession함수 호출
   useEffect(() => {
