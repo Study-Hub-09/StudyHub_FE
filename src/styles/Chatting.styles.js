@@ -127,5 +127,7 @@ export const StSendButton = styled.div`
 `;
 
 export const StChatmessage = styled.p`
+  max-width: 100%;
   margin-left: ${(props) => props.marginleft};
+  word-wrap: break-word;
 `;
