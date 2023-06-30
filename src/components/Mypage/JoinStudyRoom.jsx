@@ -69,7 +69,7 @@ function JoinStudyRoom({ token }) {
           .map((item, index) => {
             if (index < 3) {
               return (
-                <StContentMainTodoListRoomList key={item.roomId}>
+                <StContentMainTodoListRoomList key={item.sessionId}>
                   <StContentMainTodoListRoomNaCa onClick={() => openJoinModal(index)}>
                     <StContentMainTodoListRoomNa>
                       {item.roomName}
