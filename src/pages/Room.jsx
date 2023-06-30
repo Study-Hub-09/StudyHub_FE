@@ -14,6 +14,7 @@ import { getCookie } from '../Cookies/Cookies';
 import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
 import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
+import uuid from 'react-uuid';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
 import Loading from '../components/Loading/Loading';
@@ -96,7 +97,6 @@ function Room() {
   // 브라우저 새로고침시 leaveSession 함수 호출
   window.onbeforeunload = () => {
     leaveSession(studyTime, mySessionId);
-    navigate('/main');
   };
 
   // 세션 입장을 위해 필요한 토큰을 가져오기
@@ -310,13 +310,12 @@ function Room() {
           {/* 카메라 스트림 영역 */}
           <Stcamarea>
             {publisher !== undefined ? (
-              <div className="stream-container col-md-6 col-xs-6">
+              <div>
                 <UserVideoComponent streamManager={publisher} />
               </div>
             ) : null}
-            {subscribers.map((sub, index) => (
-              <div key={index} className="stream-container col-md-6 col-xs-6">
-                <span>{sub.id}</span>
+            {subscribers.map((sub) => (
+              <div key={uuid()}>
                 <UserVideoComponent streamManager={sub} />
               </div>
             ))}
