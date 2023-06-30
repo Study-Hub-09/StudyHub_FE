@@ -174,12 +174,12 @@ function SideBar({ children }) {
 
   return (
     <StContainer>
-      <StSidebarContainer isOpen={isOpen ? 'true' : undefined}>
+      <StSidebarContainer isopen={isOpen ? 'true' : undefined}>
         <StLogoContainer>
           <StSymbol
             src={isOpen ? LogoW : Logoic}
             alt="Logo"
-            isOpen={isOpen ? 'true' : undefined}
+            isopen={isOpen ? 'true' : undefined}
             onClick={() => {
               navigate('/');
             }}
@@ -188,7 +188,7 @@ function SideBar({ children }) {
           <StRevStraight
             src={RevStraight}
             alt="reverse arrow"
-            isOpen={isOpen ? 'true' : undefined}
+            isopen={isOpen ? 'true' : undefined}
             onClick={toggle}
           />
         </StLogoContainer>
@@ -202,13 +202,13 @@ function SideBar({ children }) {
               active={window.location.pathname === item.navigate ? 'true' : undefined}
             >
               <StMenuItems
-                isOpen={isOpen ? 'true' : undefined}
+                isopen={isOpen ? 'true' : undefined}
                 // active={window.location.pathname === item.navigate}
                 active={window.location.pathname === item.navigate ? 'true' : undefined}
               >
                 <StIcon>{item.icon}</StIcon>
                 <StName
-                  isOpen={isOpen ? 'true' : undefined}
+                  isopen={isOpen ? 'true' : undefined}
                   // active={window.location.pathname === item.navigate}
                   active={window.location.pathname === item.navigate ? 'true' : undefined}
                 >
@@ -227,13 +227,13 @@ function SideBar({ children }) {
                 active={window.location.pathname === item.navigate ? 'true' : undefined}
               >
                 <StMenuItems
-                  isOpen={isOpen ? 'true' : undefined}
+                  isopen={isOpen ? 'true' : undefined}
                   // active={window.location.pathname === item.navigate}
                   active={window.location.pathname === item.navigate ? 'true' : undefined}
                 >
                   <StIcon>{item.icon}</StIcon>
                   <StName
-                    isOpen={isOpen ? 'true' : undefined}
+                    isopen={isOpen ? 'true' : undefined}
                     // active={window.location.pathname === item.navigate}
                     active={
                       window.location.pathname === item.navigate ? 'true' : undefined
@@ -246,9 +246,9 @@ function SideBar({ children }) {
             ))}
           {menuItem2.map((item, index) => (
             <StNavLink2 key={index} onClick={item.onClick}>
-              <StMenuItems isOpen={isOpen ? 'true' : undefined}>
+              <StMenuItems isopen={isOpen ? 'true' : undefined}>
                 <StIcon>{item.icon}</StIcon>
-                <StName isOpen={isOpen ? 'true' : undefined}>{item.name}</StName>
+                <StName isopen={isOpen ? 'true' : undefined}>{item.name}</StName>
               </StMenuItems>
             </StNavLink2>
           ))}
@@ -256,7 +256,7 @@ function SideBar({ children }) {
 
         <StProfileContainer>
           <StProfileLaout>
-            <StProfileFreame isOpen={isOpen ? 'true' : undefined}>
+            <StProfileFreame isopen={isOpen ? 'true' : undefined}>
               <StProfile
                 src={
                   token
@@ -271,23 +271,23 @@ function SideBar({ children }) {
             </StProfileFreame>
 
             <StPofileTextFreame>
-              <StPofileImgText isOpen={isOpen ? 'true' : undefined}>
+              <StPofileImgText isopen={isOpen ? 'true' : undefined}>
                 <StPofileImg src={getRankingImage()} />
                 <StPofileName>{token ? localStorage.member : '게스트'}</StPofileName>
               </StPofileImgText>
 
-              <StPofileText2 isOpen={isOpen ? 'true' : undefined}>
+              <StPofileText2 isopen={isOpen ? 'true' : undefined}>
                 {token ? `누적시간 ${totalTime(totalStudyTime)}` : '로그인하여 이용하기'}
               </StPofileText2>
             </StPofileTextFreame>
           </StProfileLaout>
         </StProfileContainer>
       </StSidebarContainer>
-      <StOutFrame isOpen={isOpen ? 'true' : undefined}>
+      <StOutFrame isopen={isOpen ? 'true' : undefined}>
         <StStraight
           src={Straight}
           alt="arrow"
-          isOpen={isOpen ? 'true' : undefined}
+          isopen={isOpen ? 'true' : undefined}
           onClick={toggle}
         />
       </StOutFrame>

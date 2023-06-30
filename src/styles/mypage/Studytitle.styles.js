@@ -74,25 +74,26 @@ export const StContentMainTitelEx = styled.div`
   align-items: baseline;
   justify-content: space-between;
   width: 100%;
-  height: 18%;
+  padding-right: 10px;
+  height: 22%;
   /* border: 1px solid #8cacff; */
 `;
 
 export const StContentMainTitelNextEx = styled.div`
-  width: 48%;
+  width: 52%;
   height: 90%;
   font-style: normal;
   font-weight: 500;
   font-size: 0.833vw;
   line-height: 1.188rem;
   color: var(--color-old-silver);
+  margin-right: -8px;
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
 
 export const StContentMainTitelNextAro = styled.div`
   box-sizing: border-box;
-  padding: 0px 6px 0px 2px;
   /* margin: 0rem 0.188rem 0rem 0.188rem; */
   /* border: 1px solid #8cacff; */
 `;
