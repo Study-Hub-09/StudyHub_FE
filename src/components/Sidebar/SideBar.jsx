@@ -167,7 +167,7 @@ function SideBar({ children }) {
   ];
   const menuItem2 = [
     {
-      onClick: () => (token ? tokenHandler() : navigate('/members/login')),
+      onClick: () => (token ? tokenHandler() : navigate('/login')),
       name: token ? '로그아웃' : '로그인',
       icon: <img src={logoutimg} alt="logout icon" />,
     },

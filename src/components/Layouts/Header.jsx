@@ -58,7 +58,7 @@ function Header() {
               <Button
                 color="var(--color-black)"
                 hover="none"
-                onClick={() => navigate('/members/register')}
+                onClick={() => navigate('/register')}
               >
                 회원가입
               </Button>
@@ -73,7 +73,7 @@ function Header() {
             hover="none"
             borderradius="5px"
             onClick={() => {
-              isLogged ? tokenHandler() : navigate('/members/login');
+              isLogged ? tokenHandler() : navigate('/login');
             }}
           >
             {isLogged ? '로그아웃' : '로그인'}
