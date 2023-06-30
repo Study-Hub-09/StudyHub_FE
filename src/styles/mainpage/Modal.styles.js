@@ -54,9 +54,9 @@ export const StCircle = styled.button`
   width: 70px;
   height: 70px;
   border-radius: 50px;
-  color: ${(props) => (props.selected ? 'var(--color-white)' : 'var(--color-black)')};
+  color: ${(props) => (props.isSelected ? 'var(--color-white)' : 'var(--color-black)')};
   background-color: ${(props) =>
-    props.selected ? 'var(--color-dark-green)' : 'var(--color-light-gray)'};
+    props.isSelected ? 'var(--color-dark-green)' : 'var(--color-light-gray)'};
   gap: 3px;
   display: flex;
   flex-direction: column;
@@ -193,7 +193,7 @@ export const Stlockbuttonbg = styled.div`
   width: 36px;
   height: 18px;
   background-color: ${(props) =>
-    props.$lock ? 'var(--color-dark-green)' : 'var(--color-argent)'};
+    props.lock ? 'var(--color-dark-green)' : 'var(--color-argent)'};
   border-radius: 30px;
 `;
 
@@ -222,11 +222,11 @@ export const StlockbuttonBall = styled.div`
   border-radius: 30px;
   background-color: var(--color-white);
   z-index: 1;
-  transform: ${(props) => (props.$lock ? 'translateX(19.15px)' : 'translateX(1.53px)')};
+  transform: ${(props) => (props.lock ? 'translateX(19.15px)' : 'translateX(1.53px)')};
   ${(props) =>
-    props.$animate &&
+    props.animate &&
     css`
-      animation: ${props.$lock ? moveForward : moveBackward} 0.2s linear;
+      animation: ${props.lock ? moveForward : moveBackward} 0.2s linear;
     `}
 `;
 export const Stdatepickerbox = styled.div`
