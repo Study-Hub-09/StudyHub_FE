@@ -314,8 +314,8 @@ function Room() {
                 <UserVideoComponent streamManager={publisher} />
               </div>
             ) : null}
-            {subscribers.map((sub) => (
-              <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+            {subscribers.map((sub, index) => (
+              <div key={index} className="stream-container col-md-6 col-xs-6">
                 <span>{sub.id}</span>
                 <UserVideoComponent streamManager={sub} />
               </div>
