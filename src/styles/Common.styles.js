@@ -112,3 +112,61 @@ export const StRedirectContent = styled.div`
     letter-spacing: 5px;
   }
 `;
+
+// ===============PAGE NOT FOUND COMPONENT================ //
+
+export const StPageNotFoundContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const StPageNotFoundBox = styled.div`
+  width: 506px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const StPageNotFoundHeader = styled.header`
+  width: 250px;
+  height: 250px;
+
+  img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+  }
+`;
+
+export const StPageNotFoundContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    font-weight: var(--weight-bold);
+    letter-spacing: 15px;
+  }
+
+  h2 {
+    font-weight: var(--weight-semi-bold);
+    letter-spacing: 5px;
+  }
+
+  p {
+    color: var(--color-gray);
+    font-size: var(--font-small);
+  }
+`;
+
+export const StLinkStudyHub = styled(Link)`
+  cursor: pointer;
+  color: var(--color-gray);
+  margin-left: 5px;
+`;
