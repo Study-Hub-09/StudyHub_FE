@@ -202,7 +202,7 @@ export const StPofileImg = styled.img`
 `;
 
 export const StPofileName = styled.div`
-  width: 70px;
+  width: 100px;
   height: 16px;
   display: flex;
   align-items: center;

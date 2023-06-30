@@ -47,7 +47,7 @@ import {
 } from '../styles/mypage/Mypage.styles';
 
 function Mypage({ onClose }) {
-  const nickname = localStorage.member;
+  const [nickname, setNickname] = useState('');
   const [token, setToken] = useState('');
 
   const [dailyStudyTime, setDailyStudyTime] = useState(0);
@@ -66,6 +66,7 @@ function Mypage({ onClose }) {
   const { data, isLoading, isError } = useQuery('mypage', () => getMypage(), {
     onSuccess: (response) => {
       // console.log(response);
+      setNickname(response.data.nickname);
       setDailyStudyChart(response.data.dailyStudyChart);
       setDailyStudyTime(response.data.dailyStudyTime);
       setMonthlyStudyChart(response.data.monthlyStudyChart);
