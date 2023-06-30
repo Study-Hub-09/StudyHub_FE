@@ -13,7 +13,7 @@ function PageNotFound() {
     <StPageNotFoundContainer>
       <StPageNotFoundBox>
         <StPageNotFoundHeader>
-          <img src={empty} alt="" />
+          <img src={empty} alt="Magnifier With Cactus" />
         </StPageNotFoundHeader>
         <StPageNotFoundContent>
           <h1>404</h1>
