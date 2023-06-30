@@ -165,7 +165,7 @@ function Login() {
 
       <StLoginFooter>
         <p>아직 회원이 아니신가요?</p>
-        <Link to="/members/register">회원가입</Link>
+        <Link to="/register">회원가입</Link>
       </StLoginFooter>
     </Container>
   );

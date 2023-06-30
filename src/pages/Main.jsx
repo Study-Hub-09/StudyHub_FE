@@ -105,7 +105,7 @@ function Main() {
     if (token) {
       setModalOpen(true);
     } else {
-      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('members/login'));
+      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('/login'));
     }
   };
   const selectToggleHandler = (event) => {
