@@ -53,7 +53,7 @@ function Joinmodal({ onClose, roomData }) {
         }
         return response;
       } catch (error) {
-        console.log('createSessionError>>> ', error);
+        // console.log('createSessionError>>> ', error);
         const {
           response: {
             data: { message: errorMessage, statusCode },
@@ -86,7 +86,7 @@ function Joinmodal({ onClose, roomData }) {
             }
             return response;
           } catch (error) {
-            console.log(error);
+            // console.log(error);
           }
         }
       }
