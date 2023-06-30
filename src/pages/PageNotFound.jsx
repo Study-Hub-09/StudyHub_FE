@@ -7,7 +7,6 @@ import {
   StPageNotFoundContent,
   StLinkStudyHub,
 } from '../styles/Common.styles';
-import { Link } from 'react-router-dom';
 
 function PageNotFound() {
   return (
