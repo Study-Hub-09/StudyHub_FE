@@ -83,6 +83,7 @@ export const StContentMainTitelNextEx = styled.div`
   font-size: 0.833vw;
   line-height: 1.188rem;
   color: var(--color-old-silver);
+  margin-right: -8px;
   /* margin-left: 1.125rem; */
   /* border: 1px solid #8cacff; */
 `;
