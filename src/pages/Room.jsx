@@ -14,7 +14,6 @@ import { getCookie } from '../Cookies/Cookies';
 import { connectClient, disconnectClient, sendMessage } from '../core/sockJs/sockJs';
 import { createToken, exitRoom } from '../core/api/openvidu/openvidu';
 import UserVideoComponent from '../components/UserVideoComponent';
-import uuid from 'react-uuid';
 import Timer from '../components/Timer/Timer';
 import Chatting from '../components/Chatting/Chatting';
 import Loading from '../components/Loading/Loading';
@@ -310,12 +309,12 @@ function Room() {
           {/* 카메라 스트림 영역 */}
           <Stcamarea>
             {publisher !== undefined ? (
-              <div>
+              <div className="stream-container col-md-6 col-xs-6">
                 <UserVideoComponent streamManager={publisher} />
               </div>
             ) : null}
-            {subscribers.map((sub) => (
-              <div key={uuid()}>
+            {subscribers.map((sub, idx) => (
+              <div key={idx} className="stream-container col-md-6 col-xs-6">
                 <UserVideoComponent streamManager={sub} />
               </div>
             ))}
