@@ -68,7 +68,6 @@ const Modal = ({ onClose }) => {
   const [roomPassword, setRoomPassword] = useState('');
   const [uploadedImage, setUploadedImage] = useState(null);
   const [readerImage, setReaderImage] = useState(null);
-  const [randomImage, setrandomImage] = useState(null);
   const outside = useRef();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -77,7 +76,7 @@ const Modal = ({ onClose }) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries('rooms');
 
-      navigate(`/rooms/${data.data.sessionId}/detail`, {
+      navigate(`/rooms/${data.data.sessionId}`, {
         state: { roomData: data.data },
       });
     },
@@ -122,9 +121,6 @@ const Modal = ({ onClose }) => {
       // 이미지 추가
       if (uploadedImage) {
         formData.append('image', uploadedImage);
-      }
-      if (randomImage) {
-        formData.append('image', randomImage);
       } else {
         formData.append('image', '');
       }
@@ -267,7 +263,7 @@ const Modal = ({ onClose }) => {
                 {buttonInfo.map((button, index) => (
                   <StCircle
                     key={index}
-                    isSelected={selectedCategories.includes(button.name)}
+                    selected={selectedCategories.includes(button.name) ? true : false}
                     onClick={() => categoryButtonHandler(button)}
                   >
                     {selectedCategories.includes(button.name) ? (
@@ -306,7 +302,7 @@ const Modal = ({ onClose }) => {
                     <Stthumbnail>'이미지를 등록해 주세요'</Stthumbnail>
                   )}
                   <div>
-                    <StthumbnailbuttonB for="inputImage">
+                    <StthumbnailbuttonB htmlFor="inputImage">
                       PC에서 업로드
                     </StthumbnailbuttonB>
                     <input
@@ -323,8 +319,11 @@ const Modal = ({ onClose }) => {
                 <Stfont>비밀방 설정</Stfont>
                 <Stlockboxinner>
                   <Stlockbutton onClick={lockbuttonHandler}>
-                    <StlockbuttonBall animate={animate} lock={lock} />
-                    <Stlockbuttonbg lock={lock} />
+                    <StlockbuttonBall
+                      $animate={animate ? animate : undefined}
+                      $lock={lock ? lock : undefined}
+                    />
+                    <Stlockbuttonbg $lock={lock ? lock : undefined} />
                   </Stlockbutton>
                   {lock ? (
                     <>
@@ -340,7 +339,6 @@ const Modal = ({ onClose }) => {
                         />
                         <StpasswordInput
                           type="text"
-                          placeholder="1234"
                           maxLength="5"
                           value={roomPassword}
                           onChange={(e) => {
