@@ -20,8 +20,8 @@ export const StTimer = styled.div`
   /* line-height: 71px; */
   /* margin-right: 30px; */
   color: var(--color-red);
-  ${({ isPaused }) =>
-    !isPaused &&
+  ${({ paused }) =>
+    !JSON.parse(paused) &&
     `
     color: var(--color-white);
   `}
