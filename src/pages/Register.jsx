@@ -242,7 +242,7 @@ function Register() {
         data: { message: responseMessage },
       } = response;
       if (statusCode === 200 && responseMessage === '회원가입 성공') {
-        Alert('success', '회원가입 성공', () => navigate('/members/login'));
+        Alert('success', '회원가입 성공', () => navigate('/login'));
       }
     },
     onError: (error) => {
@@ -608,7 +608,7 @@ function Register() {
 
       <StRegisterFooter>
         <p>이미 계정이 있으신가요?</p>
-        <Link to="/members/login">로그인</Link>
+        <Link to="/login">로그인</Link>
       </StRegisterFooter>
     </Container>
   );

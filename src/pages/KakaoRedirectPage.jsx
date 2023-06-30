@@ -33,7 +33,7 @@ function KakaoRedirectPage() {
           console.log(error);
           const statusCode = error.response?.status;
           if (statusCode === 401) {
-            Alert('error', '로그인 실패', () => navigate('/members/login'));
+            Alert('error', '로그인 실패', () => navigate('/login'));
           }
         });
     }

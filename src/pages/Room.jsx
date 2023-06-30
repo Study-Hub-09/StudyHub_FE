@@ -281,7 +281,7 @@ function Room() {
     if (token) {
       joinSession();
     } else {
-      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('/members/login'));
+      Alert('info', '로그인이 필요한 서비스입니다', () => navigate('/login'));
     }
   }, []);
 

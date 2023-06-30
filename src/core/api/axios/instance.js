@@ -103,7 +103,7 @@ instance.interceptors.response.use(
           alert('로그인 후 다시 시도해주세요!');
           removeCookie('AccessToken', { path: '/' });
           removeCookie('RefreshToken', { path: '/' });
-          window.location.href = '/members/login';
+          window.location.href = '/login';
         }
       }
     }
