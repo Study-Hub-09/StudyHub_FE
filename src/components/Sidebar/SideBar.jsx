@@ -54,6 +54,7 @@ function SideBar({ children }) {
 
   const [token, setToken] = useState('');
   const [totalStudyTime, setTotalStudyTime] = useState(0);
+  const [nickname, setNickname] = useState('');
   const [title, setTitle] = useState('');
   const location = useLocation();
 
@@ -62,6 +63,7 @@ function SideBar({ children }) {
       // console.log(response);
       setTotalStudyTime(response.data.totalStudyTime);
       setTitle(response.data.title);
+      setNickname(response.data.nickname);
     },
     onError: (error) => {
       // console.log('error', error.msg);
@@ -273,7 +275,7 @@ function SideBar({ children }) {
             <StPofileTextFreame>
               <StPofileImgText isopen={isOpen ? 'true' : undefined}>
                 <StPofileImg src={getRankingImage()} />
-                <StPofileName>{token ? localStorage.member : '게스트'}</StPofileName>
+                <StPofileName>{token ? nickname : '게스트'}</StPofileName>
               </StPofileImgText>
 
               <StPofileText2 isopen={isOpen ? 'true' : undefined}>
