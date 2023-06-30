@@ -58,7 +58,7 @@ function Timer({ onSaveTime }) {
 
   return (
     <StTimerContainer>
-      <StTimer isPaused={isPaused}>{formatTime(time)}</StTimer>
+      <StTimer paused={isPaused.toString()}>{formatTime(time)}</StTimer>
       <StTimerImg
         src={isPaused ? play : pause}
         alt="play and pause"
