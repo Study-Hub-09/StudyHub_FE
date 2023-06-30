@@ -68,7 +68,6 @@ function SideBar({ children }) {
     },
     enabled: !!token,
     staleTime: 3000,
-    notifyOnChangeProps: 'tracked',
   });
 
   useEffect(() => {
