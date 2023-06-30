@@ -77,7 +77,7 @@ const Modal = ({ onClose }) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries('rooms');
 
-      navigate(`/rooms/${data.data.sessionId}/detail`, {
+      navigate(`/rooms/${data.data.sessionId}`, {
         state: { roomData: data.data },
       });
     },

@@ -16,8 +16,8 @@ export const StSidebarContainer = styled.div`
   background: var(--color-dark-green);
   filter: drop-shadow(6px 6px 10px var(--color-chinese-white));
   transition: width 0.3s ease;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     width: 80px; /* isOpen이 false일 때의 너비 */
   `}
@@ -70,8 +70,8 @@ export const StMenuItems = styled.div`
   display: flex;
   align-items: flex-end;
   margin: 0px 0px 0px 36px;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     margin: 0px 28px 0px 28px; /* isOpen이 false일 때의 너비 */
   `}
@@ -93,8 +93,8 @@ export const StName = styled.div`
   font-size: 15px;
   line-height: 20px;
   color: var(--color-white);
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
@@ -106,8 +106,8 @@ export const StSymbol = styled.img`
   width: 106px;
   margin: 0px 0px 0px 36px;
   cursor: pointer;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     width: 22px;
     height: 32px;
@@ -121,8 +121,8 @@ export const StRevStraight = styled.img`
   margin: 0px 36px 0px 74px;
   cursor: pointer;
   transition: display 0.36s ease;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
@@ -134,8 +134,8 @@ export const StStraight = styled.img`
   margin: 32px 0px 0px 0px;
   cursor: pointer;
   transition: display 0.36s ease;
-  ${({ isOpen }) =>
-    isOpen &&
+  ${({ isopen }) =>
+    isopen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
@@ -162,8 +162,8 @@ export const StProfileFreame = styled.div`
   width: 48px;
   height: 48px;
   transition: margin 0.36s ease;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     margin: 0px 0px 0px 72.67px; /* isOpen이 false일 때의 너비 */
   `}
@@ -188,8 +188,8 @@ export const StPofileImgText = styled.div`
   height: 24px;
   display: flex;
   align-items: center;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
@@ -219,8 +219,8 @@ export const StPofileText2 = styled.div`
   color: var(--color-light-gray);
   display: flex;
   align-items: flex-end;
-  ${({ isOpen }) =>
-    !isOpen &&
+  ${({ isopen }) =>
+    !isopen &&
     `
     display: none; /* isOpen이 false일 때의 너비 */
   `}
