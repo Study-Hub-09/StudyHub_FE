@@ -80,6 +80,8 @@ function Mypage({ onClose }) {
       // console.log('error', error.msg);
     },
     enabled: !!token,
+    staleTime: 3000,
+    notifyOnChangeProps: 'tracked',
   });
 
   useEffect(() => {
