@@ -18,9 +18,7 @@ function Router() {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />
         </Route>
-      </Routes>
 
-      <Routes>
         <Route element={<MainLayout />}>
           <Route path="/main" element={<Main />} />
           <Route path="/mypage" element={<MyPage />} />
