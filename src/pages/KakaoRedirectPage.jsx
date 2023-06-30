@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../Cookies/Cookies';
 import { kakaoLogin } from '../core/api/auth/login';
 import Loading from '../components/Loading/Loading';
-import { Alert } from '@mui/material';
+import { Alert } from '../CustomAlert/Alert';
 
 function KakaoRedirectPage() {
   const navigate = useNavigate();
