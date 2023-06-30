@@ -10,6 +10,7 @@ import Register from '../pages/Register';
 import Room from '../pages/Room';
 import KakaoRedirectPage from '../pages/KakaoRedirectPage';
 import Setting from '../pages/Setting';
+import PageNotFound from '../pages/PageNotFound';
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
         <Route path="/members/login" element={<Login />} />
         <Route path="/members/register" element={<Register />} />
         <Route path="/api/members/kakao/callback" element={<KakaoRedirectPage />} />
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );
