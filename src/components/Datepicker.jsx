@@ -38,7 +38,7 @@ export default function BasicDatePicker({ selectedDate, onDateChange }) {
           selected={selectedDate}
           onChange={(date) => onDateChange(dayjs(date).format('YYYY-MM-DD'))}
           inputFormat="YYYY-MM-dd"
-          disablePast="true"
+          disablePast={true}
           defaultValue={dayjs(today)}
         />
       </LocalizationProvider>
