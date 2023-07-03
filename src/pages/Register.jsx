@@ -73,6 +73,7 @@ function Register() {
   });
 
   const [isEmailLoading, setIsEmailLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const { nickname, email, checkCode, password, checkPassword } = values;
   const { validEmailCode, validPwd, matchPwd, validNickname, validEmail } = validations;
@@ -164,6 +165,7 @@ function Register() {
     if (!email || email.trim() === '') return Alert('info', '이메일을 입력해주세요.');
     else if (!isValidEmail) return Alert('error', '잘못된 이메일 형식입니다.');
     else {
+      setEmailSent(true);
       setIsEmailLoading(true);
       validateEmailMutation.mutate({
         email,
@@ -310,6 +312,7 @@ function Register() {
       } = error;
 
       if (statusCode === 400 && errorMessage === '중복된 email 입니다.') {
+        setEmailSent(false);
         setMessages((prevMessages) => ({
           ...prevMessages,
           emailErrorMessage: '이미 회원가입된 이메일입니다.',
@@ -496,6 +499,7 @@ function Register() {
                 validEmail={validEmail}
                 isEmailVerified={isEmailVerified}
                 isEmailLoading={isEmailLoading}
+                emailSent={emailSent}
                 emailBorder={emailBorder}
                 border={borderColor}
                 onFocus={() => onFocusInputBorder('emailBorder')}

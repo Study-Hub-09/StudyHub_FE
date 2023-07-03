@@ -31,13 +31,14 @@ function EmailInput({
   validEmailCode,
   isEmailCodeVerified,
   isEmailVerified,
+  emailSent,
   isEmailLoading,
   successMessage,
   errorMessage,
   ...inputprops
 }) {
-  const isButtonDisabled = isEmailVerified || isEmailCodeVerified;
-  const isInputDisabled = isEmailVerified || isEmailCodeVerified;
+  const isButtonDisabled = emailSent || isEmailCodeVerified;
+  const isInputDisabled = emailSent || isEmailCodeVerified;
 
   const emailBorderColor = border(
     value,
