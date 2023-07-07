@@ -1,9 +1,11 @@
 # 🌳 STUDY HUB 🌳
+![최고의 인기 프로젝트상_스터브](https://github.com/Study-Hub-09/StudyHub_FE/assets/129656095/8eca1bd1-1544-4bd2-9bc3-6829a4154651)
+
 ![1](https://github.com/Study-Hub-09/StudyHub_FE/assets/129656095/254612fa-d707-48af-b1db-2b66fd825a84)
 
 
 
->🧑‍💻 개발 기간 : 2023.05.19 ~ 2023.06.30</p> 👉 서비스 URL : https://www.study-hub.shop </P>
+>🧑‍💻 개발 기간 : 2023.05.19 ~ 2023.06.30</p> 👉 서비스 URL : https://www.study-hub.shop </P> 🏅 항해14기 최고의 인기 프로젝트상 수상!
 <br>
 
 ## 🌱 서비스 소개 <br>
